@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Cantis10/caravanBackend#readme",
   "dependencies": {
+    "@libsql/client": "^0.17.4",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "form-data": "^4.0.6",
