@@ -10,22 +10,25 @@ app.use(express.json());
 
 const routersPath = path.join(__dirname, "routes");
 
-// Recursively load all route files
-function loadRoutes(directory, prefix = "") {
+// Recursively load routes
+function loadRoutes(directory) {
   fs.readdirSync(directory).forEach((file) => {
     const filePath = path.join(directory, file);
     const stat = fs.statSync(filePath);
 
-    // If it's a folder, recursively search inside it
+    // If it's a folder, search inside it
+    // but DON'T add the folder name to the route
     if (stat.isDirectory()) {
-      loadRoutes(filePath, `${prefix}/${file}`);
-    } else if (file.endsWith(".js")) {
+      loadRoutes(filePath);
+    }
+
+    // If it's a JS file, load it
+    else if (file.endsWith(".js")) {
       const router = require(filePath);
 
       const defaultName = path.basename(file, ".js");
-      const routePrefix = router.customPath || `${prefix}/${defaultName}`;
+      const routePrefix = router.customPath || `/${defaultName}`;
 
-      // Mount the router
       app.use(routePrefix, router);
 
       console.log(`Mounted ${filePath} -> ${routePrefix}`);
