@@ -1,0 +1,17 @@
+.reports-table td.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.reports-table .items-list span {
+  color: var(--text-primary);
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+.status-failed {
+  color: var(--red);
+}

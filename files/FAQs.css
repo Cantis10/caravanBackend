@@ -1,0 +1,385 @@
+@font-face {
+  font-family: EncodeSans_GC;
+  src: url(Fonts/EncodeSans_SC/EncodeSansSC-SemiBold.ttf);
+}
+
+@font-face {
+  font-family: Merriweather;
+  src: url(Fonts/Merriweather/Merriweather_120pt-SemiBold.ttf);
+}
+
+@font-face {
+  font-family: InstrumentSans_Semi;
+  src: url(Fonts/InstrumentSans/InstrumentSans-SemiBold.ttf);
+}
+
+:root {
+  --color-primary: #6F4E37;
+  --color-secondary: #FAF4ED;
+  --color-green-card: #4F7658;
+  --color-image-bg: #EAE3D9;
+  --color-text-light: #ffffff;
+}
+
+body {
+  background-color: var(--color-secondary);
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: #333;
+}
+
+/* Navbar Rules */
+/* Navbar Base Styles */
+.navbar {
+  background-color: var(--color-primary);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.container-fluid {
+  position: relative;
+}
+
+#Caravan_Logo {
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+/* Centered Navigation */
+.nav-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.nav-item1 .nav-link,
+.nav-item2 .nav-link {
+  font-family: EncodeSans_GC, sans-serif;
+  color: white !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+}
+
+.nav-link:hover {
+  color: #a9a9a9 !important;
+}
+
+/* FAQ page content */
+.faq-page {
+  width: min(100% - clamp(32px, 8vw, 160px), 1120px);
+  box-sizing: border-box;
+  margin: 45px auto;
+  padding: 104px 0 48px;
+}
+
+.faq-page h1 {
+  margin: 0 0 22px;
+  color: #333333;
+  font-family: Merriweather, Georgia, serif;
+  font-size: clamp(22px, 2.1vw, 30px);
+  line-height: 1.35;
+}
+
+.faq-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, 1fr);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: start;
+}
+
+.faq-section h2,
+.contact-section h2 {
+  margin: 0 0 2px;
+  color: #333333;
+  font-family: InstrumentSans_Semi, sans-serif;
+  font-size: clamp(15px, 1.35vw, 19px);
+  line-height: 1.4;
+}
+
+.faq-item {
+  overflow: hidden;
+  border: 1px solid #e0d8cf;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.faq-question {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 14px;
+  border: 0;
+  background: var(--color-primary);
+  color: #ffffff;
+  cursor: pointer;
+  font-family: InstrumentSans_Semi, sans-serif;
+  font-size: 14px;
+  text-align: left;
+}
+
+.faq-question:hover,
+.faq-question:focus-visible {
+  background: #5b402e;
+}
+
+.faq-chevron {
+  width: 7px;
+  height: 7px;
+  margin-right: 2px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 0.2s ease;
+}
+
+.faq-item.is-open .faq-chevron {
+  transform: rotate(225deg) translate(-1px, -1px);
+}
+
+.faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.2s ease;
+}
+
+.faq-answer p {
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  padding: 0 14px;
+  color: #6b6b6b;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.faq-item.is-open .faq-answer {
+  grid-template-rows: 1fr;
+}
+
+.faq-item.is-open .faq-answer p {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.order-note {
+  margin: 3px 0 0;
+  color: #777777;
+  font-size: 12px;
+}
+
+.order-note a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.contact-card {
+  padding: 10px 22px;
+  border-radius: 12px;
+  background: #493526;
+  box-shadow: 0 4px 8px rgba(57, 38, 25, 0.18);
+}
+
+.contact-option {
+  display: flex;
+  gap: 14px;
+  padding: 11px 0 17px;
+  border-bottom: 1px solid rgba(202, 171, 133, 0.18);
+}
+
+.contact-option:last-child {
+  padding-bottom: 11px;
+  border-bottom: 0;
+}
+
+.contact-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: #74553d;
+  color: #f7e9d8;
+  font-size: 19px;
+}
+
+.contact-option h3 {
+  margin: 1px 0 0;
+  color: #ffffff;
+  font-family: InstrumentSans_Semi, sans-serif;
+  font-size: 14px;
+}
+
+.contact-option p {
+  margin: 1px 0 5px;
+  color: #bca68e;
+  font-size: clamp(10px, 0.8vw, 12px);
+  line-height: 1.4;
+}
+
+.contact-button {
+  display: inline-block;
+  padding: 7px 17px;
+  border-radius: 5px;
+  background: #d5b993;
+  color: #493526;
+  font-family: InstrumentSans_Semi, sans-serif;
+  font-size: 10px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.contact-button:hover,
+.contact-button:focus-visible {
+  background: #ead4b3;
+  color: #493526;
+}
+
+/*footer*/
+.footer {
+    background-color: #6F4E37;
+    padding: 60px 20px 20px;
+    margin-top: 0;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+}
+
+.footerContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footerContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 40px;
+}
+
+.footerSection {
+    padding: 0 20px;
+}
+
+.footerTitle {
+    font-family: InstrumentSans_Semi;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: white;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.footerText {
+    font-family: "Instrument Sans", sans-serif;
+    font-size: 13px;
+    color: #FFF4E9;
+    line-height: 1.8;
+    margin: 0 0 15px 0;
+    text-align: justify;
+}
+
+.footerBottom {
+    border-top: 1px solid #FFF4E9;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.footerBottom p {
+    font-family: "Instrument Sans", sans-serif;
+    font-size: 12px;
+    color: #FFF4E9;
+    margin: 0;
+}
+
+
+@media (max-width: 900px) {
+  .faq-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-card {
+    max-width: 620px;
+  }
+}
+
+@media (max-width: 768px) {
+
+    
+  .navbar-collapse {
+    width: 100%;
+  }
+
+  .nav-center,
+  .nav-right {
+    position: static;
+    transform: none;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .nav-right {
+    margin-left: 0;
+  }
+
+  .nav-item1,
+  .nav-item2 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-item1 .nav-link,
+  .nav-item2 .nav-link {
+    width: 100%;
+    text-align: center;
+  }
+
+  .faq-page {
+    width: min(100% - 32px, 620px);
+    padding-top: 104px;
+  }
+
+  .faq-layout {
+    gap: 30px;
+  }
+
+  .footerContent {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .footerSection {
+    padding: 0;
+  }
+
+  .footerText {
+    font-size: 12px;
+  }
+}

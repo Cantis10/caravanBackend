@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History - Caravan</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="Orderhistory.css" />
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md">
+      <div class="container-fluid">
+        <!-- Logo -->
+        <div class="nav-left">
+          <a class="navbar-brand" href="index.html">
+            <img
+              src="Images/CaravanLogo_Transparent.png"
+              alt="Caravan"
+              height="60"
+              id="Caravan_Logo"
+            />
+          </a>
+        </div>
+
+        <!-- Mobile Toggle Button -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Center Navigation -->
+          <ul class="navbar-nav nav-center">
+            <li class="nav-item1">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+
+            <li class="nav-item1">
+              <a class="nav-link" href="storepage.html">Market</a>
+            </li>
+
+            <li class="nav-item1">
+              <a class="nav-link" href="FAQs.html">FAQs</a>
+            </li>
+          </ul>
+
+          <!-- Right Navigation -->
+          <ul class="navbar-nav nav-right">
+            <li class="nav-item2">
+              <a class="nav-link" href="shoppingcart.html">Cart</a>
+            </li>
+
+            <li class="nav-item2">
+              <a class="nav-link" href="LoginPage.html">Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Order History -->
+    <main class="orderhistory-container">
+
+      <h1 class="orderhistory-title">Your Order History</h1>
+
+      <div class="orderhistory-list">
+
+        <!-- ORDER 1 -->
+        <div class="orderhistory-card">
+
+          <div class="order-card-header">
+            <strong>Order #54321</strong>
+            <span>Placed Oct 15, 2023</span>
+          </div>
+
+          <div class="order-card-body">
+
+            <div class="order-product">
+              <img
+                src="Images/pAPRIKA.jpg"
+                alt="Paprika"
+                class="order-product-image"
+              >
+
+              <div class="order-product-info">
+                <h3>Placeholder <span>(Size: 8 oz.)</span></h3>
+                <p>Quantity: 1</p>
+                <p>Unit Price: ₱999</p>
+              </div>
+            </div>
+
+            <div class="order-status">
+              <p>
+                Status:
+                <strong>[Shipped]</strong>
+              </p>
+
+              <p>Order Total: ₱999</p>
+            </div>
+
+            <div class="order-actions">
+
+              <button class="track-order-btn">
+                Track Order
+              </button>
+
+              <a href="#" class="order-details-link">
+                View Order Details
+              </a>
+
+            </div>
+
+          </div>
+
+          <!-- Progress -->
+          <div class="order-progress">
+
+            <div class="progress-line">
+              <div class="progress-filled"></div>
+            </div>
+
+            <div class="progress-step active">
+              <div class="progress-dot"></div>
+              <span>Confirmed</span>
+            </div>
+
+            <div class="progress-step active">
+              <div class="progress-dot"></div>
+              <span>Shipped</span>
+            </div>
+
+            <div class="progress-step">
+              <div class="progress-dot"></div>
+              <span>In Transit</span>
+            </div>
+
+            <div class="progress-step">
+              <div class="progress-dot"></div>
+              <span>Delivered</span>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ORDER 2 -->
+        <div class="orderhistory-card">
+
+          <div class="order-card-header">
+            <strong>Order #54320</strong>
+            <span>Placed Oct 15, 2023</span>
+          </div>
+
+          <div class="order-card-body">
+
+            <div class="order-product">
+              <img
+                src="Images/pAPRIKA.jpg"
+                alt="Paprika"
+                class="order-product-image"
+              >
+
+              <div class="order-product-info">
+                <h3>Placeholder <span>(Size: 8 oz.)</span></h3>
+                <p>Quantity: 1</p>
+                <p>Unit Price: ₱999</p>
+              </div>
+            </div>
+
+            <div class="order-status">
+              <p>
+                Status:
+                <strong>[Delivered]</strong>
+              </p>
+
+              <p>Order Total: ₱999</p>
+            </div>
+
+            <div class="order-actions">
+
+              <button class="track-order-btn">
+                Track Order
+              </button>
+
+              <a href="#" class="order-details-link">
+                View Order Details
+              </a>
+
+            </div>
+
+          </div>
+
+          <!-- Progress -->
+          <div class="order-progress">
+
+            <div class="progress-line">
+              <div class="progress-filled delivered"></div>
+            </div>
+
+            <div class="progress-step active">
+              <div class="progress-dot"></div>
+              <span>Confirmed</span>
+            </div>
+
+            <div class="progress-step active">
+              <div class="progress-dot"></div>
+              <span>Shipped</span>
+            </div>
+
+            <div class="progress-step active">
+              <div class="progress-dot"></div>
+              <span>In Transit</span>
+            </div>
+
+            <div class="progress-step active">
+              <div class="progress-dot"></div>
+              <span>Delivered</span>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ORDER 3 -->
+        <div class="orderhistory-card">
+
+          <div class="order-card-header">
+            <strong>Order #54323</strong>
+            <span>Placed Oct 15, 2023</span>
+          </div>
+
+          <div class="order-card-body">
+
+            <div class="order-product">
+              <img
+                src="Images/pAPRIKA.jpg"
+                alt="Paprika"
+                class="order-product-image"
+              >
+
+              <div class="order-product-info">
+                <h3>Placeholder <span>(Size: 8 oz.)</span></h3>
+                <p>Quantity: 1</p>
+                <p>Unit Price: ₱999</p>
+              </div>
+            </div>
+
+            <div class="order-status">
+              <p>
+                Status:
+                <strong>[Delivered]</strong>
+              </p>
+
+              <p>Order Total: ₱999</p>
+            </div>
+
+            <div class="order-actions">
+
+              <button class="track-order-btn">
+                Track Order
+              </button>
+
+              <a href="#" class="order-details-link">
+                View Order Details
+              </a>
+
+            </div>
+
+          </div>
+
+          <!-- Progress -->
+          <div class="order-progress">
+
+            <div class="progress-line">
+              <div class="progress-filled delivered"></div>
+            </div>
+
+            <div class="progress-step active">
+              <div class="progress-dot"></div>
+              <span>Confirmed</span>
+            </div>
+
+            <div class="progress-step active">
+              <div class="progress-dot"></div>
+              <span>Shipped</span>
+            </div>
+
+            <div class="progress-step active">
+              <div class="progress-dot"></div>
+              <span>In Transit</span>
+            </div>
+
+            <div class="progress-step active">
+              <div class="progress-dot"></div>
+              <span>Delivered</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <p class="order-support">
+        Need help with an order?
+        Visit our
+        <a href="FAQs.html">Customer Support</a>.
+      </p>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footerContainer">
+
+          <div class="footerContent">
+
+          <div class="footerSection">
+              <h3 class="footerTitle">ADDITIONAL INFORMATION</h3>
+              <p class="footerText">
+                The Caravan Company is dedicated to providing quality products to its
+                customers and constituents while ensuring a convenient, reliable, and
+                satisfying shopping experience. As such, we ensure that our products meet
+                established quality and safety standards, supported by relevant
+                certifications and trust badges. We are also committed to sustainability
+                by promoting responsible sourcing, reducing unnecessary waste, and
+                supporting environmentally conscious practices throughout our operations.
+              </p>
+          </div>
+
+          <div class="footerSection">
+              <h3 class="footerTitle">CONTACT INFORMATION</h3>
+
+              <p class="footerText">
+              E. Rodriguez, Cubao, Philippines
+              </p>
+
+              <p class="footerText">
+              Caravan@gmail.com<br>
+              +63 912 345 6789<br>
+              + (02) 1234 5678
+              </p>
+          </div>
+
+          </div>
+
+          <div class="footerBottom">
+          <p>&copy; 2026 TheCaravan.com</p>
+          </div>
+
+      </div>
+    </footer>   
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="Orderhistory.js"></script>
+</body>
+</html>

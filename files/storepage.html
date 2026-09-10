@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Caravan - Storepage</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="storepage.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md">
+      <div class="container-fluid">
+        <!-- Logo -->
+        <div class="nav-left">
+          <a class="navbar-brand" href="index.html">
+            <img
+              src="Images/CaravanLogo_Transparent.png"
+              alt="Caravan"
+              height="60"
+              id="Caravan_Logo"
+            />
+          </a>
+        </div>
+
+        <!-- Mobile Toggle Button -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Center Navigation -->
+          <ul class="navbar-nav nav-center">
+            <li class="nav-item1">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+
+            <li class="nav-item1">
+              <a class="nav-link" href="storepage.html">Market</a>
+            </li>
+
+            <li class="nav-item1">
+              <a class="nav-link" href="FAQs.html">FAQs</a>
+            </li>
+          </ul>
+
+          <!-- Right Navigation -->
+          <ul class="navbar-nav nav-right">
+            <li class="nav-item2">
+              <a class="nav-link" href="shoppingcart.html">Cart</a>
+            </li>
+
+            <li class="nav-item2">
+              <a class="nav-link" href="LoginPage.html">Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Overlay for mobile menu -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleCategoryMenu()"></div>
+
+    <!-- Bootstrap JavaScript-->
+
+    <div class="main-contents">
+      <div class="vertical-navbar">
+        <div class="category-header">
+          <span style="font-size: 20px"> <b>Categories</b></span>
+        </div>
+
+        <!-- Default -->
+        <div class="category">
+          <div class="category-title" onclick="toggleSubcategories(this)">
+            <span>Default</span>
+            <span class="toggle-icon">&#9660;</span>
+          </div>
+          <div class="subcategories">
+            <div class="subcategory">All Products</div>
+          </div>
+        </div>
+
+        <!--Cooking-->
+        <div class="category">
+          <div class="category-title" onclick="toggleSubcategories(this)">
+            <span>Cooking</span>
+            <span class="toggle-icon">&#9660;</span>
+          </div>
+          <div class="subcategories">
+            <div class="subcategory">Appetizers / Starters</div>
+            <div class="subcategory">Main Course</div>
+            <div class="subcategory">Soups & Stews</div>
+            <div class="subcategory">Side Dishes</div>
+            <div class="subcategory">Sauce & Condiments</div>
+          </div>
+        </div>
+
+        <!-- Medicine -->
+        <div class="category">
+          <div class="category-title" onclick="toggleSubcategories(this)">
+            <span>Medicine</span>
+            <span class="toggle-icon">&#9660;</span>
+          </div>
+          <div class="subcategories">
+            <div class="subcategory">First aid</div>
+            <div class="subcategory">Herbal Remedies & Supplements</div>
+            <div class="subcategory">Health & Wellness</div>
+          </div>
+        </div>
+
+        <!-- Garnishing -->
+        <div class="category">
+          <div class="category-title" onclick="toggleSubcategories(this)">
+            <span>Garnishing</span>
+            <span class="toggle-icon">&#9660;</span>
+          </div>
+          <div class="subcategories">
+            <div class="subcategory">Herbs & leaves</div>
+            <div class="subcategory">Edible Flowers</div>
+            <div class="subcategory">Decorative Plating</div>
+          </div>
+        </div>
+
+        <!-- Drinks -->
+        <div class="category">
+          <div class="category-title" onclick="toggleSubcategories(this)">
+            <span>Drinks</span>
+            <span class="toggle-icon">&#9660;</span>
+          </div>
+          <div class="subcategories">
+            <div class="subcategory">Hot Beverages</div>
+            <div class="subcategory">Cold Beverages</div>
+            <div class="subcategory">Juice & Smoothies</div>
+          </div>
+        </div>
+
+        <!-- Baking -->
+        <div class="category">
+          <div class="category-title" onclick="toggleSubcategories(this)">
+            <span>Baking</span>
+            <span class="toggle-icon">&#9660;</span>
+          </div>
+          <div class="subcategories">
+            <div class="subcategory">Cakes</div>
+            <div class="subcategory">Breads</div>
+            <div class="subcategory">Pastries</div>
+            <div class="subcategory">Desserts</div>
+          </div>
+        </div>
+      </div>
+      <div class="product-grid">
+        <!-- 
+          Product items will be dynamically inserted here 
+        -->
+        <div class="function-bar">
+        <button class="hamburger-menu" id="categoryMenuToggle" onclick="toggleCategoryMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <form class="search-container" id="Searchbar">
+          <input
+            type="text"
+            class="searchbar"
+            placeholder="Search for products..."
+            id="searchInput"
+          />
+          <button
+            class="searchbtn"
+            style="font-size: 2rem; width: 50px; height: 50px; margin-top: 10px"
+            onclick="SearchProducts()"
+          >
+            ⌕
+          </button>
+          <div class="country-filter">
+            <label for="product_country">Filter by Country:</label>
+            <select class="country-dropdown" id="product_country" name="product_country">
+              <option class="country-option" value="">All Countries</option>
+            </select>
+          </div>
+        </form>
+
+        </div>
+        <div class="main-product-section">
+          <!-- Tab Navigation -->
+          <div class="tabs-container">
+            <button class="tab-button active" id="productsTab" onclick="switchTab('products')">Products</button>
+            <button class="tab-button" id="bundlesTab" onclick="switchTab('bundles')">Bundles</button>
+          </div>
+
+          <!-- Products Section -->
+          <div id="productsContent" class="tab-content active">
+            <h1 style="padding-left: 50px;">Products</h1>
+            <div class="product-section" id="productsSection">
+              <!-- Product cards are inserted here, just connect to database to change placeholder info -->
+              <div class="noitem-container" style="display: none">
+                <div class="noitem-content">
+                  <img
+                    src="Images/ItemNotFound_nobg.png"
+                    alt="NoItemImg"
+                    class="noitem-image"
+                  />
+                  <h1>
+                    Sorry, we couldn't find any products matching your search.
+                  </h1>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bundles Section -->
+          <div id="bundlesContent" class="tab-content">
+            <h1 style="padding-left: 50px;">Bundles</h1>
+            <div class="product-section" id="bundlesSection">
+              <!-- Bundle cards are inserted here -->
+              <div class="noitem-container" style="display: none">
+                <div class="noitem-content">
+                  <img
+                    src="Images/ItemNotFound_nobg.png"
+                    alt="NoItemImg"
+                    class="noitem-image"
+                  />
+                  <h1>
+                    Sorry, we couldn't find any bundles matching your search.
+                  </h1>
+                </div>
+              </div>
+            </div>
+          </div>
+            <div class="product-footer">
+              <p style="text-align: center;">You've reached the end of our collection. Check back soon for more rare finds!</p>
+            </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- JavaScript Linking -->
+    <script src="storepage.js"></script>
+  </body>
+</html>

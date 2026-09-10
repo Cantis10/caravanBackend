@@ -1,0 +1,572 @@
+@font-face {
+  font-family: EncodeSans_GC;
+  src: url(Fonts/EncodeSans_SC/EncodeSansSC-SemiBold.ttf);
+}
+
+@font-face {
+  font-family: Merriweather;
+  src: url(Fonts/Merriweather/Merriweather_120pt-SemiBold.ttf);
+}
+
+@font-face {
+  font-family: InstrumentSans_Semi;
+  src: url(Fonts/InstrumentSans/InstrumentSans-SemiBold.ttf);
+}
+
+:root {
+  --color-primary: #6F4E37;
+  --color-secondary: #FAF4ED;
+  --color-green-card: #4F7658;
+  --color-image-bg: #EAE3D9;
+  --color-text-light: #ffffff;
+}
+
+html,
+body {
+  min-height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--color-secondary);
+  padding: 150px 50px 50px 50px;
+  box-sizing: border-box;
+  border: #333 1px solid;
+}
+
+/* Navbar Rules */
+/* Navbar Base Styles */
+.navbar {
+  background-color: var(--color-primary);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.container-fluid {
+  position: relative;
+}
+
+#Caravan_Logo {
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+/* Centered Navigation */
+.nav-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.nav-item1 .nav-link,
+.nav-item2 .nav-link {
+  font-family: EncodeSans_GC, sans-serif;
+  color: white !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+}
+
+.nav-link:hover {
+  color: #a9a9a9 !important;
+}
+
+/* ORDER HISTORY*/
+
+.orderhistory-container {
+  width: 100%;
+  max-width: 1100px;
+
+  margin: 0px auto 50px;
+
+  padding: 20px 30px;
+
+  box-sizing: border-box;
+}
+
+.orderhistory-title {
+  font-family: Merriweather, serif;
+  font-size: 32px;
+  font-weight: 600;
+
+  margin: 0 0 25px;
+
+  color: #333;
+}
+
+.orderhistory-list {
+  height: 500px;
+  
+  display: flex;
+  padding: 10px 20px 10px 20px;
+  overflow-y: scroll;
+  flex-direction: column;
+  gap: 25px;
+}
+
+
+/* ORDER CARD*/
+
+.orderhistory-card {
+  width: 100%;
+
+  flex-shrink: 0;
+
+  background-color: white;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+/* CARD HEADER*/
+
+.order-card-header {
+  height: 40px;
+
+  padding: 0 20px;
+
+  background-color: var(--color-primary);
+  color: white;
+
+  display: flex;
+  align-items: center;
+
+  gap: 70px;
+
+  font-family: EncodeSans_GC, sans-serif;
+  font-size: 14px;
+}
+
+.order-card-header strong {
+  font-weight: 600;
+}
+
+.order-card-header span {
+  font-weight: 400;
+}
+
+
+/* CARD BODY*/
+
+.order-card-body {
+  display: grid;
+
+  grid-template-columns: 2fr 1.5fr 1fr;
+
+  align-items: center;
+
+  gap: 25px;
+
+  padding: 18px 20px 10px;
+}
+
+
+/* PRODUCT*/
+
+.order-product {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+.order-product-image {
+  width: 85px;
+  height: 70px;
+
+  object-fit: cover;
+
+  border-radius: 5px;
+}
+
+.order-product-info h3 {
+  margin: 0 0 4px;
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.order-product-info h3 span {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.order-product-info p {
+  margin: 2px 0;
+
+  font-size: 12px;
+  color: #555;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.order-status {
+  font-size: 13px;
+}
+
+.order-status p {
+  margin: 5px 0;
+}
+
+.order-status strong {
+  color: var(--color-green-card);
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.order-actions {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.track-order-btn {
+  width: 135px;
+  height: 38px;
+
+  border: none;
+  border-radius: 7px;
+
+  background-color: var(--color-green-card);
+  color: white;
+
+  font-family: EncodeSans_GC, sans-serif;
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+.track-order-btn:hover {
+  background-color: #42664a;
+}
+
+.order-details-link {
+  color: var(--color-primary);
+
+  font-size: 12px;
+
+  text-decoration: underline;
+}
+
+
+/* =========================
+   ORDER PROGRESS
+========================= */
+
+.order-progress {
+  position: relative;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  margin: 0 50px;
+
+  padding: 10px 0 15px;
+}
+
+
+/* Background line */
+
+.progress-line {
+  position: absolute;
+
+  top: 16px;
+  left: 0;
+  right: 0;
+
+  height: 5px;
+
+  background-color: #ddd;
+
+  border-radius: 5px;
+
+  z-index: 0;
+}
+
+
+/* Filled line */
+
+.progress-filled {
+  width: 50%;
+  height: 100%;
+
+  background-color: var(--color-green-card);
+
+  border-radius: 5px;
+}
+
+.progress-filled.delivered {
+  width: 100%;
+}
+
+
+/* Steps */
+
+.progress-step {
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 5px;
+
+  z-index: 1;
+
+  font-size: 11px;
+
+  color: #aaa;
+}
+
+.progress-step.active {
+  color: var(--color-green-card);
+}
+
+
+/* Dots */
+
+.progress-dot {
+  width: 15px;
+  height: 15px;
+
+  border-radius: 50%;
+
+  background-color: #ddd;
+
+  border: 3px solid white;
+}
+
+.progress-step.active .progress-dot {
+  background-color: var(--color-green-card);
+}
+
+
+/* =========================
+   SUPPORT
+========================= */
+
+.order-support {
+  margin-top: 25px;
+
+  font-size: 13px;
+
+  color: #555;
+}
+
+.order-support a {
+  color: var(--color-primary);
+
+  font-weight: 600;
+
+  text-decoration: underline;
+}
+
+/*footer*/
+.footer {
+    background-color: #6F4E37;
+    padding: 60px 20px 20px;
+    margin-top: 0;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+}
+
+.footerContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footerContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 40px;
+}
+
+.footerSection {
+    padding: 0 20px;
+}
+
+.footerTitle {
+    font-family: InstrumentSans_Semi;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: white;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.footerText {
+    font-family: "Instrument Sans", sans-serif;
+    font-size: 13px;
+    color: #FFF4E9;
+    line-height: 1.8;
+    margin: 0 0 15px 0;
+    text-align: justify;
+}
+
+.footerBottom {
+    border-top: 1px solid #FFF4E9;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.footerBottom p {
+    font-family: "Instrument Sans", sans-serif;
+    font-size: 12px;
+    color: #FFF4E9;
+    margin: 0;
+}
+
+
+@media (max-width: 768px) {
+    
+  .navbar-collapse {
+    width: 100%;
+  }
+
+  .nav-center,
+  .nav-right {
+    position: static;
+    transform: none;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .nav-right {
+    margin-left: 0;
+  }
+
+  .nav-item1,
+  .nav-item2 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-item1 .nav-link,
+  .nav-item2 .nav-link {
+    width: 100%;
+    text-align: center;
+  }
+
+  .orderhistory-container {
+    margin-top: 0px;
+    padding: 20px 15px 40px;
+  }
+
+  .orderhistory-title {
+    font-size: 25px;
+  }
+
+  .order-card-header {
+    height: auto;
+
+    padding: 10px 15px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 3px;
+
+    font-size: 12px;
+  }
+
+  .order-card-body {
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+
+    padding: 15px;
+  }
+
+  .order-product {
+    align-items: flex-start;
+  }
+
+  .order-product-image {
+    width: 90px;
+    height: 75px;
+  }
+
+  .order-status {
+    margin-left: 105px;
+  }
+
+  .order-actions {
+    align-items: flex-start;
+
+    margin-left: 105px;
+  }
+
+  .order-progress {
+    margin: 0 25px;
+
+    overflow-x: hidden;
+  }
+
+  .progress-step {
+    font-size: 9px;
+  }
+
+  .progress-dot {
+    width: 12px;
+    height: 12px;
+  }
+
+  .footerContent {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .footerSection {
+    padding: 0;
+  }
+
+  .footerText {
+    font-size: 12px;
+  }
+}

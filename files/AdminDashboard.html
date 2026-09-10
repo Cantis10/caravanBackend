@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caravan · Dashboard</title>
+<link rel="stylesheet" href="AdminCSS.css">
+</head>
+<body>
+
+<div class="CaravanDesk">
+  <aside class="SideNav">
+    <div class="brand">
+      <span class="brand-icon" aria-hidden="true">
+        <img src="./Images/Caravan-Icon.png" alt="Caravan logo">
+      </span>
+      <span class="CompName">Caravan</span>
+    </div>
+
+    <nav class="navigation" aria-label="Primary">
+      <ul>
+        <li>
+          <a href="AdminDashboard.html" class="nav-link" data-page="Dashboard">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="12" rx="1.6" stroke="currentColor" stroke-width="1.6"/><path d="M8 20h8M12 16v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="Products & Reports.html" class="nav-link" data-page="Products &amp; Reports">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v5.2L5.6 16A2 2 0 0 0 7.4 19h9.2a2 2 0 0 0 1.8-3l-4.4-7.8V3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7.5 14.5h9" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span>Products &amp; Reports</span>
+          </a>
+        </li>
+        <li>
+          <a href="OrdersReports.html" class="nav-link" data-page="Orders Reports">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M6 3h9l3 3v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 11h6M9 15h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <span>Orders Reports</span>
+          </a>
+        </li>
+        <li>
+          <a href="StocksInventory.html" class="nav-link" data-page="Stocks Inventory">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2.6" fill="currentColor"/></svg>
+            <span>Stocks Inventory</span>
+          </a>
+        </li>
+        <li>
+          <a href="AccountManagement.html" class="nav-link" data-page="Manage Accounts">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="1.6"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <span>Manage Accounts</span>
+          </a>
+        </li>
+        <li>
+          <a href="SalesReport.html" class="nav-link" data-page="Sales Report">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M3 17l5-5 4 3 8-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 6h5v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Sales Report</span>
+          </a>
+        </li>
+        <li>
+          <a href="ContentManagement.html" class="nav-link" data-page="Content Management">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="1.6" stroke="currentColor" stroke-width="1.6"/><path d="M3 9h18M8 4v5" stroke="currentColor" stroke-width="1.6"/></svg>
+            <span>Content Management</span>
+          </a>
+        </li>
+        <li>
+          <a href="Audit.html" class="nav-link" data-page="Audit Trail">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><path d="M6 3h9l3 3v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 11h4M9 15h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <span>Audit Trail</span>
+          </a>
+        </li>
+        <li>
+          <a href="SettingsConfig.html" class="nav-link" data-page="Settings">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="1.6"/><path d="M12 3v2.3M12 18.7V21M21 12h-2.3M5.3 12H3M18 6l-1.6 1.6M7.6 16.4 6 18M18 18l-1.6-1.6M7.6 7.6 6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <span>Settings</span>
+          </a>
+        </li>
+      </ul>
+
+      <button class="signout" id="signOutBtn" type="button">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none"><rect x="6" y="3" width="9" height="18" rx="1.4" stroke="currentColor" stroke-width="1.6"/><path d="M11 12h9m0 0-3-3m3 3-3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Sign Out</span>
+    </button>
+    </nav>
+  </aside>
+
+
+  <main class="content">
+    <div class="panel">
+
+      <header class="panel-header">
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <p class="subtitle" id="pageSubtitle">Welcome back, Admin</p>
+        </div>
+        <button class="notifs" id="bellBtn" type="button" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5a5.5 5.5 0 0 0-5.5 5.5v3.1c0 .6-.2 1.1-.6 1.6L4.6 15c-.7.8-.1 2 .9 2h13c1 0 1.6-1.2.9-2l-1.3-1.3a2.2 2.2 0 0 1-.6-1.6V9A5.5 5.5 0 0 0 12 3.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 19a2.5 2.5 0 0 0 5 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <span class="bell-dot" id="bellDot"></span>
+        </button>
+      </header>
+
+      <section class="section">
+        <h2 class="section-title concerns-title">Current concerns</h2>
+
+        <div class="concerns-card">
+          <div class="concern-row">
+            <div class="concern-left">
+              <svg class="concern-icon warn" viewBox="0 0 24 24" fill="none"><path d="M12 4 2.5 20h19L12 4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 10v4.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="17.3" r="0.9" fill="currentColor"/></svg>
+              <p>Product A stocks are running low</p>
+            </div>
+            <a href="#" class="see-more">See more <span aria-hidden="true">&rarr;</span></a>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="concern-row">
+            <div class="concern-left">
+              <svg class="concern-icon ok" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9.4" stroke="currentColor" stroke-width="1.6"/><path d="M8 12.3l2.6 2.6L16.2 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <p>Product D has now been fully restocked</p>
+            </div>
+            <a href="#" class="see-more">See more <span aria-hidden="true">&rarr;</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title orders-title">Recent Orders</h2>
+
+        <div class="orders-card">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer ID</th>
+                <th>Product ID</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="ordersBody">
+              <tr>
+                <td class="mono strong">#1111</td>
+                <td class="mono">#00000324</td>
+                <td class="mono">#00000111</td>
+                <td><span class="status status-completed">Completed</span></td>
+              </tr>
+              <tr>
+                <td class="mono strong">#1112</td>
+                <td class="mono">#00000816</td>
+                <td class="mono">#00445001</td>
+                <td><span class="status status-processing">Processing</span></td>
+              </tr>
+              <tr>
+                <td class="mono strong">#1113</td>
+                <td class="mono">#00000816</td>
+                <td class="mono">#00003450</td>
+                <td><span class="status status-processing">Processing</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+</div>
+
+<script src="ADDashboard.js"></script>
+</body>
+</html>

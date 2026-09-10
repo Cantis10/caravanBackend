@@ -1,0 +1,54 @@
+.stock-warning {
+  color: var(--red);
+  font-weight: 600;
+}
+
+.stock-filters {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 26px 0 30px;
+}
+
+.filter-pill {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 999px;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.filter-pill:hover {
+  color: var(--text-primary);
+  border-color: var(--gold-dim);
+}
+
+.filter-pill.is-active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--bg);
+}
+
+.stock-search {
+  flex: 0 1 260px;
+  margin-left: auto;
+}
+
+.level-ring {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 3px solid var(--border);
+}
+
+.level-ring.level-low { border-color: var(--gold); }
+.level-ring.level-full { border-color: var(--green); }
+.level-ring.level-out { border-color: var(--red); }
+
+.action-adjust {
+  color: var(--gold);
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "bundle_id": 1,
+    "bundle_name": "Curry Bundle",
+    "bundle_price": 65.00,
+    "bundle_likes": 572,
+    "bundle_category": "Cooking",
+    "bundle_description": "A flavorful collection of aromatic spices selected for preparing rich and fragrant curry dishes.",
+    "bundle_items_id": [2, 4, 10, 11],
+    "bundle_image": "https://t3.ftcdn.net/jpg/01/75/13/88/360_F_175138803_mS0nhdCZcUWR6LCrzKfJ7mQqgAGj2Cwe.jpg"
+  },
+  {
+    "bundle_id": 2,
+    "bundle_name": "Barbecue Bundle",
+    "bundle_price": 40.00,
+    "bundle_likes": 486,
+    "bundle_category": "Cooking",
+    "bundle_description": "A smoky and flavorful spice selection designed to complement grilled meats, marinades, rubs, and barbecue sauces.",
+    "bundle_items_id": [3, 10, 23, 29],
+    "bundle_image": "https://png.pngtree.com/thumb_back/fw800/background/20240601/pngtree-barbecue-rub-in-a-bowl-image_15737093.jpg"
+  },
+  {
+    "bundle_id": 3,
+    "bundle_name": "Shawarma Bundle",
+    "bundle_price": 50.00,
+    "bundle_likes": 531,
+    "bundle_category": "Cooking",
+    "bundle_description": "A warm and aromatic spice collection inspired by the rich flavors commonly used in shawarma seasoning and marinades.",
+    "bundle_items_id": [3, 10, 14, 17],
+    "bundle_image": "https://mysweetprecision.com/wp-content/uploads/2025/04/hello-fresh-shawarma-spice-featured-image-360x360.jpg"
+  }
+]

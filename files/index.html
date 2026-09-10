@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- CSS Linking -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+
+    <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+
+    <title>Caravan</title>
+  </head>
+  <body style="background-color: #FFF4E9;">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md fixed-top">
+      <div class="container-fluid">
+        <!-- Logo -->
+        <div class="nav-left">
+          <a class="navbar-brand" href="index.html">
+            <img
+              src="./Images/CaravanLogo_Transparent.png"
+              alt="Caravan"
+              height="60"
+              id="Caravan_Logo"
+            />
+          </a>
+        </div>
+
+        <!-- Mobile Toggle Button -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Center Navigation -->
+          <ul class="navbar-nav nav-center">
+            <li class="nav-item1">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+
+            <li class="nav-item1">
+              <a class="nav-link" href="storepage.html">Market</a>
+            </li>
+
+            <li class="nav-item1">
+              <a class="nav-link" href="FAQs.html">FAQs</a>
+            </li>
+          </ul>
+
+          <!-- Right Navigation -->
+          <ul class="navbar-nav nav-right">
+            <li class="nav-item2">
+              <a class="nav-link" href="shoppingcart.html">Cart</a>
+            </li>
+
+            <li class="nav-item2">
+              <a class="nav-link" href="LoginPage.html">Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="hero container-fluid">
+      <div class="overlay"></div>
+      <div class="text-box">
+        <p id="Welcome">
+          Welcome to Caravan
+          <img
+            id="text-logo"
+            src="./Images/CaravanLogo_Transparent_Black.png"
+            alt="Caravan_Logo"
+            height="60"
+          />
+        </p>
+        <div class="features-grid">
+
+          <div class="feature-item">
+            <img src="./Images/Cart.png" alt="Cart" height="60"></img>
+
+              <div class="feature-text">
+                <h3>PURCHASE SECURELY</h3>
+                <p>
+                  Buy your herbs and spices with our<br>
+                  secure and easy payment process.
+                </p>
+              </div>
+          </div>
+
+          <div class="feature-item">
+            <img src="./Images/Truck.png" alt="Truck" height="60"></img>
+
+              <div class="feature-text">
+                <h3>SHIPPED TO YOU</h3>
+                  <p>
+                    Get your package safely delivered to 
+                    your doorstep
+                  </p>
+                </div>
+          </div>
+
+          <div class="feature-item">
+            <img src="./Images/Checklist.png" alt="Checklist" height="60"></img>
+
+              <div class="feature-text">
+                <h3>DEDICATED RECIPES</h3>
+                  <p>
+                    We offer list of recipes you can cook<br>
+                    using our herbs and spices
+                  </p>
+              </div>
+          </div>
+
+          <div class="feature-item">
+            <img src="./Images/Wallet.png" alt="Wallet" height="60"></img>
+
+              <div class="feature-text">
+                <h3>SAVE MORE</h3>
+                  <p>
+                    Buying bundles will cost less rather<br>
+                    than buying them individually
+                  </p>
+              </div>
+          </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </header>
+
+    <!-- Browse By Categories -->
+<div class="browseSection container-fluid">
+
+  <p id="Browse" class="fade-title">Browse By Categories</p>
+
+  <div class="Selection">
+
+    <!-- Baking -->
+    <div class="Categories">
+      <a href="storepage.html">
+        <img class="catImage" src="./Images/Baking.jpg" alt="Baking">
+      </a>
+      <h5 class="catType">Baking</h5>
+    </div>
+
+    <!-- Drinks -->
+    <div class="Categories">
+      <a href="storepage.html">
+        <img class="catImage" src="./Images/Drinking.jpg" alt="Drinking">
+      </a>
+      <h5 class="catType">Drinking</h5>
+    </div>
+
+    <!-- Cooking -->
+    <div class="Categories">
+      <a href="storepage.html">
+        <img class="catImage" src="./Images/Cooking.jpg" alt="Cooking">
+      </a>
+      <h5 class="catType">Cooking</h5>
+    </div>
+
+    <!-- Garnishing -->
+    <div class="Categories">
+      <a href="storepage.html">
+        <img class="catImage" src="./Images/Garnishing.jpg" alt="Garnishing">
+      </a>
+      <h5 class="catType">Garnishing</h5>
+    </div>
+
+    <!-- Medicinal -->
+    <div class="Categories">
+      <a href="storepage.html">
+        <img class="catImage" src="./Images/Medicinal.jpg" alt="Medicinal">
+      </a>
+      <h5 class="catType">Medicinal</h5>
+    </div>
+
+  </div>
+</div>
+
+<!-- New Arrivals Section -->
+<div class="cardSection container-fluid">
+  <p id="cardTitle1" class="fade-title">New Arrivals</p>
+
+  <div class="cardContainer" id="newArrivalsContainer">
+    <!-- inserts new products here -->
+
+  </div>
+</div>
+
+<!-- Popular Products Section -->
+<div class="cardSection container-fluid">
+  <p id="cardTitle1" class="fade-title">Most Popular</p>
+
+  <div class="cardContainer" id="popularProductsContainer">
+    <!-- inserts popular products here -->
+  </div>
+</div>
+  
+<div class="expmrBtn fade-title">
+  <a href="storepage.html">
+  <button class="explore-btn btn btn-primary" type="button">
+    Explore More
+  </button>
+  </a>
+</div>
+
+<!-- Team Members Section -->
+<div class="teamSection fade-title">
+
+  <h2 class="teamTitle">Meet the Caravan Team</h2>
+
+  <div class="container">
+    <div class="row justify-content-center">
+
+      <div class="col-6 col-lg-4 teamMemberCol">
+        <img 
+          src="./Images/demillo.png" 
+          alt="Team Member 1" 
+          class="teamMemberPhoto"
+        >
+        <p class="teamMemberName">Demillo, Orland Gabriel</p>
+      </div>
+
+      <div class="col-6 col-lg-4 teamMemberCol">
+        <img 
+          src="./Images/Ghazal.webp" 
+          alt="Team Member 2" 
+          class="teamMemberPhoto"
+        >
+        <p class="teamMemberName">Ghazal, Iyad Michael</p>
+      </div>
+
+      <div class="col-6 col-lg-4 teamMemberCol">
+        <img 
+          src="./Images/Lim.webp" 
+          alt="Team Member 3" 
+          class="teamMemberPhoto"
+        >
+        <p class="teamMemberName">Lim, Michael Terrence</p>
+      </div>
+
+      <div class="col-6 col-lg-4 teamMemberCol">
+        <img 
+          src="./Images/Narvarte.png" 
+          alt="Team Member 4" 
+          class="teamMemberPhoto"
+        >
+        <p class="teamMemberName">Narvarte, Michael Ray</p>
+      </div>
+
+      <div class="col-6 col-lg-4 teamMemberCol">
+        <img 
+          src="./Images/Paulino.jpg" 
+          alt="Team Member 5" 
+          class="teamMemberPhoto"
+        >
+        <p class="teamMemberName">Paulino, John Lois</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- About Us / Mission & Vision -->
+<div class="aboutUs fade-title container-fluid" id="aboutUsSection">
+
+  <!-- About Us Section -->
+  <div class="aboutUsSection">
+    <h2 class="aboutUsTitle">About Us</h2>
+
+    <p class="aboutUsSubtitle">
+      Caravan was founded in 2026 by an aspiring entrepreneur named Iyad Michael Ghazal.
+      After recognizing a gap in the local spice market, he established the company and
+      partnered up with four of his business associates with a goal to introduce a wider-variety
+      of spices to Philippine consumers. While Caravan offers staple off-the-shelf spices and
+      seasonings such as pepper, salt, and chilies, the company also specializes in sourcing
+      rare and premium spices and bringing it here into the Philippine Market. Caravan aims to
+      provide home cooks, food enthusiasts, and professional chefs with easy access to
+      high-quality spices that are not commonly available in local stores. Caravan also provides
+      product bundles consisting of herbs and spices representing a country, dish, or culture.
+    </p>
+  </div>
+
+  <!-- Mission Vision Section -->
+  <div class="missionVisionContainer fade-title">
+
+    <div class="container">
+      <div class="row">
+
+        <div class="col-12 col-lg-6">
+          <div class="missionVisionBox">
+            <h3 class="missionVisionTitle">Mission</h3>
+
+            <p class="missionVisionText">
+              The Caravan purpose is to address the challenge faced by cooking  
+              enthusiasts in sourcing fresh and exotic products from major retailers.  
+              We aim to deliver unique herbs, spices, and culinary ingredients through 
+              trusted suppliers, creating product bundles that represent various  countries, 
+              dishes, or cultures. Lastly, we aim to provide detailed  information about 
+              each herb or bundle's history and offers multiple  payment methods, including 
+              online payments or cash, along with receipts.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="missionVisionBox">
+            <h3 class="missionVisionTitle">Vision</h3>
+
+            <p class="missionVisionText">
+              Over the next 3-5 years, we have a vision of becoming a global business. 
+              Our customer reach will expand through international shipping, multi-currency 
+              payments, diversify our catalog with variety of products, launch an app dedicated 
+              for mobile use (iOS/Android), lastly, we aim to have partnerships with international 
+              suppliers and third-party logistics providers will strengthen our product range, 
+              affordability, and fulfillment of our said mission.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footerContainer">
+
+    <div class="footerContent">
+
+      <div class="footerSection">
+        <h3 class="footerTitle">ADDITIONAL INFORMATION</h3>
+
+        <p class="footerText">
+          The Caravan Company is dedicated to providing quality products to its
+          customers and constituents while ensuring a convenient, reliable, and
+          satisfying shopping experience. As such, we ensure that our products meet
+          established quality and safety standards, supported by relevant
+          certifications and trust badges. We are also committed to sustainability
+          by promoting responsible sourcing, reducing unnecessary waste, and
+          supporting environmentally conscious practices throughout our operations.
+        </p>
+      </div>
+
+      <div class="footerSection">
+        <h3 class="footerTitle">CONTACT INFORMATION</h3>
+
+        <p class="footerText">
+          E. Rodriguez, Cubao, Philippines
+        </p>
+
+        <p class="footerText">
+          Caravan@gmail.com<br>
+          +63 912 345 6789<br>
+          + (02) 1234 5678
+        </p>
+      </div>
+
+    </div>
+
+    <div class="footerBottom">
+      <p>&copy; 2026 TheCaravan.com</p>
+    </div>
+
+  </div>
+</footer>
+    
+    <!-- Bootstrap JavaScript-->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- JavaScript Linking -->
+    <script src="script.js"></script>
+  </body>
+</html>

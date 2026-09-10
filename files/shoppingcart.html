@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Caravan</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="shoppingcart.css" />
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md">
+      <div class="container-fluid">
+        <!-- Logo -->
+        <div class="nav-left">
+          <a class="navbar-brand" href="index.html">
+            <img
+              src="Images/CaravanLogo_Transparent.png"
+              alt="Caravan"
+              height="60"
+              id="Caravan_Logo"
+            />
+          </a>
+        </div>
+
+        <!-- Mobile Toggle Button -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Center Navigation -->
+          <ul class="navbar-nav nav-center">
+            <li class="nav-item1">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+
+            <li class="nav-item1">
+              <a class="nav-link" href="storepage.html">Market</a>
+            </li>
+
+            <li class="nav-item1">
+              <a class="nav-link" href="FAQs.html">FAQs</a>
+            </li>
+          </ul>
+
+          <!-- Right Navigation -->
+          <ul class="navbar-nav nav-right">
+            <li class="nav-item2">
+              <a class="nav-link" href="shoppingcart.html">Cart</a>
+            </li>
+
+            <li class="nav-item2">
+              <a class="nav-link" href="LoginPage.html">Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Delete notice Modal -->
+    <div class="delete-warning-modal">
+      <div class="delete-warning">
+        <h2 class="warning-title">WARNING</h2>
+        <h1>⚠️</h1>
+        <p class="warning-desc">Are you sure you want to delete your selection?</p>
+        <div class="warning-actions">
+          <button type="button" class="btn btn-outline-danger" onclick="warning_Yes()">Yes</button>
+          <button type="button" class="btn btn-outline-primary" onclick="warning_No()">No</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete notice Modal -->
+    <div class="checkout-warning-modal">
+      <div class="checkout-warning">
+        <h2 class="checkout-warning-title">PROCEED TO CHECKOUT</h2>
+        <img src="Images/checkout-img.png" alt="checkout-img.png">
+        <hr>
+        <div class="warning-actions">
+          <button type="button" class="btn btn-outline-success" onclick="checkout_Yes()">Yes</button> <!-- create checkout function for backend -->
+          <button type="button" class="btn btn-outline-danger" onclick="checkout_No()">No</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shoppingcart-container">
+
+    <h2 class="page-title">Shopping Cart</h2>
+
+    <div class="shoppingcart-content">
+
+      <!-- LEFT: YOUR CART -->
+      <div class="your-cart">
+
+        <div class="your-class-text">
+          <h3>Your Cart</h3>
+          <p>You can edit the cart by adding, decreasing, and deleting products.</p>
+        </div>
+
+        <div class="cart-items">
+
+          <!-- Example cart item -->
+          <!-- <div class="item-card">
+            <div class="product-image">
+              <img src="Images/pAPRIKA.jpg" alt="Paprika">
+            </div>
+
+            <div class="item-info">
+              <h4 class="product_name">Placeholder</h4>
+              <p class="product_size">Size: 8oz.</p>
+              <p class="product_category">Category: Cooking</p>
+
+              <div class="quantity-control">
+                <span >Quantity:</span>
+                <button class="quantity-btn">−</button>
+                <span class="product_quantity">1</span>
+                <button class="quantity-btn">+</button>
+
+                <button class="delete-btn" onclick="deleteWarn(this)">🗑 Delete</button>
+              </div>
+            </div>
+
+            <div class="item-price">
+              <p class="product_price">Price: ₱999.99</p>
+            </div>
+
+          </div> -->
+
+          <!-- Add more item-card elements here -->
+
+        </div>
+      </div>
+
+
+      <!-- RIGHT: PRICE BREAKDOWN -->
+      <div class="price-breakdown">
+
+        <h3>Price Breakdown</h3>
+
+        <div class="price-row">
+          <span>Products Cost:</span>
+          <span>₱999.99</span>
+        </div>
+
+        <div class="price-row">
+          <span>Shipping Fee:</span>
+          <span>₱999.99</span>
+        </div>
+
+        <div class="price-row">
+          <span>Discount:</span>
+          <span>10% Off</span>
+        </div>
+
+        <hr>
+        
+        <div class="line-break"></div>
+
+        <div class="total-row">
+          <span>Total Cost:</span>
+          <span>₱1999.99</span>
+        </div>
+
+        <h4 style="margin-bottom: 20px;">Payment Method</h4>
+
+        <div class="payment-section">
+
+          <button class="payment-option">
+            <span>₱</span>
+            <span>Card Payment (Debit / Credit)</span>
+          </button>
+
+
+          <button class="payment-option">
+            <span>🚚</span>
+            <span>Cash on Delivery</span>
+          </button>
+
+          <button class="checkout-btn" onclick="checkoutWarn()">
+            Checkout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="shoppingcart.js"></script>
+</body>
+</html>

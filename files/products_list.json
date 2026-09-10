@@ -1,0 +1,1006 @@
+[
+  {
+    "product_id": 1,
+    "product_name": "Saffron",
+    "product_price": 110,
+    "product_amount": 10,
+    "product_likes": 428,
+    "product_desc": "A highly prized spice made from the dried stigmas of the saffron crocus. It has a delicate floral aroma and gives dishes a distinctive golden color and refined flavor.",
+    "product_category": [
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      },
+      {
+        "category_id": 18,
+        "category_name": "Desserts"
+      },
+      {
+        "category_id": 17,
+        "category_name": "Pastries"
+      }
+    ],
+    "product_country": "Iran",
+    "product_image": "https://t4.ftcdn.net/jpg/00/57/74/29/360_F_57742944_kp79dI35mqdrvDh67zZUjhPMfKje0CBb.jpg"
+  },
+  {
+    "product_id": 2,
+    "product_name": "Black Cardamom",
+    "product_price": 51.5,
+    "product_amount": 10,
+    "product_likes": 286,
+    "product_desc": "Large aromatic cardamom pods with a smoky, earthy flavor. Black cardamom is commonly used in savory curries, rice dishes, stews, and spice blends.",
+    "product_category": [
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 3,
+        "category_name": "Soups & Stews"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      }
+    ],
+    "product_country": "India",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4I0vmA0mXEmotCLsVDnXX6J32ceo-jo4g38nxVbyLt-DUGf6VcPfAC0u2&s=10"
+  },
+  {
+    "product_id": 3,
+    "product_name": "Long Pepper",
+    "product_price": 45,
+    "product_amount": 10,
+    "product_likes": 193,
+    "product_desc": "A rare pepper with a warm, sweet, earthy, and mildly pungent flavor. It can be ground as a seasoning or used whole in spice blends and slow-cooked dishes.",
+    "product_category": [
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 3,
+        "category_name": "Soups & Stews"
+      },
+      {
+        "category_id": 5,
+        "category_name": "Sauce & Condiments"
+      }
+    ],
+    "product_country": "India",
+    "product_image": "https://static.vecteezy.com/system/resources/thumbnails/023/010/371/small/long-pepper-on-olive-wood-photo.jpg"
+  },
+  {
+    "product_id": 4,
+    "product_name": "Asafoetida",
+    "product_price": 35,
+    "product_amount": 10,
+    "product_likes": 341,
+    "product_desc": "A pungent resinous spice that develops a savory onion-and-garlic-like aroma when cooked. It is widely used in Indian vegetarian dishes, legumes, and vegetable preparations.",
+    "product_category": [
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 4,
+        "category_name": "Side Dishes"
+      },
+      {
+        "category_id": 3,
+        "category_name": "Soups & Stews"
+      },
+      {
+        "category_id": 5,
+        "category_name": "Sauce & Condiments"
+      }
+    ],
+    "product_country": "India",
+    "product_image": "https://gardenerspath.com/wp-content/uploads/2023/02/Asafetida-Powder-on-a-Wooden-Surface.jpg"
+  },
+  {
+    "product_id": 5,
+    "product_name": "Makrut Lime Leaves",
+    "product_price": 29.5,
+    "product_amount": 10,
+    "product_likes": 512,
+    "product_desc": "Fragrant citrus leaves with bright lime and floral notes. They are commonly used to flavor Thai curries, soups, stir-fries, marinades, and beverages.",
+    "product_category": [
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 3,
+        "category_name": "Soups & Stews"
+      },
+      {
+        "category_id": 13,
+        "category_name": "Cold Beverages"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      }
+    ],
+    "product_country": "Thailand",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHh-FmHhHrcmNwHNeFKNchJDbSjGMui_cuoTm9UGQyPD2k23jSQY41whw&s=10"
+  },
+  {
+    "product_id": 6,
+    "product_name": "Culantro",
+    "product_price": 60,
+    "product_amount": 10,
+    "product_likes": 267,
+    "product_desc": "A strongly aromatic herb with a flavor similar to cilantro but more intense. Culantro is commonly used in Caribbean, Latin American, and Southeast Asian cooking.",
+    "product_category": [
+      {
+        "category_id": 9,
+        "category_name": "Herbs & Leaves"
+      },
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 3,
+        "category_name": "Soups & Stews"
+      },
+      {
+        "category_id": 4,
+        "category_name": "Side Dishes"
+      }
+    ],
+    "product_country": "Mexico",
+    "product_image": "https://therike.com/cdn/shop/files/174a603380c934ed-1024x681.webp"
+  },
+  {
+    "product_id": 7,
+    "product_name": "Wasabi",
+    "product_price": 67,
+    "product_amount": 10,
+    "product_likes": 603,
+    "product_desc": "A pungent Japanese condiment known for its sharp heat and fresh green character. Wasabi is traditionally served with sushi and sashimi and can also flavor sauces and dressings.",
+    "product_category": [
+      {
+        "category_id": 5,
+        "category_name": "Sauce & Condiments"
+      },
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 1,
+        "category_name": "Appetizers / Starters"
+      }
+    ],
+    "product_country": "Japan",
+    "product_image": "https://specialtyproduce.com/sppics/756.png"
+  },
+  {
+    "product_id": 8,
+    "product_name": "Mahlab",
+    "product_price": 18.5,
+    "product_amount": 10,
+    "product_likes": 178,
+    "product_desc": "A fragrant spice made from the kernels of sour cherry pits, offering an almond-like aroma with subtle floral and fruity notes. It is especially valued in breads and pastries.",
+    "product_category": [
+      {
+        "category_id": 16,
+        "category_name": "Breads"
+      },
+      {
+        "category_id": 17,
+        "category_name": "Pastries"
+      },
+      {
+        "category_id": 18,
+        "category_name": "Desserts"
+      },
+      {
+        "category_id": 15,
+        "category_name": "Cakes"
+      }
+    ],
+    "product_country": "Turkey",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdJM835AFiysIeFrE_SWaQYyAl_qFV6bsMC6QvyhVjI3fjE5NY4phpHIU&s=10"
+  },
+  {
+    "product_id": 9,
+    "product_name": "Boldo Leaves",
+    "product_price": 16.5,
+    "product_amount": 10,
+    "product_likes": 149,
+    "product_desc": "Aromatic leaves traditionally brewed as an herbal tea. Boldo has a distinctive earthy and slightly bitter flavor and is commonly associated with traditional South American herbal practices.",
+    "product_category": [
+      {
+        "category_id": 7,
+        "category_name": "Herbal Remedies & Supplements"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      },
+      {
+        "category_id": 8,
+        "category_name": "Health & Wellness"
+      }
+    ],
+    "product_country": "Chile",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-o2aKGV6GNUK-mfY78qHNuqXBLiTR_1zyb_245tPvMigT9b2CZryMZiKf&s=10"
+  },
+  {
+    "product_id": 10,
+    "product_name": "Sumac",
+    "product_price": 28.6,
+    "product_amount": 10,
+    "product_likes": 385,
+    "product_desc": "A deep red spice made from dried sumac berries. It has a bright, tangy, lemon-like flavor that is commonly used on meats, salads, dips, breads, and rice dishes.",
+    "product_category": [
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 4,
+        "category_name": "Side Dishes"
+      },
+      {
+        "category_id": 5,
+        "category_name": "Sauce & Condiments"
+      },
+      {
+        "category_id": 1,
+        "category_name": "Appetizers / Starters"
+      }
+    ],
+    "product_country": "Turkey",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC17rjiRhJsUvUKr4gb2KvqSK0xL2avu4uoqfK_fCxrg&s=10"
+  },
+  {
+    "product_id": 11,
+    "product_name": "Kala Namak",
+    "product_price": 27,
+    "product_amount": 10,
+    "product_likes": 329,
+    "product_desc": "Also known as Indian black salt, Kala Namak is a mineral-rich seasoning with a distinctive sulfurous aroma and savory flavor. It is often used in chaats, salads, snacks, and vegetarian dishes.",
+    "product_category": [
+      {
+        "category_id": 4,
+        "category_name": "Side Dishes"
+      },
+      {
+        "category_id": 5,
+        "category_name": "Sauce & Condiments"
+      },
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 1,
+        "category_name": "Appetizers / Starters"
+      }
+    ],
+    "product_country": "India",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStQBgRHN-XAtpR8K8UwPT2I84O3BrzPxVqEiqg0HicfuNE8ZKRmS2bACQ&s=10"
+  },
+  {
+    "product_id": 12,
+    "product_name": "Pasilla de Oaxaca",
+    "product_price": 14.5,
+    "product_amount": 10,
+    "product_likes": 214,
+    "product_desc": "A distinctive Mexican dried chile known for its dark color, smoky aroma, fruity flavor, and moderate heat. It is commonly used in sauces, stews, and traditional Mexican dishes.",
+    "product_category": [
+      {
+        "category_id": 5,
+        "category_name": "Sauce & Condiments"
+      },
+      {
+        "category_id": 3,
+        "category_name": "Soups & Stews"
+      },
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 1,
+        "category_name": "Appetizers / Starters"
+      }
+    ],
+    "product_country": "Mexico",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXk6pnWmjTHx_d5TeYL80qM_HYxUo3sYMWW-CK4LPTNQ&s=10"
+  },
+  {
+    "product_id": 13,
+    "product_name": "Yarrow Leaves",
+    "product_price": 25,
+    "product_amount": 10,
+    "product_likes": 121,
+    "product_desc": "Aromatic herb leaves traditionally used in herbal preparations and teas. Yarrow has a mildly bitter, grassy, and slightly floral character.",
+    "product_category": [
+      {
+        "category_id": 7,
+        "category_name": "Herbal Remedies & Supplements"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      },
+      {
+        "category_id": 9,
+        "category_name": "Herbs & Leaves"
+      },
+      {
+        "category_id": 8,
+        "category_name": "Health & Wellness"
+      }
+    ],
+    "product_country": "France",
+    "product_image": "https://turtlelodgetradingpost.ca/cdn/shop/files/Yarrow_Adjustment2.png?v=1721314060"
+  },
+  {
+    "product_id": 14,
+    "product_name": "Tarragon Leaves",
+    "product_price": 21,
+    "product_amount": 10,
+    "product_likes": 296,
+    "product_desc": "A delicate culinary herb with a sweet, bittersweet, and anise-like flavor. Tarragon is often used with fish, poultry, soups, sauces, mushrooms, and salads.",
+    "product_category": [
+      {
+        "category_id": 9,
+        "category_name": "Herbs & Leaves"
+      },
+      {
+        "category_id": 5,
+        "category_name": "Sauce & Condiments"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      },
+      {
+        "category_id": 8,
+        "category_name": "Health & Wellness"
+      }
+    ],
+    "product_country": "France",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTB1xe7nboyz1UvHnRilPqhfCyW6GuzUoPViyVj6CDYnA&s=10"
+  },
+  {
+    "product_id": 15,
+    "product_name": "Enoki Mushrooms",
+    "product_price": 9,
+    "product_amount": 10,
+    "product_likes": 474,
+    "product_desc": "Delicate mushrooms with long slender stems and small caps. Enoki has a mild flavor and crisp texture and is commonly added to soups, hot pots, stir-fries, and noodle dishes.",
+    "product_category": [
+      {
+        "category_id": 3,
+        "category_name": "Soups & Stews"
+      },
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 4,
+        "category_name": "Side Dishes"
+      },
+      {
+        "category_id": 1,
+        "category_name": "Appetizers / Starters"
+      }
+    ],
+    "product_country": "Japan",
+    "product_image": "https://freshcap.com/cdn/shop/articles/1.jpg?crop=center&height=1200&v=1784294321&width=1200"
+  },
+  {
+    "product_id": 16,
+    "product_name": "Lemon Myrtle",
+    "product_price": 12,
+    "product_amount": 10,
+    "product_likes": 251,
+    "product_desc": "An intensely fragrant Australian herb with a strong lemon aroma and fresh citrus flavor. Lemon myrtle is used in teas, desserts, sauces, marinades, and spice blends.",
+    "product_category": [
+      {
+        "category_id": 9,
+        "category_name": "Herbs & Leaves"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      },
+      {
+        "category_id": 18,
+        "category_name": "Desserts"
+      },
+      {
+        "category_id": 13,
+        "category_name": "Cold Beverages"
+      }
+    ],
+    "product_country": "Australia",
+    "product_image": "https://theteacentre.com.au/cdn/shop/files/TTC-1x1-LemonMyrtle.jpg?v=1745996864&width=1946"
+  },
+  {
+    "product_id": 17,
+    "product_name": "Fennel Pollen",
+    "product_price": 31,
+    "product_amount": 10,
+    "product_likes": 167,
+    "product_desc": "A rare spice collected from flowering fennel plants. It has concentrated sweet, floral, citrus, and anise-like notes and is used as a finishing spice for savory and sweet dishes.",
+    "product_category": [
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 17,
+        "category_name": "Pastries"
+      },
+      {
+        "category_id": 18,
+        "category_name": "Desserts"
+      },
+      {
+        "category_id": 16,
+        "category_name": "Breads"
+      }
+    ],
+    "product_country": "Italy",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaR2RTGjYCtDVeA56kwdZKHbMtHI-Ki-MP2e7m6RxBuA&s=10"
+  },
+  {
+    "product_id": 18,
+    "product_name": "Marigold Petals",
+    "product_price": 16,
+    "product_amount": 10,
+    "product_likes": 318,
+    "product_desc": "Bright edible marigold petals with a mild floral and vegetal flavor. The petals can be used in teas, desserts, salads, and as colorful decorative garnishes.",
+    "product_category": [
+      {
+        "category_id": 10,
+        "category_name": "Edible Flowers"
+      },
+      {
+        "category_id": 11,
+        "category_name": "Decorative Plating"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      },
+      {
+        "category_id": 18,
+        "category_name": "Desserts"
+      }
+    ],
+    "product_country": "India",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSXRfbB7t7wRb9cK7U8YlYB6oXPq-Ikl0blGMWbimjyA&s=10"
+  },
+  {
+    "product_id": 19,
+    "product_name": "Tonka Beans",
+    "product_price": 55,
+    "product_amount": 10,
+    "product_likes": 359,
+    "product_desc": "Highly aromatic beans with notes of vanilla, almond, cherry, caramel, and warm spice. Tonka beans are especially valued in desserts, chocolate preparations, and specialty beverages.",
+    "product_category": [
+      {
+        "category_id": 18,
+        "category_name": "Desserts"
+      },
+      {
+        "category_id": 15,
+        "category_name": "Cakes"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      },
+      {
+        "category_id": 17,
+        "category_name": "Pastries"
+      }
+    ],
+    "product_country": "Venezuela",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVUNm76xhmIdV4MaduZkRwtM2G9pxUpTzs6jEYaSkRXw&s=10"
+  },
+  {
+    "product_id": 20,
+    "product_name": "Mastic Resin",
+    "product_price": 43,
+    "product_amount": 10,
+    "product_likes": 227,
+    "product_desc": "A natural aromatic resin harvested from the mastic tree. It has a pine-like, slightly citrusy aroma and is used in traditional sweets, breads, drinks, and culinary preparations.",
+    "product_category": [
+      {
+        "category_id": 18,
+        "category_name": "Desserts"
+      },
+      {
+        "category_id": 16,
+        "category_name": "Breads"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      },
+      {
+        "category_id": 17,
+        "category_name": "Pastries"
+      }
+    ],
+    "product_country": "Greece",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUhvADqt1QfAxhjcNLffgpLRDH-L8wru5eXi_CXLi_1g&s=10"
+  },
+  {
+    "product_id": 21,
+    "product_name": "Maca Root",
+    "product_price": 18,
+    "product_amount": 10,
+    "product_likes": 442,
+    "product_desc": "A Peruvian root commonly dried and ground into powder. Maca has an earthy, nutty, and slightly sweet flavor and is commonly incorporated into smoothies, drinks, and food preparations.",
+    "product_category": [
+      {
+        "category_id": 7,
+        "category_name": "Herbal Remedies & Supplements"
+      },
+      {
+        "category_id": 8,
+        "category_name": "Health & Wellness"
+      },
+      {
+        "category_id": 14,
+        "category_name": "Juice & Smoothies"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      }
+    ],
+    "product_country": "Peru",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8aNDe7cy-OOPtnBZ7SU8xQYX7_9r0kzDULh3TsmBYsg&s=10"
+  },
+  {
+    "product_id": 22,
+    "product_name": "Camu-Camu",
+    "product_price": 10.6,
+    "product_amount": 10,
+    "product_likes": 387,
+    "product_desc": "A small Amazonian fruit usually sold as a dried powder. Camu-camu has a naturally tart and fruity flavor and is commonly added to smoothies, juices, and wellness beverages.",
+    "product_category": [
+      {
+        "category_id": 8,
+        "category_name": "Health & Wellness"
+      },
+      {
+        "category_id": 14,
+        "category_name": "Juice & Smoothies"
+      },
+      {
+        "category_id": 13,
+        "category_name": "Cold Beverages"
+      }
+    ],
+    "product_country": "Peru",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5869PlOfKriuiG_f7JlM7uRR0m05IEVXSwq8Zqmw6NA&s=10"
+  },
+  {
+    "product_id": 23,
+    "product_name": "Tasmanian Pepperberry",
+    "product_price": 17,
+    "product_amount": 10,
+    "product_likes": 194,
+    "product_desc": "A rare Australian spice with a complex flavor profile combining peppery heat with fruity, berry-like and mildly sweet notes. It is prized as a specialty seasoning for gourmet dishes.",
+    "product_category": [
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 4,
+        "category_name": "Side Dishes"
+      },
+      {
+        "category_id": 5,
+        "category_name": "Sauce & Condiments"
+      },
+      {
+        "category_id": 1,
+        "category_name": "Appetizers / Starters"
+      }
+    ],
+    "product_country": "Australia",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSEDoFpvl0tdMAbO8t4RRpWgykqgdS24ffuhfpgXAaFA&s=10"
+  },
+  {
+    "product_id": 24,
+    "product_name": "Green Aniseed",
+    "product_price": 3,
+    "product_amount": 10,
+    "product_likes": 275,
+    "product_desc": "Small aromatic seeds with a naturally sweet licorice-like flavor. Green aniseed is used in breads, pastries, desserts, spice blends, and beverages.",
+    "product_category": [
+      {
+        "category_id": 16,
+        "category_name": "Breads"
+      },
+      {
+        "category_id": 17,
+        "category_name": "Pastries"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      },
+      {
+        "category_id": 18,
+        "category_name": "Desserts"
+      }
+    ],
+    "product_country": "Egypt",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-P4F2IRrNez-hsNsSxZp5gXDeOsxOsqq00Pb6h7XlUw&s"
+  },
+  {
+    "product_id": 25,
+    "product_name": "Ajwain Seeds",
+    "product_price": 2.5,
+    "product_amount": 10,
+    "product_likes": 231,
+    "product_desc": "Small aromatic seeds with a strong thyme-like, peppery, and slightly bitter flavor. Ajwain is commonly used in Indian breads, curries, fried foods, and savory dishes.",
+    "product_category": [
+      {
+        "category_id": 16,
+        "category_name": "Breads"
+      },
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 4,
+        "category_name": "Side Dishes"
+      },
+      {
+        "category_id": 1,
+        "category_name": "Appetizers / Starters"
+      }
+    ],
+    "product_country": "India",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHHPNXorMHzm9ssFfqUGwEi3wBFrCn1YhTtLzima35zg&s=10"
+  },
+  {
+    "product_id": 26,
+    "product_name": "Grains of Selim",
+    "product_price": 4.5,
+    "product_amount": 10,
+    "product_likes": 156,
+    "product_desc": "Also known as grains of Selim, these aromatic West African spice pods have a warm, peppery, slightly bitter, and smoky character. They are commonly used in soups, stews, and spice blends.",
+    "product_category": [
+      {
+        "category_id": 3,
+        "category_name": "Soups & Stews"
+      },
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 5,
+        "category_name": "Sauce & Condiments"
+      },
+      {
+        "category_id": 1,
+        "category_name": "Appetizers / Starters"
+      }
+    ],
+    "product_country": "Ghana",
+    "product_image": "https://silkroadspices.ca/cdn/shop/products/GrainsofSelim2_1024x1024.jpg?v=1660243185"
+  },
+  {
+    "product_id": 27,
+    "product_name": "Chervil",
+    "product_price": 6.5,
+    "product_amount": 10,
+    "product_likes": 184,
+    "product_desc": "A delicate culinary herb with a mild parsley-like flavor and subtle anise notes. Chervil is commonly used as a finishing herb for salads, soups, sauces, egg dishes, and light appetizers.",
+    "product_category": [
+      {
+        "category_id": 1,
+        "category_name": "Appetizers / Starters"
+      },
+      {
+        "category_id": 9,
+        "category_name": "Herbs & Leaves"
+      },
+      {
+        "category_id": 4,
+        "category_name": "Side Dishes"
+      }
+    ],
+    "product_country": "France",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnpdzYrG2RFnYXr4I8BXObesmtnKh2-YjGtnUKoeaGOhZETcWEqI_rJaCf&s=10"
+  },
+  {
+    "product_id": 28,
+    "product_name": "Blade Mace",
+    "product_price": 3.9,
+    "product_amount": 10,
+    "product_likes": 216,
+    "product_desc": "The dried outer covering of the nutmeg seed, blade mace has a warm, sweet, floral, and slightly peppery aroma. It is used to season savory dishes, sauces, soups, and baked preparations.",
+    "product_category": [
+      {
+        "category_id": 1,
+        "category_name": "Appetizers / Starters"
+      },
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 18,
+        "category_name": "Desserts"
+      },
+      {
+        "category_id": 17,
+        "category_name": "Pastries"
+      }
+    ],
+    "product_country": "Indonesia",
+    "product_image": "https://www.allrecipes.com/thmb/UdOAouCSE0LN4m-wqXFgNS_2ZaQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/What-Is-Mace-4x3-bcaa6556f9864cc29b48af725ddc5ffd.jpg"
+  },
+  {
+    "product_id": 29,
+    "product_name": "Isot Pepper",
+    "product_price": 5,
+    "product_amount": 10,
+    "product_likes": 231,
+    "product_desc": "A Turkish pepper known for its deep burgundy color and distinctive smoky, fruity, mildly sweet, and moderately hot flavor. Isot pepper is commonly used as a finishing spice and seasoning.",
+    "product_category": [
+      {
+        "category_id": 1,
+        "category_name": "Appetizers / Starters"
+      },
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 5,
+        "category_name": "Sauce & Condiments"
+      },
+      {
+        "category_id": 4,
+        "category_name": "Side Dishes"
+      }
+    ],
+    "product_country": "Turkey",
+    "product_image": "https://bturkish.com/cdn/shop/files/5c8c2d9a07291c1d74fa6f0c.webp?v=1759944842&width=300"
+  },
+  {
+    "product_id": 30,
+    "product_name": "Sorrel",
+    "product_price": 3.3,
+    "product_amount": 10,
+    "product_likes": 197,
+    "product_desc": "A leafy herb with a distinctive fresh, tangy, lemon-like flavor. Sorrel can be used in salads, soups, sauces, garnishes, and other light culinary preparations.",
+    "product_category": [
+      {
+        "category_id": 1,
+        "category_name": "Appetizers / Starters"
+      },
+      {
+        "category_id": 9,
+        "category_name": "Herbs & Leaves"
+      },
+      {
+        "category_id": 4,
+        "category_name": "Side Dishes"
+      },
+      {
+        "category_id": 13,
+        "category_name": "Cold Beverages"
+      }
+    ],
+    "product_country": "France",
+    "product_image": "https://www.marthastewart.com/thmb/FBRg22KTMHbocE82bwGniPJxpM8=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/ms-sorrel-leaves-getty-ee81d3b9ab5045f0aa8dc078972127be.jpg"
+  },
+  {
+    "product_id": 31,
+    "product_name": "Epazote",
+    "product_price": 3.9,
+    "product_amount": 10,
+    "product_likes": 263,
+    "product_desc": "A strongly aromatic Mexican herb with a distinctive earthy, citrusy, and slightly minty character. Epazote is traditionally used in beans, soups, stews, quesadillas, and other Mexican dishes.",
+    "product_category": [
+      {
+        "category_id": 1,
+        "category_name": "Appetizers / Starters"
+      },
+      {
+        "category_id": 2,
+        "category_name": "Main Course"
+      },
+      {
+        "category_id": 9,
+        "category_name": "Herbs & Leaves"
+      },
+      {
+        "category_id": 3,
+        "category_name": "Soups & Stews"
+      }
+    ],
+    "product_country": "Mexico",
+    "product_image": "https://images.squarespace-cdn.com/content/63f3e5fd4d968c376e9f4d3d/1680025207323-PKUU25OSL5MS10YSKWHG/bunch-of-fresh-epazote-mexico-casa-jacaranda.jpg?format=1500w&content-type=image%2Fjpeg"
+  },
+  {
+    "product_id": 32,
+    "product_name": "Chamomile",
+    "product_price": 2.5,
+    "product_amount": 10,
+    "product_likes": 214,
+    "product_desc": "A fragrant flowering herb traditionally used in soothing teas and gentle herbal preparations. Chamomile is valued for its mild floral aroma and calming character.",
+    "product_category": [
+      {
+        "category_id": 6,
+        "category_name": "First aid"
+      },
+      {
+        "category_id": 7,
+        "category_name": "Herbal Remedies & Supplements"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      },
+      {
+        "category_id": 10,
+        "category_name": "Edible Flowers"
+      }
+    ],
+    "product_country": "Egypt",
+    "product_image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSj3zZgQ8HFluzw8cETZpt8hhtyXZ4TTgmXzheLleVKLA&s"
+  },
+  {
+    "product_id": 33,
+    "product_name": "Calendula",
+    "product_price": 2.3,
+    "product_amount": 10,
+    "product_likes": 198,
+    "product_desc": "Bright yellow and orange calendula flowers traditionally used in herbal preparations and topical products. They are valued for their gentle botanical character and soothing properties.",
+    "product_category": [
+      {
+        "category_id": 6,
+        "category_name": "First aid"
+      },
+      {
+        "category_id": 7,
+        "category_name": "Herbal Remedies & Supplements"
+      },
+      {
+        "category_id": 10,
+        "category_name": "Edible Flowers"
+      }
+    ],
+    "product_country": "Egypt",
+    "product_image": "https://tiimg.tistatic.com/fp/1/007/008/healthy-and-natural-fresh-calendula-flowers-669.jpg"
+  },
+  {
+    "product_id": 34,
+    "product_name": "Lavender",
+    "product_price": 1.1,
+    "product_amount": 10,
+    "product_likes": 236,
+    "product_desc": "An aromatic flowering herb known for its distinctive floral fragrance. Lavender is commonly used in herbal preparations, teas, aromatics, and traditional soothing applications.",
+    "product_category": [
+      {
+        "category_id": 6,
+        "category_name": "First aid"
+      },
+      {
+        "category_id": 7,
+        "category_name": "Herbal Remedies & Supplements"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      },
+      {
+        "category_id": 10,
+        "category_name": "Edible Flowers"
+      }
+    ],
+    "product_country": "France",
+    "product_image": "https://media.istockphoto.com/id/155072973/photo/lavender.jpg?s=612x612&w=0&k=20&c=eo6k3O0TQSljJvMBzuRzykMwTwZMfzEpG5ji_lq_0QI="
+  },
+  {
+    "product_id": 35,
+    "product_name": "Cinnamon",
+    "product_price": 1.5,
+    "product_amount": 10,
+    "product_likes": 321,
+    "product_desc": "A warm and aromatic spice with a naturally sweet, woody flavor. Cinnamon is commonly used in teas, desserts, baked goods, and traditional culinary and herbal preparations.",
+    "product_category": [
+      {
+        "category_id": 6,
+        "category_name": "First aid"
+      },
+      {
+        "category_id": 7,
+        "category_name": "Herbal Remedies & Supplements"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      },
+      {
+        "category_id": 18,
+        "category_name": "Desserts"
+      }
+    ],
+    "product_country": "Sri Lanka",
+    "product_image": "https://img.magnific.com/free-photo/front-view-cinnamon-sticks-cinnamon-powders-pinecone-wood-board-dark_140725-105514.jpg?semt=ais_hybrid&w=740&q=80"
+  },
+  {
+    "product_id": 36,
+    "product_name": "Peppermint",
+    "product_price": 0.9,
+    "product_amount": 10,
+    "product_likes": 289,
+    "product_desc": "A refreshing aromatic herb with a cool minty flavor and strong fragrance. Peppermint is commonly used in teas, herbal preparations, and traditional soothing applications.",
+    "product_category": [
+      {
+        "category_id": 6,
+        "category_name": "First aid"
+      },
+      {
+        "category_id": 7,
+        "category_name": "Herbal Remedies & Supplements"
+      },
+      {
+        "category_id": 9,
+        "category_name": "Herbs & Leaves"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      }
+    ],
+    "product_country": "Morocco",
+    "product_image": "https://cdn.mos.cms.futurecdn.net/YtmBGLwoTEFjvrUZGK3Ne-1600-80.jpg"
+  },
+  {
+    "product_id": 37,
+    "product_name": "Valerian Root",
+    "product_price": 1.2,
+    "product_amount": 10,
+    "product_likes": 176,
+    "product_desc": "A dried aromatic root traditionally used in herbal preparations and teas. Valerian is particularly known for its earthy aroma and its long-standing use in traditional calming and relaxation preparations.",
+    "product_category": [
+      {
+        "category_id": 6,
+        "category_name": "First aid"
+      },
+      {
+        "category_id": 7,
+        "category_name": "Herbal Remedies & Supplements"
+      },
+      {
+        "category_id": 12,
+        "category_name": "Hot Beverages"
+      }
+    ],
+    "product_country": "Germany",
+    "product_image": "https://cdn-prod.medicalnewstoday.com/content/images/articles/318/318088/valerian-root.jpg"
+  }
+]

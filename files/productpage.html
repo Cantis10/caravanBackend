@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Page - Caravan</title>
+  
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="productpage.css" />
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md">
+      <div class="container-fluid">
+        <!-- Logo -->
+        <div class="nav-left">
+          <a class="navbar-brand" href="index.html">
+            <img
+              src="Images/CaravanLogo_Transparent.png"
+              alt="Caravan"
+              height="60"
+              id="Caravan_Logo"
+            />
+          </a>
+        </div>
+
+        <!-- Mobile Toggle Button -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Center Navigation -->
+          <ul class="navbar-nav nav-center">
+            <li class="nav-item1">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+
+            <li class="nav-item1">
+              <a class="nav-link" href="storepage.html">Market</a>
+            </li>
+
+            <li class="nav-item1">
+              <a class="nav-link" href="FAQs.html">FAQs</a>
+            </li>
+          </ul>
+
+          <!-- Right Navigation -->
+          <ul class="navbar-nav nav-right">
+            <li class="nav-item2">
+              <a class="nav-link" href="shoppingcart.html">Cart</a>
+            </li>
+
+            <li class="nav-item2">
+              <a class="nav-link" href="LoginPage.html">Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+  <!-- Main Content Body -->
+  <main class="main-contents">
+
+    <!-- addtocart modal -->
+    <div class="addtocart-modal">
+      <div class="cart-warning">
+        <h2 class="warning-title">ADD TO CART?</h2>
+        <h1 style="font-size: 70px;">&#128722;</h1>
+        <hr>
+        <div class="warning-actions">
+          <button type="button" class="btn btn-outline-danger" onclick="addtocart_confirm()">Yes</button>
+          <button type="button" class="btn btn-outline-primary" onclick="addtocart_close()">No</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- success Modal -->
+    <div class="success-modal">
+      <div class="cart-warning">
+        <h2 class="warning-title">SUCCESS</h2>
+        <hr>
+        <p class="warning-desc">Your Product has been added to your cart</p>
+        <br>
+        <div class="warning-actions">
+          <button type="button" class="btn btn-outline-primary" onclick="closeModal()">Okay</button>
+        </div>
+      </div>
+    </div>
+
+
+    <button class="back-button" onclick="history.back()">&#x21A9;</button>
+
+    <!-- Main Product Section -->
+    <div class="product-container">
+      <div class="product-image-container">
+        <img
+          src="Images/pAPRIKA.jpg"
+          alt="Paprika Spice"
+          class="product-image"
+          id="mainProductImg"
+        />
+      </div>
+
+      <div class="product-info">
+        <h1 class="product-title" id="productTitle">Paprika</h1>
+        <p class="product-origin" id="productOrigin">Origin: Central and South America</p>
+        <p class="product-description" id="productDesc">
+          Description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </p>
+
+        <div class="size-selector">
+          <label for="spiceSize">Size: </label>
+          <select id="spiceSize">
+            <option value="8oz">8 oz</option>
+            <option value="16oz">16 oz</option>
+          </select>
+        </div>
+
+        <div class="product-price" id="productPrice">Price: $999</div>
+
+        <div class="product-actions">
+          <button class="btn-like" id="likeBtn">
+            <span class="heart-icon">&#9825;</span> <span id="likeCount">129</span>
+          </button>
+          <button class="add-to-cart-button" id="addToCartBtn" 
+          aria-label="Add to Cart" onclick="addtoCart(this)">
+            &#128722;
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: Similar Spices -->
+    <section class="recommendations-section">
+      <div class="section-header">
+        <h2>Similar Herbs & Spices</h2>
+      </div>
+
+      <div class="recommendations-similar">
+        <div class="product-grid">
+          <!-- <div class="recommendation-card">
+            <div class="cardImg">
+              <img src="Images/pAPRIKA.jpg" alt="Paprika" class="recommendation-img"/>
+            </div>
+            <div class="card-details">
+              <h4 class="card-title">Paprika</h4>
+              <p class="art-price">$999</p>
+            </div>
+          </div> -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Spices you may like -->
+    <section class="recommendations-section">
+      <div class="section-header">
+        <h2>Herbs & Spices you might like</h2>
+      </div>
+
+      <div class="recommendations-like">
+        <div class="product-grid">
+          <!-- <div class="recommendation-card">
+            <div class="cardImg">
+              <img src="Images/pAPRIKA.jpg" alt="Paprika" class="liked-img"/>
+            </div>
+            <div class="card-details">
+              <h4 class="card-title">Paprika</h4>
+              <p class="art-price">$999</p>
+            </div>
+          </div> -->
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"></script>
+  <script src="productpage.js"></script>
+</body>
+</html>

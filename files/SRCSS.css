@@ -1,0 +1,95 @@
+
+#salesToolbar {
+  flex-wrap: wrap;
+}
+
+#salesToolbar .search-field {
+  flex: 1 1 240px;
+}
+
+#salesToolbar .btn {
+  flex: 0 0 auto;
+}
+
+.export-btn {
+  color: var(--bg);
+  background: var(--gold);
+  border-color: var(--gold);
+  font-weight: 600;
+}
+
+.export-btn:hover {
+  background: var(--gold-dim);
+  border-color: var(--gold-dim);
+  color: var(--bg);
+}
+
+.filter-wrap {
+  position: relative;
+}
+
+.filter-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  min-width: 180px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+}
+
+.filter-menu.is-open {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.filter-menu button {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  text-align: left;
+  font-size: 0.88rem;
+  padding: 9px 10px;
+  border-radius: 7px;
+}
+
+.filter-menu button:hover {
+  background: rgba(217, 164, 65, 0.08);
+  color: var(--text-primary);
+}
+
+.filter-menu button.is-active {
+  color: var(--gold);
+  font-weight: 600;
+  background: rgba(217, 164, 65, 0.14);
+}
+
+.gain {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  font-family: var(--mono);
+  font-size: 0.9rem;
+}
+
+.gain svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.gain-up { color: var(--green); }
+.gain-down { color: var(--red); }
+
+@media (max-width: 560px) {
+  .filter-menu {
+    right: auto;
+    left: 0;
+  }
+}
