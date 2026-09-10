@@ -2,7 +2,7 @@ const express = require("express");
 const app = express.Router();
 const db = require("../../imports/database");
 
-app.customPath = "/dbcheck";
+app.customPath = "/";
 app.get("/", async (req, res) => {
   try {
     const result = await db.execute("SELECT 1 AS test");
