@@ -2,12 +2,12 @@ const express = require("express");
 const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
-
+const cookieParser = require("cookie-parser");
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
-
+app.use(cookieParser());
 const routersPath = path.join(__dirname, "routes");
 
 // Recursively load routes

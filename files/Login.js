@@ -5,11 +5,9 @@ const errorMessage = document.getElementById("error-message");
 const successMessage = document.getElementById("success-message");
 const loginButton = document.getElementById("loginButton");
 
-
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
-
 
 function showError(message) {
   errorMessage.textContent = message;
@@ -20,8 +18,7 @@ function showError(message) {
   }, 2000);
 }
 
-
-loginForm.addEventListener("submit", function (e) {
+loginForm.addEventListener("submit", async function (e) {
   e.preventDefault();
 
   // Get values
@@ -32,13 +29,11 @@ loginForm.addEventListener("submit", function (e) {
   errorMessage.style.display = "none";
   successMessage.style.display = "none";
 
-
   // Check if email is empty
   if (email === "") {
     showError("Please enter your email address.");
     return;
   }
-
 
   // Validate email
   if (!validateEmail(email)) {
@@ -46,13 +41,11 @@ loginForm.addEventListener("submit", function (e) {
     return;
   }
 
-
   // Check if password is empty
   if (password === "") {
     showError("Please enter your password.");
     return;
   }
-
 
   // Validate password length
   if (password.length < 6) {
@@ -60,22 +53,32 @@ loginForm.addEventListener("submit", function (e) {
     return;
   }
 
+  //now call api /api/login
+  const response = await fetch("/api/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  });
 
-  // Loading state
-  loginButton.textContent = "Signing In...";
+  const data = await response.json();
+
   loginButton.disabled = true;
 
+  if (data.error) {
+    showError(data.error);
+
+    loginButton.disabled = false;
+    return;
+  } else {
+    if (data.role == "admin") {
+      window.location.href = "/admin/dashboard";
+    } else {
+      window.location.href = "/store";
+    }
+  }
+  // Loading state
 
   // Successful login simulation
-  setTimeout(() => {
-
-    successMessage.textContent = "Login successful!";
-    successMessage.style.display = "block";
-
-    setTimeout(() => {
-      window.location.href = "index.html";
-    }, 1000);
-
-  }, 1000);
-
 });
