@@ -7,8 +7,9 @@ app.customPath = "/api";
 
 app.post("/register", async (req, res) => {
   try {
-    const { first_name, last_name, email, password } = req.body;
-
+    const { firstName, lastName, email, password } = req.body;
+    const first_name = firstName;
+    const last_name = lastName;
     if (!first_name || !last_name || !email || !password) {
       console.log("missing required fields");
       return res.status(400).json({ error: "Missing required fields" });
@@ -28,8 +29,59 @@ app.post("/register", async (req, res) => {
       console.log("invalid email format");
       return res.status(400).json({ error: "Invalid email format" });
     }
-
+    /*INSERT INTO Customer (
+    Customer_id,
+    first_name,
+    last_name,
+    Cus_email,
+    Cus_phone,
+    Cus_birthdate,
+    Cus_password,
+    Status
+) */
     //TODO: add into
+    const result = await db.execute({
+      sql: `
+        INSERT INTO Customer (first_name, last_name, Cus_email, Cus_password)
+        VALUES (?, ?, ?, ?)
+      `,
+      args: [first_name, last_name, email, password],
+    });
+    if (result.affectedRows === 0) {
+      return res.status(500).json({ error: "Server error" });
+    }
+    const user = await db.execute({
+      sql: `
+        SELECT *
+        FROM Customer
+        WHERE Cus_email = ?
+        AND Cus_password = ?
+      `,
+      args: [email, password],
+    });
+
+    const token = jwt.sign(
+      {
+        userId: user.Customer_id,
+        email: user.Cus_email,
+        role: "user",
+      },
+      JWT_SECRET,
+      {
+        expiresIn: "24h",
+      },
+    );
+
+    res.cookie("auth", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    return res.json({
+      login: "success",
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
