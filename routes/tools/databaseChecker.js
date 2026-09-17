@@ -10,22 +10,24 @@ const express = require("express");
 const app = express.Router();
 const db = require("../../imports/database");
 const path = require("path");
+const { requireAuth } = require("../../imports/token");
+
 app.customPath = "/api/databaseChecker";
 // helper: run a query and return { rows, columns }
 async function query(sql, args = []) {
   const result = await db.execute({ sql, args });
   return { rows: result.rows, columns: result.columns.map((c) => c.name ?? c) };
 }
-app.get("/", (req, res) => {
+app.get("/",  requireAuth("admin"),(req, res) => {
   res.sendFile(path.join(__dirname, "../../files/databaseMan.html"));
 });
 
-app.get("/home", (req, res) => {
+app.get("/home", requireAuth("admin"), (req, res) => {
   res.sendFile(path.join(__dirname, "../../files/databaseMan.html"));
 });
 
 // GET /api/databaseChecker/tables
-app.get("/tables", async (req, res) => {
+app.get("/tables",  requireAuth("admin"),async (req, res) => {
   try {
     const { rows } = await query(
       `SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name`,
@@ -39,7 +41,7 @@ app.get("/tables", async (req, res) => {
 });
 
 // GET /api/databaseChecker/table-data
-app.get("/table-data", async (req, res) => {
+app.get("/table-data",  requireAuth("admin"),async (req, res) => {
   const { table, page = 1, limit = 50, sort, dir = "asc", filter } = req.query;
   if (!table) return res.status(400).json({ error: "table is required" });
   const offset = (page - 1) * limit;
@@ -81,7 +83,7 @@ app.get("/table-data", async (req, res) => {
 });
 
 // GET /api/databaseChecker/schema
-app.get("/schema", async (req, res) => {
+app.get("/schema", requireAuth("admin"), async (req, res) => {
   try {
     const { rows: tableRows } = await query(
       `SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name`,
@@ -108,7 +110,7 @@ app.get("/schema", async (req, res) => {
 });
 
 // POST /api/databaseChecker/query  { sql }
-app.post("/query", async (req, res) => {
+app.post("/query", requireAuth("admin"), async (req, res) => {
   const { sql } = req.body;
   if (!sql) return res.status(400).json({ error: "sql is required" });
   try {
