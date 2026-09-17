@@ -1,9 +1,12 @@
 const express = require("express");
 const app = express.Router();
+
+/*
 const FormData = require("form-data");
 const Mailgun = require("mailgun.js");
 
 const mailgun = new Mailgun(FormData);
+
 const mg = mailgun.client({
   username: "api",
   key: process.env.MAILGUN_API_KEY,
@@ -25,6 +28,6 @@ app.get("/send-email", async (req, res) => {
     console.log(error);
     return res.status(500).json({ success: false, error: error.message });
   }
-});
+});*/
 
 module.exports = app;

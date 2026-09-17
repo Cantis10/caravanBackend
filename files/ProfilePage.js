@@ -18,6 +18,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+
+  //logout
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      window.location.href = "/login";
+    });
+  }
+
   // Modal Handlers
   const addressModal = document.getElementById("addressModal");
   const openAddressBtn = document.getElementById("openAddressModalBtn");

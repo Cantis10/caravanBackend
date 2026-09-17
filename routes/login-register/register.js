@@ -7,6 +7,7 @@ app.customPath = "/api";
 
 app.post("/register", async (req, res) => {
   try {
+
     const { firstName, lastName, email, password } = req.body;
     const first_name = firstName;
     const last_name = lastName;
@@ -40,6 +41,21 @@ app.post("/register", async (req, res) => {
     Status
 ) */
     //TODO: add into
+
+    const existingUser = await db.execute({
+  sql: `
+    SELECT Customer_id
+    FROM Customer
+    WHERE Cus_email = ?
+  `,
+  args: [email],
+});
+
+if (existingUser.rows.length > 0) {
+  return res.status(409).json({
+    error: "Email is already registered",
+  });
+}
     const result = await db.execute({
       sql: `
         INSERT INTO Customer (first_name, last_name, Cus_email, Cus_password)

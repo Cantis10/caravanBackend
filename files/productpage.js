@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         () => {
 
                             window.location.href =
-                                `productpage.html?productId=${recommendedProduct.product_id}`;
+                                `product?productId=${recommendedProduct.product_id}`;
 
                         }
                     );
@@ -310,7 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         () => {
 
                             window.location.href =
-                                `productpage.html?productId=${randomProduct.product_id}`;
+                                `product?productId=${randomProduct.product_id}`;
 
                         }
                     );

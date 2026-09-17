@@ -53,6 +53,10 @@ loginForm.addEventListener("submit", async function (e) {
     return;
   }
 
+  loginButton.disabled = true;
+  loginButton.textContent = "LOADING...";
+  loginButton.style.backdropFilter = "blur(25px)";
+
   //now call api /api/login
   const response = await fetch("/api/login", {
     method: "POST",
@@ -64,12 +68,11 @@ loginForm.addEventListener("submit", async function (e) {
 
   const data = await response.json();
 
-  loginButton.disabled = true;
-
   if (data.error) {
     showError(data.error);
 
     loginButton.disabled = false;
+    loginButton.style.backdropFilter = "blur(0px)";
     return;
   } else {
     if (data.role == "admin") {

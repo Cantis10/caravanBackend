@@ -1,3 +1,7 @@
+body {
+  overflow-x: hidden;
+}
+
 /* Foants Imported */
 @font-face {
   font-family: EncodeSans_GC_Semi; /* Font Name */

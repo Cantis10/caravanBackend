@@ -15,11 +15,13 @@ app.get("/", (req, res) => {
 
 app.get("/login", (req, res) => {
   console.log("Route hit: /loginPage");
+  res.clearCookie("auth");
   res.sendFile(path.join(filesPath, "LoginPage.html"));
 });
 
 app.get("/register", (req, res) => {
   console.log("Route hit: /registerPage");
+  res.clearCookie("auth");
   res.sendFile(path.join(filesPath, "RegisterPage.html"));
 });
 
@@ -35,6 +37,7 @@ app.get("/store", (req, res) => {
 
 app.get("/product", (req, res) => {
   console.log("Route hit: /product");
+
   res.sendFile(path.join(filesPath, "productpage.html"));
 });
 

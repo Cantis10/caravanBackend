@@ -36,7 +36,24 @@ function loadRoutes(directory) {
   });
 }
 
+
+
+
+
 loadRoutes(routersPath);
+
+
+
+const filesPath = path.join(__dirname, "/files");
+
+app.use(express.static(filesPath));
+
+app.use((req, res) => {
+
+  res.sendFile(path.join(filesPath, "404.html"));
+  
+});
+module.exports = app;
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);

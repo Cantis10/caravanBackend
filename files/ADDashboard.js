@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (bellDot) bellDot.classList.add("show");
 
-  const currentPage = location.pathname.split("/").pop() || "dashboard.html";
+  const currentPage = location.pathname.split("/").pop() || "dashboard";
   navLinks.forEach((link) => {
     const isCurrent = link.getAttribute("href") === currentPage;
     link.classList.toggle("is-active", isCurrent);

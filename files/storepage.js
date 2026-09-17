@@ -39,7 +39,23 @@ function switchTab(tab) {
         renderBundles();
     }
 }
+async function updateNavbarLogin(){
 
+      const response = await fetch("/api/isLoggedIn");
+
+console.log(response);
+    if(!response.ok){
+document.getElementById("accountButton").innerHTML = `
+    <a class="nav-link" href="/login">Login</a>
+`;
+    }else{
+        document.getElementById("accountButton").innerHTML = `
+    <a class="nav-link" href="/user/profile">Profile</a>
+`;
+    }
+
+}
+updateNavbarLogin();
 // Update navbar based on tab
 function updateNavbarForTab(tab) {
     const verticalNavbar = document.querySelector(".vertical-navbar");
@@ -149,7 +165,7 @@ function renderProducts() {
         `;
 
         productCard.addEventListener("click", () => {
-            window.location.href = `productpage.html?productId=${product.product_id}`;
+            window.location.href = `product?productId=${product.product_id}`;
         });
 
         productsection.appendChild(productCard);
@@ -197,7 +213,7 @@ function renderBundles() {
         `;
 
         bundleCard.addEventListener("click", () => {
-            window.location.href = `productpage.html?bundleId=${bundle.bundle_id}`;
+            window.location.href = `product?bundleId=${bundle.bundle_id}`;
         });
 
         bundleSection.appendChild(bundleCard);

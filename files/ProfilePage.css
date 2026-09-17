@@ -356,6 +356,19 @@ body {
   cursor: pointer;
 }
 
+.large-boux {
+    display: flex;
+    flex-direction: column; /* Stack the text and button vertically */
+    align-items: center;    /* Center them horizontally */
+    justify-content: center; /* Center them vertically (if the box has a set height) */
+    text-align: center;     /* Ensures the text itself is centered */
+    padding: 20px;          /* Optional: Adds space inside the box */
+}
+
+.large-boux .empty-text {
+    margin-bottom: 15px; 
+}
+
 .submit-btn:hover {
   background: #563C2A;
 }
@@ -430,3 +443,6 @@ body {
 }
 }
 
+#logoutBtn{
+width: 150px;
+}

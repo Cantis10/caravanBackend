@@ -190,12 +190,17 @@ registerForm.addEventListener("submit", async function (e) {
     return;
   }
 
+  registerButton.disabled = true;
+  registerButton.textContent = "LOADING...";
+  registerButton.style.backdropFilter = "blur(2px)";
+
   const response = await fetch("/api/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ firstName, lastName, email, password }),
+    
   });
 
   const data = await response.json();
@@ -203,6 +208,10 @@ registerForm.addEventListener("submit", async function (e) {
 
   if (data.error) {
     showError(data.error);
+
+    registerButton.disabled = false;
+    registerButton.textContent = "REGISTER";
+    registerButton.style.backdropFilter = "blur(0px)";
   }
 
   if (data.login) {
