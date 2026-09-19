@@ -1,7 +1,24 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Calls loadProfile function
+  loadProfile();
+
   // Sidebar Tab Navigation
   const menuItems = document.querySelectorAll(".menu-item");
   const tabPanes = document.querySelectorAll(".tab-pane");
+
+  const profileFields = [
+      document.getElementById("userEmail"),
+      document.getElementById("userBirthdate"),
+      document.getElementById("userFirstName"),
+      document.getElementById("userLastName"),
+      document.getElementById("userPassword")
+  ];
+
+  const editBtn = document.getElementById("editProfileBtn");
+  const saveBtn = document.getElementById("saveProfileBtn");
+  const cancelBtn = document.getElementById("cancelProfileBtn");
+
+  let originalValues = {};
 
   menuItems.forEach((button) => {
     button.addEventListener("click", () => {
@@ -18,6 +35,112 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // get items from db and insert in profile page
+  async function loadProfile() {
+
+      try {
+
+          const response = await fetch("/api/profile");
+
+          if (!response.ok) {
+              console.error("Failed to load profile:", response.status);
+              return;
+          }
+
+          const data = await response.json();
+
+          console.log("Profile information:", data);
+
+          document.getElementById("userEmail").value =
+              data.email || "";
+
+          document.getElementById("userFirstName").value =
+              data.firstName || "";
+
+          document.getElementById("userLastName").value =
+              data.lastName || "";
+
+          document.getElementById("userBirthdate").value =
+              data.birthdate || "";
+
+          document.querySelector(".user-name").textContent =
+              `${data.firstName || ""} ${data.lastName || ""}`.trim();
+
+      } catch (error) {
+
+          console.error("Error loading profile:", error);
+
+      }
+  }
+
+  editBtn.addEventListener("click", () => {
+
+    profileFields.forEach(field => {
+        originalValues[field.id] = field.value;
+        field.removeAttribute("readonly");
+    });
+
+      editBtn.style.display = "none";
+      saveBtn.style.display = "inline-block";
+      cancelBtn.style.display = "inline-block";
+  });
+
+  cancelBtn.addEventListener("click", () => {
+
+    profileFields.forEach(field => {
+        field.value = originalValues[field.id];
+        field.setAttribute("readonly", true);
+    });
+
+    editBtn.style.display = "inline-block";
+    saveBtn.style.display = "none";
+    cancelBtn.style.display = "none";
+  });
+
+  const saveModal = document.getElementById("saveProfileModal");
+
+  const confirmSaveBtn = document.getElementById("confirmSaveBtn");
+
+  const cancelSaveBtn = document.getElementById("cancelSaveBtn");
+
+  saveBtn.addEventListener("click", () => {
+
+      saveModal.classList.add("active");
+
+  });
+
+  confirmSaveBtn.addEventListener("click", async () => {
+
+      const payload = {
+          email: document.getElementById("userEmail").value,
+          birthdate: document.getElementById("userBirthdate").value,
+          firstName: document.getElementById("userFirstName").value,
+          lastName: document.getElementById("userLastName").value,
+          password: document.getElementById("userPassword").value
+      };
+
+      console.log("Saving profile...", payload);
+
+      // future fetch() goes here
+
+      profileFields.forEach(field => {
+          field.setAttribute("readonly", true);
+      });
+
+      editBtn.style.display = "inline-block";
+      saveBtn.style.display = "none";
+      cancelBtn.style.display = "none";
+
+      saveModal.classList.remove("active");
+
+      alert("Profile updated successfully.");
+  });
+
+  cancelSaveBtn.addEventListener("click", () => {
+
+    saveModal.classList.remove("active");
+
+  });
 
   //logout
   const logoutBtn = document.getElementById("logoutBtn");
@@ -45,6 +168,8 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("click", (e) => {
     if (e.target === addressModal) addressModal.classList.remove("active");
     if (e.target === cardModal) cardModal.classList.remove("active");
+    if (e.target === saveModal) saveModal.classList.remove("active");
+    
   });
 
   // Dynamic Address Form Submission
