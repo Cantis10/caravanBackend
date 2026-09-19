@@ -29,9 +29,9 @@ let selectedVoucher = null;
 document.addEventListener("DOMContentLoaded", () => {
     loadCartItems();
     updateNavbarLogin();
-
     renderVoucherDropdown();
 
+    // Voucher dropdown
     document.addEventListener("change", function(event) {
 
         if (event.target.id !== "voucherSelect") {
@@ -55,7 +55,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
         updatePriceSummary();
     });
+
+    // Payment selector
+    const paymentOptions =
+        document.querySelectorAll(".payment-option");
+
+    paymentOptions.forEach(option => {
+
+        option.addEventListener("click", () => {
+
+            paymentOptions.forEach(btn => {
+                btn.classList.remove("selected");
+            });
+
+            option.classList.add("selected");
+
+            selectedPaymentMethod =
+                option.textContent.trim();
+        });
+
+    });
 });
+``
 
 // checks if user Logged in; if so, change login to profile
 async function updateNavbarLogin(){
@@ -111,7 +132,7 @@ function warning_Yes() {
                 cartData = cart;
                 // Updates Checkoutbtn depending on cart content
                 updateCheckoutButton();
-                displayCartEmpty();
+                displayCartItems();
             }
         }
 
