@@ -39,6 +39,8 @@ function switchTab(tab) {
         renderBundles();
     }
 }
+
+// checks if user Logged in; if so, change login to profile
 async function updateNavbarLogin(){
 
       const response = await fetch("/api/isLoggedIn");
@@ -56,6 +58,7 @@ document.getElementById("accountButton").innerHTML = `
 
 }
 updateNavbarLogin();
+
 // Update navbar based on tab
 function updateNavbarForTab(tab) {
     const verticalNavbar = document.querySelector(".vertical-navbar");

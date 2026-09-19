@@ -3,6 +3,8 @@ let isBundle = false;
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    updateNavbarLogin();
+
     const sizeSelect = document.getElementById("spiceSize");
     const priceDisplay = document.getElementById("productPrice");
 
@@ -399,6 +401,24 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 });
+
+// checks if user Logged in; if so, change login to profile
+async function updateNavbarLogin(){
+
+    const response = await fetch("/api/isLoggedIn");
+
+    console.log(response);
+        if(!response.ok){
+    document.getElementById("accountButton").innerHTML = `
+        <a class="nav-link" href="/login">Login</a>
+    `;
+        }else{
+            document.getElementById("accountButton").innerHTML = `
+        <a class="nav-link" href="/user/profile">Profile</a>
+    `;
+        }
+
+}
 
 const addtocart_modal = document.querySelector(".addtocart-modal");
 const success_modal = document.querySelector(".success-modal");

@@ -1,3 +1,22 @@
+// checks if user Logged in; if so, change login to profile
+async function updateNavbarLogin(){
+
+    const response = await fetch("/api/isLoggedIn");
+
+    console.log(response);
+        if(!response.ok){
+    document.getElementById("accountButton").innerHTML = `
+        <a class="nav-link" href="/login">Login</a>
+    `;
+        }else{
+            document.getElementById("accountButton").innerHTML = `
+        <a class="nav-link" href="/user/profile">Profile</a>
+    `;
+        }
+
+}
+updateNavbarLogin();
+
 const elements = document.querySelectorAll(
     ".Categories, .fade-title, .card, .explore-btn, .teamSection, .aboutUs"
   );
