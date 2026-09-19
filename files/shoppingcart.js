@@ -2,10 +2,59 @@ let selectedItem = null;
 let cartData = [];
 let productsData = [];
 let bundlesData = [];
+let selectedPaymentMethod = null;
+
+let vouchers = [
+    {
+        voucher_id: 1,
+        voucher_name: "WELCOME10",
+        discount: 10,
+        voucher_desc: "Get 10% off your order."
+    },
+    {
+        voucher_id: 2,
+        voucher_name: "CARAVAN15",
+        discount: 15,
+        voucher_desc: "Get 15% off your order."
+    },
+    {
+        voucher_id: 3,
+        voucher_name: "SPICE20",
+        discount: 20,
+        voucher_desc: "Get 20% off your order."
+    } /* NOTE: TEMPORARY VOUCHERS JUST FOR SIMULATION, REAL VOUCHERS WILL BE ADDED IN DB LATER */
+];
+let selectedVoucher = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     loadCartItems();
     updateNavbarLogin();
+
+    renderVoucherDropdown();
+
+    document.addEventListener("change", function(event) {
+
+        if (event.target.id !== "voucherSelect") {
+            return;
+        }
+
+        const voucherId = parseInt(event.target.value);
+
+        selectedVoucher =
+            vouchers.find(v =>
+                v.voucher_id === voucherId
+            ) || null;
+
+        const desc =
+            document.getElementById("voucherDescription");
+
+        desc.textContent =
+            selectedVoucher
+                ? selectedVoucher.voucher_desc
+                : "";
+
+        updatePriceSummary();
+    });
 });
 
 // checks if user Logged in; if so, change login to profile
@@ -58,6 +107,11 @@ function warning_Yes() {
             if (cartIndex > -1 && cartIndex < cart.length) {
                 cart.splice(cartIndex, 1);
                 localStorage.setItem("cart", JSON.stringify(cart));
+
+                cartData = cart;
+                // Updates Checkoutbtn depending on cart content
+                updateCheckoutButton();
+                displayCartEmpty();
             }
         }
 
@@ -72,13 +126,16 @@ function warning_Yes() {
 const warning_modal = document.querySelector(".checkout-warning-modal");
 const checkout_button = document.querySelector(".checkout-btn");
 
-function checkoutWarn(event) {
+function checkoutWarn() {
+
+    if (!selectedPaymentMethod) {
+        alert("Please select a payment method first.");
+        return;
+    }
 
     warning_modal.style.visibility = "visible";
     warning_modal.style.opacity = "1";
 }
-
-checkout_button.addEventListener('click', checkoutWarn);
 
 function checkout_No() {
     warning_modal.style.visibility = "hidden";
@@ -96,6 +153,8 @@ function loadCartItems() {
     // Load cart from localStorage
     cartData = JSON.parse(localStorage.getItem("cart")) || [];
 
+    // Updates Checkoutbtn depending on cart content
+    updateCheckoutButton();
     // Fetch both products and bundles
     Promise.all([
         fetch("/products_list.json").then(r => r.json()),
@@ -113,16 +172,12 @@ function loadCartItems() {
     });
 }
 
-// Display cart items in the UI
-function displayCartItems() {
-    const cartItemsContainer = document.querySelector(".cart-items");
 
-    // Clear existing items
-    cartItemsContainer.innerHTML = "";
+const cartItemsContainer = document.querySelector(".cart-items");
 
-    // Check if cart is empty
-    if (cartData.length === 0) {
-        cartItemsContainer.innerHTML = `
+// display cart empty screen when cart empty
+function displayCartEmpty() {
+    cartItemsContainer.innerHTML = `
             <div style="display: flex; justify-content: center; align-items: center; padding: 40px;">
                 <img
                     src="Images/emptycart.png"
@@ -135,6 +190,18 @@ function displayCartItems() {
                 Your cart is empty.
             </h4>
         `;
+}
+
+// Display cart items in the UI
+function displayCartItems() {
+
+    // Clear existing items
+    cartItemsContainer.innerHTML = "";
+
+    // Check if cart is empty
+    if (cartData.length === 0) {
+        
+        displayCartEmpty();
         updatePriceSummary();
         return;
     }
@@ -264,6 +331,18 @@ function createBundleCard(bundle, cartItem, index) {
     `;
 
     return itemCard;
+}
+
+function updateCheckoutButton() {
+    const checkoutButton = document.querySelector(".checkout-btn");
+
+    if (!checkoutButton) return;
+
+    if (cartData.length === 0) {
+        checkoutButton.disabled = true;
+    } else {
+        checkoutButton.disabled = false;
+    }
 }
 
 // Increase quantity for a cart item
@@ -396,6 +475,36 @@ function decreaseQuantity(index) {
     }
 }
 
+// voucher dropdown
+function renderVoucherDropdown() {
+
+    const select = document.getElementById("voucherSelect");
+
+    if (!select) {
+        return;
+    }
+
+    select.innerHTML = "";
+
+    if (vouchers.length === 0) {
+        select.innerHTML =
+            '<option value="">No vouchers available</option>';
+        return;
+    }
+    select.innerHTML =
+        '<option value="">Select Voucher</option>';
+
+    vouchers.forEach(voucher => {
+        const option = document.createElement("option");
+
+        option.value = voucher.voucher_id;
+        option.textContent =
+            voucher.voucher_name +
+            " (" + voucher.discount + "% OFF)";
+        select.appendChild(option);
+    });
+}
+
 // Update price summary
 function updatePriceSummary() {
     let totalProductCost = 0;
@@ -430,8 +539,20 @@ function updatePriceSummary() {
 
     // Update price breakdown
     const shippingFee = 100.00;
-    const discount = totalProductCost * 0.1; // 10% discount
-    const totalCost = totalProductCost + shippingFee - discount;
+
+    let discount = 0;
+
+    if (selectedVoucher) {
+
+        discount =
+            totalProductCost *
+            (selectedVoucher.discount / 100);
+    }
+
+    const totalCost =
+        totalProductCost +
+        shippingFee -
+        discount;
 
     // Update the price breakdown display
     const priceBreakdown = document.querySelector(".price-breakdown");

@@ -538,6 +538,12 @@ function addtocart_confirm() {
     showSuccessModal();
 }
 
+function addtocart_close() {
+        
+    addtocart_modal.style.visibility = "hidden";
+    addtocart_modal.style.opacity = "0";
+}
+
 function showSuccessModal() {
     const successModal = document.querySelector(".success-modal");
     successModal.querySelector(".warning-title").textContent = "SUCCESS";

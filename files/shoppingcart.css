@@ -343,7 +343,7 @@ body {
 
 .price-breakdown {
   flex: 1;
-  height: 520px;
+  height: 580px;
   background-color: #ffffff;
   border-radius: 15px;
   padding: 25px;
@@ -383,6 +383,38 @@ body {
 
 .line-break {
   border: black 1px solid;
+}
+
+/* Voucher list */
+.voucher-select {
+    width: 180px;
+    padding: 6px 10px;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    background: white;
+    font-size: 14px;
+}
+
+.voucher-description {
+    display: block;
+    color: #6c757d;
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.voucher-select:focus {
+    outline: none;
+    border-color: var(--color-green-card);
+}
+
+.voucher-row {
+    align-items: center;
+}
+
+.voucher-description {
+    margin-left: auto;
+    margin-bottom: 15px;
+    text-align: right;
 }
 
 .payment-section {
@@ -432,6 +464,11 @@ body {
   outline: none;
 }
 
+.payment-option.selected {
+  border: 2px solid #28a745;
+  background-color: #f8fff8;
+}
+
 .checkout-btn {
   display: block;
   width: 130px;
@@ -449,6 +486,10 @@ body {
   cursor: pointer;
 }
 
+.checkout-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
 @media (max-width: 768px) {
 
