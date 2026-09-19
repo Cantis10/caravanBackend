@@ -101,6 +101,34 @@
       </div>
     </div>
 
+    <!-- Login Required Modal -->
+    <div class="login-required-modal">
+      <div class="cart-warning">
+        <h2 class="warning-title">LOGIN REQUIRED</h2>
+        <h1 style="font-size: 70px;">&#128274;</h1>
+        <hr>
+        <p class="warning-desc">
+          You need to be logged in to add items to your cart.
+        </p>
+        <div class="warning-actions">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            onclick="goToLogin()"
+          >
+            Login
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-danger"
+            onclick="closeLoginRequiredModal()"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
 
     <button class="back-button" onclick="history.back()">&#x21A9;</button>
 

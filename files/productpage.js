@@ -424,7 +424,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const addtocart_modal = document.querySelector(".addtocart-modal");
 const success_modal = document.querySelector(".success-modal");
-
+const login_required_modal = document.querySelector(".login-required-modal");
 
 async function addtoCart(button) {
 
@@ -433,15 +433,20 @@ async function addtoCart(button) {
         const response = await fetch("/api/isLoggedIn");
 
         if (!response.ok) {
-            console.log('You must be logged in to add items to your cart');
-            
+
+            login_required_modal.style.visibility = "visible";
+            login_required_modal.style.opacity = "1";
+
             return;
         }
 
         const data = await response.json();
 
         if (!data.loggedIn) {
-            alert("You must be logged in to add items to your cart.");
+
+            login_required_modal.style.visibility = "visible";
+            login_required_modal.style.opacity = "1";
+
             return;
         }
 
@@ -455,14 +460,18 @@ async function addtoCart(button) {
 
         console.error("Login check failed:", error);
 
-        alert("Unable to verify your login status. Please try again.");
+        login_required_modal.style.visibility = "visible";
+        login_required_modal.style.opacity = "1";
     }
 }
 
-function addtocart_close() {
-    addtocart_modal.style.visibility = "hidden";
-    addtocart_modal.style.opacity = "0";
+function closeLoginRequiredModal() {
+    login_required_modal.style.visibility = "hidden";
+    login_required_modal.style.opacity = "0";
+}
 
+function goToLogin() {
+    window.location.href = "/login";
 }
 
 function addtocart_confirm() {
