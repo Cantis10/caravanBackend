@@ -1,10 +1,12 @@
+
+let isBundle = false;
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const sizeSelect = document.getElementById("spiceSize");
     const priceDisplay = document.getElementById("productPrice");
 
     let basePrice = 0;
-    let isBundle = false;
     let currentItem = null;
     let allProducts = [];
 
@@ -28,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (bundleId) {
         isBundle = true;
-        fetch("bundles_list.json")
+        fetch("/bundles_list.json")
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(
@@ -90,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     } else {
         // Load as product
-        fetch("products_list.json")
+        fetch("/products_list.json")
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(
@@ -220,33 +222,26 @@ document.addEventListener("DOMContentLoaded", () => {
                         </div>
                     `;
 
-
                     // Click → product page
                     recommendationCard.addEventListener(
                         "click",
                         () => {
-
                             window.location.href =
                                 `product?productId=${recommendedProduct.product_id}`;
-
                         }
                     );
-
 
                     recommendationsContainer.appendChild(
                         recommendationCard
                     );
-
                 }
             );
 
             // SPICES YOU MAY LIKE
-
             const likedContainer =
                 document.querySelector(
                     ".recommendations-like .product-grid"
                 );
-
 
             // Get all products except current product
             const otherProducts =
@@ -256,18 +251,15 @@ document.addEventListener("DOMContentLoaded", () => {
                         product.product_id
                 );
 
-
             // Shuffle
             const shuffledRandomProducts =
                 [...otherProducts].sort(
                     () => Math.random() - 0.5
                 );
 
-
             // Maximum of 7
             const randomProducts =
                 shuffledRandomProducts.slice(0, 7);
-
 
             // Create cards
             randomProducts.forEach(
@@ -282,7 +274,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     recommendationCard.dataset.productId =
                         randomProduct.product_id;
-
 
                     recommendationCard.innerHTML = `
                         <div class="cardImg">
@@ -303,26 +294,20 @@ document.addEventListener("DOMContentLoaded", () => {
                         </div>
                     `;
 
-
                     // Click → product page
                     recommendationCard.addEventListener(
                         "click",
                         () => {
-
                             window.location.href =
                                 `product?productId=${randomProduct.product_id}`;
-
                         }
                     );
-
 
                     likedContainer.appendChild(
                         recommendationCard
                     );
-
                 }
             );
-
         })
         .catch((error) => {
             console.error("Error loading product:", error);
@@ -330,33 +315,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 "<p>Unable to load this product.</p>";
         });
     }
-
     // PRICE
 
     function updatePrice() {
-
         const multiplier =
             sizeSelect.value === "8oz"
                 ? 8
                 : 16;
-
         const calculatedPrice =
             (basePrice * multiplier).toFixed(2);
-
         priceDisplay.textContent =
             `Price: ₱${calculatedPrice}`;
     }
 
 
     if (sizeSelect && priceDisplay) {
-
         sizeSelect.addEventListener(
             "change",
             updatePrice
         );
-
     }
-
 
     // LIKE BUTTON
 
@@ -475,47 +453,87 @@ function goToLogin() {
 }
 
 function addtocart_confirm() {
+
     addtocart_modal.style.visibility = "hidden";
     addtocart_modal.style.opacity = "0";
 
-    // Get existing cart from localStorage or create new array
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    // Store the selected size so the cart can calculate its price.
     const size = document.getElementById("spiceSize").value;
-    
+
+    const params = new URLSearchParams(window.location.search);
+
+    const productId = Number(params.get("productId"));
+    const bundleId = Number(params.get("bundleId"));
+
+    let existingItem;
+
     if (isBundle) {
-        // For bundles
-        const bundleId = Number(
-            new URLSearchParams(window.location.search).get("bundleId")
+
+        // Check if the same bundle AND same size is already in cart
+        existingItem = cart.find(item =>
+            item.isBundle === true &&
+            Number(item.cartbundle_id) === bundleId &&
+            item.cartprod_size === size
         );
-        if (bundleId) {
-            cart.push({
-                cartbundle_id: bundleId,
-                cartprod_size: size,
-                isBundle: true
-            });
+
+        if (existingItem) {
+            // Already in cart
+            showAlreadyInCartModal();
+            return;
         }
+        // Add new bundle
+        cart.push({
+            cartbundle_id: bundleId,
+            cartprod_size: size,
+            quantity: 1,
+            isBundle: true
+        });
     } else {
-        // For products
-        const productId = Number(
-            new URLSearchParams(window.location.search).get("productId")
+        // Check if the same product AND same size is already in cart
+        existingItem = cart.find(item =>
+            item.isBundle === false &&
+            Number(item.cartprod_id) === productId &&
+            item.cartprod_size === size
         );
-        if (productId) {
-            cart.push({
-                cartprod_id: productId,
-                cartprod_size: size,
-                isBundle: false
-            });
+
+        if (existingItem) {
+            // Already in cart
+            showAlreadyInCartModal();
+            return;
         }
+
+        // Add new product
+        cart.push({
+            cartprod_id: productId,
+            cartprod_size: size,
+            quantity: 1,
+            isBundle: false
+        });
     }
-
-    // Save updated cart back to localStorage
     localStorage.setItem("cart", JSON.stringify(cart));
+    console.log("Cart saved:", cart);
 
-    // Show success modal
-    success_modal.style.visibility = "visible";
-    success_modal.style.opacity = "1";
+    // Show normal success modal
+    showSuccessModal();
+}
+
+function showSuccessModal() {
+    const successModal = document.querySelector(".success-modal");
+    successModal.querySelector(".warning-title").textContent = "SUCCESS";
+    successModal.querySelector(".warning-desc").textContent = "Your Product has been added to your cart";
+
+    successModal.style.visibility = "visible";
+    successModal.style.opacity = "1";
+}
+
+function showAlreadyInCartModal() {
+    const successModal = document.querySelector(".success-modal");
+    successModal.querySelector(".warning-title").textContent = "ALREADY IN CART";
+    successModal.querySelector(".warning-desc").textContent = "This product is already inside your cart";
+
+    successModal.style.visibility = "visible";
+    successModal.style.opacity = "1";
 }
 
 function closeModal() {

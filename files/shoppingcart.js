@@ -79,8 +79,8 @@ function loadCartItems() {
 
     // Fetch both products and bundles
     Promise.all([
-        fetch("products_list.json").then(r => r.json()),
-        fetch("bundles_list.json").then(r => r.json())
+        fetch("/products_list.json").then(r => r.json()),
+        fetch("/bundles_list.json").then(r => r.json())
     ])
     .then(([products, bundles]) => {
         productsData = products;
@@ -261,26 +261,53 @@ function increaseQuantity(index) {
     let quantity = parseInt(quantityElement.textContent, 10);
     quantity++;
 
+    // Update cart data
+    cartData[index].quantity = quantity;
+
+    // Save cart
+    localStorage.setItem("cart", JSON.stringify(cartData));
+
+    // Update displayed quantity
     quantityElement.textContent = quantity;
-
-    const productId = Number(itemCard.dataset.productId);
-    const product = productsData.find(
-        p => p.product_id === productId
-    );
-
     const cartItem = cartData[index];
 
-    if (product) {
-        const sizeMultiplier =
-            cartItem.cartprod_size === "16oz" ? 16 : 8;
+    if (cartItem.isBundle) {
 
-        const itemPrice =
-            product.product_price * sizeMultiplier * quantity;
+        const bundleId = Number(itemCard.dataset.bundleId);
+        const bundle = bundlesData.find(
+            b => b.bundle_id === bundleId
+        );
 
-        priceElement.textContent =
-            `Price: ₱${itemPrice.toFixed(2)}`;
+        if (bundle) {
+            const sizeMultiplier =
+                cartItem.cartprod_size === "16oz" ? 16 : 8;
+
+            const itemPrice =
+                bundle.bundle_price *
+                sizeMultiplier *
+                quantity;
+
+            priceElement.textContent =
+                `Price: ₱${itemPrice.toFixed(2)}`;
+        }
+    } else {
+        const productId = Number(itemCard.dataset.productId);
+        const product = productsData.find(
+            p => p.product_id === productId
+        );
+        if (product) {
+            const sizeMultiplier =
+                cartItem.cartprod_size === "16oz" ? 16 : 8;
+
+            const itemPrice =
+                product.product_price *
+                sizeMultiplier *
+                quantity;
+
+            priceElement.textContent =
+                `Price: ₱${itemPrice.toFixed(2)}`;
+        }
     }
-
     updatePriceSummary();
 }
 
@@ -291,7 +318,6 @@ function decreaseQuantity(index) {
     );
 
     if (!itemCard) return;
-
     const quantityElement = itemCard.querySelector(".product_quantity");
     const priceElement = itemCard.querySelector(".product_price");
 
@@ -300,26 +326,53 @@ function decreaseQuantity(index) {
     if (quantity > 1) {
         quantity--;
 
+        // Update cart data
+        cartData[index].quantity = quantity;
+
+        // Save cart
+        localStorage.setItem("cart", JSON.stringify(cartData));
+
+        // Update displayed quantity
         quantityElement.textContent = quantity;
-
-        const productId = Number(itemCard.dataset.productId);
-        const product = productsData.find(
-            p => p.product_id === productId
-        );
-
         const cartItem = cartData[index];
 
-        if (product) {
-            const sizeMultiplier =
-                cartItem.cartprod_size === "16oz" ? 16 : 8;
+        if (cartItem.isBundle) {
+            const bundleId = Number(itemCard.dataset.bundleId);
+            const bundle = bundlesData.find(
+                b => b.bundle_id === bundleId
+            );
 
-            const itemPrice =
-                product.product_price * sizeMultiplier * quantity;
+            if (bundle) {
+                const sizeMultiplier =
+                    cartItem.cartprod_size === "16oz" ? 16 : 8;
 
-            priceElement.textContent =
-                `Price: ₱${itemPrice.toFixed(2)}`;
+                const itemPrice =
+                    bundle.bundle_price *
+                    sizeMultiplier *
+                    quantity;
+
+                priceElement.textContent =
+                    `Price: ₱${itemPrice.toFixed(2)}`;
+            }
+        } else {
+            const productId = Number(itemCard.dataset.productId);
+            const product = productsData.find(
+                p => p.product_id === productId
+            );
+
+            if (product) {
+                const sizeMultiplier =
+                    cartItem.cartprod_size === "16oz" ? 16 : 8;
+
+                const itemPrice =
+                    product.product_price *
+                    sizeMultiplier *
+                    quantity;
+
+                priceElement.textContent =
+                    `Price: ₱${itemPrice.toFixed(2)}`;
+            }
         }
-
         updatePriceSummary();
     }
 }
@@ -332,6 +385,9 @@ function updatePriceSummary() {
     document.querySelectorAll(".item-card").forEach((itemCard, index) => {
         const cartIndex = parseInt(itemCard.dataset.cartIndex, 10);
         const cartItem = cartData[cartIndex];
+        if (!cartItem) {
+            return;
+        }
         const quantityElement = itemCard.querySelector(".product_quantity");
         const quantity = quantityElement ? parseInt(quantityElement.textContent) : 1;
         const sizeMultiplier = cartItem && cartItem.cartprod_size === "16oz" ? 16 : 8;
