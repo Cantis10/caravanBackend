@@ -426,11 +426,37 @@ const addtocart_modal = document.querySelector(".addtocart-modal");
 const success_modal = document.querySelector(".success-modal");
 
 
-function addtoCart(button) {
-    selectedItem = button.closest(".item-card");
+async function addtoCart(button) {
 
-    addtocart_modal.style.visibility = "visible";
-    addtocart_modal.style.opacity = "1";
+    try {
+
+        const response = await fetch("/api/isLoggedIn");
+
+        if (!response.ok) {
+            console.log('You must be logged in to add items to your cart');
+            
+            return;
+        }
+
+        const data = await response.json();
+
+        if (!data.loggedIn) {
+            alert("You must be logged in to add items to your cart.");
+            return;
+        }
+
+        // User is logged in
+        selectedItem = button.closest(".item-card");
+
+        addtocart_modal.style.visibility = "visible";
+        addtocart_modal.style.opacity = "1";
+
+    } catch (error) {
+
+        console.error("Login check failed:", error);
+
+        alert("Unable to verify your login status. Please try again.");
+    }
 }
 
 function addtocart_close() {

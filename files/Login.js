@@ -5,6 +5,30 @@ const errorMessage = document.getElementById("error-message");
 const successMessage = document.getElementById("success-message");
 const loginButton = document.getElementById("loginButton");
 
+const togglePassword = document.getElementById("togglePassword");
+
+togglePassword.addEventListener("click", function () {
+
+  if (passwordInput.type === "password") {
+
+    passwordInput.type = "text";
+
+    togglePassword.innerHTML = '<i class="bi bi-eye-slash"></i>';
+
+    togglePassword.setAttribute("aria-label", "Hide password");
+
+  } else {
+
+    passwordInput.type = "password";
+
+    togglePassword.innerHTML = '<i class="bi bi-eye"></i>';
+
+    togglePassword.setAttribute("aria-label", "Show password");
+
+  }
+
+});
+
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
@@ -15,6 +39,9 @@ function showError(message) {
 
   setTimeout(() => {
     errorMessage.style.display = "none";
+    loginButton.disabled = false;
+    loginButton.textContent = "SIGN IN";
+    loginButton.style.backdropFilter = "blur(0px)";
   }, 2000);
 }
 
@@ -72,6 +99,7 @@ loginForm.addEventListener("submit", async function (e) {
     showError(data.error);
 
     loginButton.disabled = false;
+    loginButton.textContent = "SIGN IN";
     loginButton.style.backdropFilter = "blur(0px)";
     return;
   } else {

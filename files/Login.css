@@ -158,6 +158,35 @@ body {
     width: 100%;
 }
 
+.password-container {
+  position: relative;
+  width: 100%;
+}
+
+.password-container .form-input {
+  padding-right: 45px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  border: none;
+  background: transparent;
+  color: #594137;
+
+  cursor: pointer;
+  font-size: 1.1rem;
+
+  padding: 5px;
+}
+
+.password-toggle:hover {
+  color: #6f4e37;
+}
+
 .form-input {
     width: 100%;
     height: 44px;

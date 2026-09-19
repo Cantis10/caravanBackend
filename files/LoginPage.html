@@ -106,15 +106,26 @@
         autocomplete="email"
        />
        
-      <input
-        type="password"
-        id="password"
-        placeholder="Password"
-        class="form-input"
-        name="password"
-        autocomplete="current-password"
-        required
-      />
+      <div class="password-container">
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          class="form-input"
+          name="password"
+          autocomplete="current-password"
+          required
+        />
+
+        <button
+          type="button"
+          id="togglePassword"
+          class="password-toggle"
+          aria-label="Show password"
+        >
+          <i class="bi bi-eye"></i>
+        </button>
+      </div>
 
       <button
         type="submit"

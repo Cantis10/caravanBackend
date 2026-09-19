@@ -21,6 +21,54 @@ const closeModal = document.getElementById("closeModal");
 const acceptPrivacy = document.getElementById("acceptPrivacy");
 const declinePrivacy = document.getElementById("declinePrivacy");
 
+const togglePassword = document.getElementById("togglePassword");
+const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
+
+
+// Show/Hide Password
+togglePassword.addEventListener("click", function () {
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        togglePassword.innerHTML =
+            '<i class="bi bi-eye-slash"></i>';
+        togglePassword.setAttribute(
+            "aria-label",
+            "Hide password"
+        );
+    } else {
+        passwordInput.type = "password";
+        togglePassword.innerHTML =
+            '<i class="bi bi-eye"></i>';
+        togglePassword.setAttribute(
+            "aria-label",
+            "Show password"
+        );
+    }
+});
+// Show/Hide Confirm Password
+toggleConfirmPassword.addEventListener("click", function () {
+    if (confirmPasswordInput.type === "password") {
+        confirmPasswordInput.type = "text";
+        toggleConfirmPassword.innerHTML =
+            '<i class="bi bi-eye-slash"></i>';
+
+        toggleConfirmPassword.setAttribute(
+            "aria-label",
+            "Hide confirm password"
+        );
+    } else {
+        confirmPasswordInput.type = "password";
+
+        toggleConfirmPassword.innerHTML =
+            '<i class="bi bi-eye"></i>';
+
+        toggleConfirmPassword.setAttribute(
+            "aria-label",
+            "Show confirm password"
+        );
+    }
+});
+
 function openPrivacyModal() {
   privacyModal.style.display = "flex";
   document.body.classList.add("modal-open");
