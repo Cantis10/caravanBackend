@@ -232,6 +232,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const cancelEditAddressBtn = document.getElementById("cancelEditAddressBtn");
   const saveEditedAddressBtn = document.getElementById("saveEditedAddressBtn");
 
+  const editStreetAddressInput = document.getElementById("editStreetAddress");
+  const editCityInput = document.getElementById("editCity");
+  const editZipCodeInput = document.getElementById("editZipCode");
+  let originalEditAddressValues = {
+    streetAddress: "",
+    city: "",
+    zipCode: ""
+  };
+
   const deleteAddressModal = document.getElementById("deleteAddressModal");
   const closeDeleteAddressModalBtn = document.getElementById("closeDeleteAddressModal");
   const cancelDeleteAddressBtn = document.getElementById("cancelDeleteAddressBtn");
@@ -409,18 +418,84 @@ if (addressForm) {
         }
     }
 
-    function openEditAddressModal(address) {
-        document.getElementById("editAddressId").value = address.Address_id;
-        document.getElementById("editStreetAddress").value = address.Street_address || "";
-        document.getElementById("editCity").value = address.City || "";
-        document.getElementById("editZipCode").value = address.Zip_code || "";
+    function hasEditedAddressChanges() {
+        const currentStreetAddress =
+            editStreetAddressInput.value.trim();
 
+        const currentCity =
+            editCityInput.value.trim();
+
+        const currentZipCode =
+            editZipCodeInput.value.trim();
+
+        const hasCompleteAddress =
+            currentStreetAddress !== "" &&
+            currentCity !== "" &&
+            currentZipCode !== "";
+
+        const hasChanges =
+            currentStreetAddress !==
+                originalEditAddressValues.streetAddress ||
+            currentCity !==
+                originalEditAddressValues.city ||
+            currentZipCode !==
+                originalEditAddressValues.zipCode;
+
+        return hasCompleteAddress && hasChanges;
+    }
+
+    function updateEditedAddressSaveButton() {
+        saveEditedAddressBtn.disabled =
+            !hasEditedAddressChanges();
+    }
+
+    function openEditAddressModal(address) {
+        const streetAddress = address.Street_address || "";
+        const city = address.City || "";
+        const zipCode = String(address.Zip_code || "");
+
+        document.getElementById("editAddressId").value = address.Address_id;
+        editStreetAddressInput.value = streetAddress;
+        editCityInput.value = city;
+        editZipCodeInput.value = zipCode;
+
+        originalEditAddressValues = {
+            streetAddress: streetAddress.trim(),
+            city: city.trim(),
+            zipCode: zipCode.trim()
+        };
+
+        updateEditedAddressSaveButton();
         editAddressModal.classList.add("active");
     }
+
+    editStreetAddressInput.addEventListener(
+        "input",
+        updateEditedAddressSaveButton
+    );
+
+    editCityInput.addEventListener(
+        "input",
+        updateEditedAddressSaveButton
+    );
+
+    editZipCodeInput.addEventListener(
+        "input",
+        updateEditedAddressSaveButton
+    );
 
     function closeEditAddressModal() {
         editAddressModal.classList.remove("active");
         editAddressForm.reset();
+
+        originalEditAddressValues = {
+            streetAddress: "",
+            city: "",
+            zipCode: ""
+        };
+
+        saveEditedAddressBtn.disabled = true;
+        saveEditedAddressBtn.textContent = "Save";
     }
 
     closeEditAddressModalBtn.addEventListener(
@@ -484,30 +559,25 @@ if (addressForm) {
         return card;
     }
 
+    // Submit Handler for edit address form
     editAddressForm.addEventListener(
         "submit", async (e) => {
 
             e.preventDefault();
-            if (saveEditedAddressBtn.disabled) {
+            if (saveEditedAddressBtn.disabled || !hasEditedAddressChanges()) {
                 return;
             }
             const addressId = document.getElementById("editAddressId").value;
 
             const payload = {
                 streetAddress:
-                    document.getElementById(
-                        "editStreetAddress"
-                    ).value.trim(),
+                    editStreetAddressInput.value.trim(),
 
                 city:
-                    document.getElementById(
-                        "editCity"
-                    ).value.trim(),
+                    editCityInput.value.trim(),
 
                 zipCode:
-                    document.getElementById(
-                        "editZipCode"
-                    ).value.trim()
+                    editZipCodeInput.value.trim(),
             };
             saveEditedAddressBtn.disabled = true;
             saveEditedAddressBtn.textContent =
@@ -546,8 +616,11 @@ if (addressForm) {
                     "Failed to update address."
                 );
             } finally {
-                saveEditedAddressBtn.disabled = false;
                 saveEditedAddressBtn.textContent = "Save";
+
+                if (editAddressModal.classList.contains("active")) {
+                    updateEditedAddressSaveButton();
+                }
             }
         }
     );

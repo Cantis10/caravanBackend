@@ -184,6 +184,7 @@ body {
   border-radius: 10px;
   padding: 30px;
   min-height: 420px;
+  max-height: 665px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
@@ -206,6 +207,12 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+#addressListContainer {
+    flex: 1;
+    max-height: 500px;
+    overflow-y: auto;
 }
 
 /* Specific 10px Radius Input Fields & Boxes */
@@ -408,6 +415,46 @@ body {
   font-family: InstrumentSans_Semi, sans-serif;
   font-size: 14px;
   cursor: pointer;
+}
+
+#saveAddressBtn {
+    background-color: #6F4E37;
+    color: white;
+    opacity: 1;
+    cursor: pointer;
+}
+
+#saveAddressBtn:hover {
+    filter: brightness(0.85);
+    opacity: 1;
+    cursor: pointer;
+}
+
+#saveAddressBtn:disabled {
+    background-color: #6F4E37;
+    color: white;
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+#saveEditedAddressBtn {
+    background-color: #6F4E37;
+    color: white;
+    opacity: 1;
+    cursor: pointer;
+}
+
+#saveEditedAddressBtn:hover {
+    filter: brightness(0.85);
+    opacity: 1;
+    cursor: pointer;
+}
+
+#saveEditedAddressBtn:disabled {
+    background-color: #6F4E37;
+    color: white;
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 .large-boux {

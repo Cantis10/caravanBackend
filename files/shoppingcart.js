@@ -3,6 +3,8 @@ let cartData = [];
 let productsData = [];
 let bundlesData = [];
 let selectedPaymentMethod = null;
+let addresses = [];
+let selectedAddress = null;
 
 let vouchers = [
     {
@@ -30,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadCartItems();
     updateNavbarLogin();
     renderVoucherDropdown();
+    loadAddresses();
 
     // Voucher dropdown
     document.addEventListener("change", function(event) {
@@ -55,6 +58,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
         updatePriceSummary();
     });
+
+    // Address dropdown
+    document.addEventListener(
+        "change",
+        function(event) {
+
+            if (
+                event.target.id !==
+                "addressSelect"
+            ) {
+                return;
+            }
+
+            const addressId =
+                parseInt(
+                    event.target.value
+                );
+
+            selectedAddress =
+                addresses.find(
+                    a =>
+                    a.Address_id ===
+                    addressId
+                ) || null;
+
+            console.log(
+                "Selected address:",
+                selectedAddress
+            );
+        }
+    );
 
     // Payment selector
     const paymentOptions =
@@ -154,6 +188,11 @@ function checkoutWarn() {
         return;
     }
 
+    if (!selectedAddress) {
+        alert("Please select a delivery address.");
+        return;
+    }
+
     warning_modal.style.visibility = "visible";
     warning_modal.style.opacity = "1";
 }
@@ -193,6 +232,35 @@ function loadCartItems() {
     });
 }
 
+// Loads User's Stored addresses from db
+async function loadAddresses() {
+
+    try {
+
+        const response =
+            await fetch("/api/addresses");
+
+        if (!response.ok) {
+            console.error(
+                "Failed to load addresses"
+            );
+            return;
+        }
+
+        addresses =
+            await response.json();
+
+        renderAddressDropdown();
+
+    } catch (error) {
+
+        console.error(
+            "Address load error:",
+            error
+        );
+
+    }
+}
 
 const cartItemsContainer = document.querySelector(".cart-items");
 
@@ -523,6 +591,55 @@ function renderVoucherDropdown() {
             voucher.voucher_name +
             " (" + voucher.discount + "% OFF)";
         select.appendChild(option);
+    });
+}
+
+// address dropdown
+function renderAddressDropdown() {
+
+    const select =
+        document.getElementById(
+            "addressSelect"
+        );
+
+    if (!select) return;
+
+    select.innerHTML = "";
+
+    if (addresses.length === 0) {
+
+        select.innerHTML =
+            `
+            <option value="">
+                No saved addresses
+            </option>
+            `;
+
+        return;
+    }
+
+    select.innerHTML =
+        `
+        <option value="">
+            Select Address
+        </option>
+        `;
+
+    addresses.forEach(address => {
+
+        const option =
+            document.createElement("option");
+
+        option.value =
+            address.Address_id;
+
+        option.textContent =
+            `${address.Street_address}, `
+            + `${address.City} `
+            + `${address.Zip_code}`;
+
+        select.appendChild(option);
+
     });
 }
 

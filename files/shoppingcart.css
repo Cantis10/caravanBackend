@@ -426,6 +426,30 @@ body {
   gap: 10px;
 }
 
+  /* ADDRESS LIST */
+
+.address-section {
+    margin: 20px 0;
+}
+
+.address-section h4 {
+    margin-bottom: 10px;
+}
+
+.address-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #d0d0d0;
+    background-color: white;
+    font-size: 14px;
+}
+
+.address-select:focus {
+    outline: none;
+    border-color: var(--color-green-card);
+}
+
    /* PAYMENT */
 
 .payment-option {
