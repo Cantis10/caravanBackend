@@ -427,8 +427,125 @@ body {
   background: #563C2A;
 }
 
+#addressListContainer {
+    margin-top: 12px;
+}
+
+.address-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    padding: 14px 16px;
+    margin-bottom: 10px;
+}
+
+.address-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.address-card-content strong {
+    overflow-wrap: anywhere;
+}
+
+.address-location {
+    color: #666;
+    overflow-wrap: anywhere;
+}
+
+.address-edit-btn {
+    flex-shrink: 0;
+
+    padding: 6px 14px;
+
+    border: 1px solid #6f4e37;
+    border-radius: 8px;
+
+    background-color: transparent;
+    color: #6f4e37;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.address-edit-btn:hover {
+    background-color: #6f4e37;
+    color: #ffffff;
+}
+
+.address-edit-btn:active {
+    transform: scale(0.97);
+}
+
+.address-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.address-delete-btn {
+    padding: 6px 12px;
+
+    border: 1px solid #b42318;
+    border-radius: 8px;
+
+    background-color: transparent;
+    color: #b42318;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.address-delete-btn:hover {
+    background-color: #b42318;
+    color: #ffffff;
+}
+
+.delete-confirm-btn {
+    border: none;
+    padding: 10px 20px;
+
+    background-color: #b42318;
+    color: #ffffff;
+
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.delete-confirm-btn:hover {
+    background-color: #8f1d14;
+}
+
+.delete-confirm-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.delete-address-preview {
+    margin: 16px 0;
+    padding: 12px 14px;
+
+    border-left: 4px solid #b42318;
+    border-radius: 8px;
+
+    background-color: #fff1f0;
+    color: #333;
+
+    overflow-wrap: anywhere;
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
+
   .profile-container {
     flex-direction: column;
   }
@@ -463,38 +580,57 @@ body {
   }
 
   /* Specific 10px Radius Input Fields & Boxes with Soft Shadows */
-.radius-10-box {
-  border-radius: 12px !important;
-  background-color: #F5F5F5;
-  border: 1px solid #E2E2E2;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.8);
-  font-family: InstrumentSans, sans-serif;
-}
+  .radius-10-box {
+    border-radius: 12px !important;
+    background-color: #F5F5F5;
+    border: 1px solid #E2E2E2;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    font-family: InstrumentSans, sans-serif;
+  }
 
-.custom-input-box,
-.radius-10-input {
-  width: 100%;
-  background-color: #F5F5F5;
-  border: 1px solid #E2E2E2;
-  border-radius: 12px;
-  padding: 10px 16px;
-  font-family: InstrumentSans, sans-serif;
-  font-size: 13px;
-  color: #333;
-  outline: none;
-  /* Soft outer shadow to match prototype rendering */
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.8);
-  transition: all 0.2s ease-in-out;
-}
+  .custom-input-box,
+  .radius-10-input {
+    width: 100%;
+    background-color: #F5F5F5;
+    border: 1px solid #E2E2E2;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-family: InstrumentSans, sans-serif;
+    font-size: 13px;
+    color: #333;
+    outline: none;
+    /* Soft outer shadow to match prototype rendering */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    transition: all 0.2s ease-in-out;
+  }
 
-/* Enhanced Focus State when Typing */
-.custom-input-box:focus,
-.radius-10-input:focus {
-  background-color: #FFFFFF;
-  border-color: #6F4E37;
-  /* Stronger visible drop shadow on typing/focus */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12), 0 0 0 3px rgba(111, 78, 55, 0.15);
-}
+  /* Enhanced Focus State when Typing */
+  .custom-input-box:focus,
+  .radius-10-input:focus {
+    background-color: #FFFFFF;
+    border-color: #6F4E37;
+    /* Stronger visible drop shadow on typing/focus */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12), 0 0 0 3px rgba(111, 78, 55, 0.15);
+  }
+
+  .address-card {
+    align-items: flex-start;
+  }
+
+  .address-edit-btn {
+    padding: 5px 10px;
+  }
+
+  .address-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .address-edit-btn,
+  .address-delete-btn {
+    padding: 5px 10px;
+  }
+
 }
 
 #logoutBtn{

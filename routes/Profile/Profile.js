@@ -186,4 +186,223 @@ router.put("/profile", checkAuth("user"), async (req, res) => {
     }
 });
 
+// GET CURRENT USER ADDRESSES
+router.get("/addresses", checkAuth("user"), async (req, res) => {
+    try {
+
+        const userId = req.user.userId;
+
+        const result = await db.execute({
+            sql: `
+                SELECT
+                    Address_id,
+                    Street_address,
+                    City,
+                    Zip_code
+                FROM Address
+                WHERE Customer_id = ?
+                ORDER BY Address_id
+            `,
+            args: [userId]
+        });
+
+        return res.status(200).json(result.rows);
+
+    } catch (error) {
+
+        console.error("Address API Error:", error);
+
+        return res.status(500).json({
+            error: "Unable to retrieve addresses"
+        });
+    }
+});
+
+// UPDATE CURRENT USER ADDRESS
+router.put(
+    "/addresses/:addressId",
+    checkAuth("user"),
+    async (req, res) => {
+        try {
+            const userId = req.user.userId;
+            const addressId = req.params.addressId;
+
+            const {
+                streetAddress,
+                city,
+                zipCode
+            } = req.body;
+
+            if (!userId) {
+                return res.status(401).json({
+                    error: "User ID not found"
+                });
+            }
+            if (!streetAddress?.trim() || !city?.trim() || !zipCode?.trim()) {
+                return res.status(400).json({
+                    error:
+                        "Street address, city, and zip code are required"
+                });
+            }
+            const result = await db.execute({
+                sql: `
+                    UPDATE Address
+                    SET
+                        Street_address = ?,
+                        City = ?,
+                        Zip_code = ?
+                    WHERE Address_id = ?
+                    AND Customer_id = ?
+                `,
+                args: [
+                    streetAddress.trim(),
+                    city.trim(),
+                    zipCode.trim(),
+                    addressId,
+                    userId
+                ]
+            });
+            if (!result.rowsAffected) {
+                return res.status(404).json({
+                    error: "Address not found"
+                });
+            }
+            return res.status(200).json({
+                message: "Address updated successfully",
+                address: {
+                    Address_id: Number(addressId),
+                    Street_address: streetAddress.trim(),
+                    City: city.trim(),
+                    Zip_code: zipCode.trim()
+                }
+            });
+        } catch (error) {
+            console.error(
+                "Address update error:",
+                error
+            );
+            return res.status(500).json({
+                error: "Unable to update address"
+            });
+        }
+    }
+);
+
+// DELETE CURRENT USER ADDRESS
+router.delete(
+    "/addresses/:addressId",
+    checkAuth("user"),
+    async (req, res) => {
+        try {
+            const userId = req.user.userId;
+            const addressId = req.params.addressId;
+
+            if (!userId) {
+                return res.status(401).json({
+                    error: "User ID not found"
+                });
+            }
+
+            if (!addressId) {
+                return res.status(400).json({
+                    error: "Address ID is required"
+                });
+            }
+
+            const result = await db.execute({
+                sql: `
+                    DELETE FROM Address
+                    WHERE Address_id = ?
+                    AND Customer_id = ?
+                `,
+                args: [
+                    addressId,
+                    userId
+                ]
+            });
+
+            if (!result.rowsAffected) {
+                return res.status(404).json({
+                    error: "Address not found"
+                });
+            }
+
+            return res.status(200).json({
+                message: "Address deleted successfully",
+                addressId: Number(addressId)
+            });
+
+        } catch (error) {
+            console.error(
+                "Address deletion error:",
+                error
+            );
+
+            return res.status(500).json({
+                error: "Unable to delete address"
+            });
+        }
+    }
+);
+
+// CREATE ADDRESS FOR CURRENT USER
+router.post("/addresses", checkAuth("user"), async (req, res) => {
+    try {
+        const userId = req.user.userId;
+
+        const {
+            streetAddress,
+            city,
+            zipCode
+        } = req.body;
+
+        if (!userId) {
+            return res.status(401).json({
+                error: "User ID not found"
+            });
+        }
+
+        if (
+            !streetAddress?.trim() ||
+            !city?.trim() ||
+            !zipCode?.trim()
+        ) {
+            return res.status(400).json({
+                error:
+                    "Street address, city, and zip code are required"
+            });
+        }
+
+        const result = await db.execute({
+            sql: `
+                INSERT INTO Address (
+                    Customer_id,
+                    Street_address,
+                    City,
+                    Zip_code
+                )
+                VALUES (?, ?, ?, ?)
+            `,
+            args: [
+                userId,
+                streetAddress.trim(),
+                city.trim(),
+                zipCode.trim()
+            ]
+        });
+
+        return res.status(201).json({
+            message: "Address created successfully",
+            addressId: Number(result.lastInsertRowid)
+        });
+
+    } catch (error) {
+        console.error("Create address error:", error);
+
+        return res.status(500).json({
+            error: "Unable to create address"
+        });
+    }
+});
+
 module.exports = router;
