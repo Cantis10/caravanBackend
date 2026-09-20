@@ -20,6 +20,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let originalValues = {};
 
+  function hasChanges() {
+    return profileFields.some(field =>
+        field.value !== (originalValues[field.id] || "")
+    );
+  }
+
+  function updateSaveButtonState() {
+      saveBtn.disabled = !hasChanges();
+
+      if (saveBtn.disabled) {
+          saveBtn.style.opacity = "0.5";
+          saveBtn.style.cursor = "not-allowed";
+      } else {
+          saveBtn.style.opacity = "1";
+          saveBtn.style.cursor = "pointer";
+      }
+  }
+
   menuItems.forEach((button) => {
     button.addEventListener("click", () => {
       const targetTab = button.getAttribute("data-tab");
@@ -37,7 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // get items from db and insert in profile page
   async function loadProfile() {
-
       try {
 
           const response = await fetch("/api/profile");
@@ -75,14 +92,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   editBtn.addEventListener("click", () => {
 
-    profileFields.forEach(field => {
-        originalValues[field.id] = field.value;
-        field.removeAttribute("readonly");
-    });
+      profileFields.forEach(field => {
+          originalValues[field.id] = field.value;
+          field.removeAttribute("readonly");
+
+          field.addEventListener("input", updateSaveButtonState);
+      });
 
       editBtn.style.display = "none";
       saveBtn.style.display = "inline-block";
       cancelBtn.style.display = "inline-block";
+
+      updateSaveButtonState();
   });
 
   cancelBtn.addEventListener("click", () => {
@@ -105,11 +126,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   saveBtn.addEventListener("click", () => {
 
-      saveModal.classList.add("active");
+      if (!hasChanges()) {
+        return;
+      }
 
+      saveModal.classList.add("active");
   });
 
+
+  // Saves the user changes to profile
   confirmSaveBtn.addEventListener("click", async () => {
+
+      if (confirmSaveBtn.disabled) {
+          return;
+      }
+
+      confirmSaveBtn.disabled = true;
+      confirmSaveBtn.textContent = "Saving...";
 
       const payload = {
           email: document.getElementById("userEmail").value,
@@ -120,8 +153,35 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       console.log("Saving profile...", payload);
+      
+      //PUTS new items inside db (replacing old)
+      try {
+          const response = await fetch("/api/profile", {
+              method: "PUT",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify(payload)
+          });
 
-      // future fetch() goes here
+          const result = await response.json();
+
+          console.log(result);
+
+          if (!response.ok) {
+              throw new Error(result.message || "Save failed");
+          }
+
+      } catch (err) {
+          console.error("Save error:", err);
+
+          confirmSaveBtn.disabled = false;
+          confirmSaveBtn.textContent = "Save";
+
+          alert("Failed to save profile.");
+          return;
+      }
+
 
       profileFields.forEach(field => {
           field.setAttribute("readonly", true);
@@ -134,6 +194,17 @@ document.addEventListener("DOMContentLoaded", () => {
       saveModal.classList.remove("active");
 
       alert("Profile updated successfully.");
+
+      profileFields.forEach(field => {
+          originalValues[field.id] = field.value;
+      });
+
+      confirmSaveBtn.disabled = false;
+      confirmSaveBtn.textContent = "Save";
+
+      saveBtn.disabled = true;
+      saveBtn.style.opacity = "0.5";
+      saveBtn.style.cursor = "not-allowed";
   });
 
   cancelSaveBtn.addEventListener("click", () => {
