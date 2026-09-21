@@ -301,7 +301,7 @@ body {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 40px;
-  justify-content: left;
+  justify-content: center;
 }
 
 /* Empty State Handling */
