@@ -6,7 +6,6 @@ const { requireAuth } = require("../../imports/token");
 const db = require("../../imports/database");
 app.customPath = "/api";
 
-
 app.get("/fetchProducts", async (req, res) => {
   const { productId } = req.query;
 
@@ -53,62 +52,44 @@ app.get("/fetchProducts", async (req, res) => {
           p.product_id,
           cat.category_id
       `,
-      args: params
+      args: params,
     });
 
-    const productsMap = new Map();
+    // Group SQL rows into products
+    const products = {};
 
-    result.rows.forEach((row) => {
-      const productId = Number(row.product_id);
-
-      if (!productsMap.has(productId)) {
-        productsMap.set(productId, {
-          product_id: productId,
+    for (const row of result.rows) {
+      if (!products[row.product_id]) {
+        products[row.product_id] = {
+          product_id: row.product_id,
           product_name: row.Prod_name,
-          product_price: Number(row.Prod_price),
-          product_amount: Number(row.Prod_amount),
-          product_likes: Number(row.Prod_likes),
-          product_desc: row.desc || "",
-
-          product_country: row.country_name || null,
-
+          product_price: row.Prod_price,
+          product_amount: row.Prod_amount,
+          product_likes: row.Prod_likes,
+          product_desc: row.desc,
           product_category: [],
-
-          product_image: row.Prod_img || ""
-        });
+          product_country: row.country_name,
+          product_image: row.Prod_img,
+        };
       }
 
-      if (row.category_id !== null && row.category_id !== undefined) {
-        productsMap.get(productId).product_category.push({
-          category_id: Number(row.category_id),
-          category_name: row.category_name
+      // Add category only if one exists
+      if (row.category_id !== null) {
+        products[row.product_id].product_category.push({
+          category_id: row.category_id,
+          category_name: row.category_name,
         });
       }
-    });
-
-    const products = Array.from(productsMap.values());
-
-    if (productId) {
-      if (products.length === 0) {
-        return res.status(404).json({
-          error: "Product not found"
-        });
-      }
-
-      return res.status(200).json(products[0]);
     }
 
-    return res.status(200).json(products);
-
+    res.json(Object.values(products));
   } catch (error) {
-    console.error("Failed to fetch products:", error);
-
-    return res.status(500).json({
-      error: "Failed to fetch products"
+    console.error("Error fetching products:", error);
+    res.status(500).json({
+      error: "Failed to fetch products",
     });
   }
 });
-
 
 app.post("/addProduct", requireAuth("admin"), async (req, res) => {
   try {
