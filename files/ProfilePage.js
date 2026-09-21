@@ -1,6 +1,26 @@
+// load screen functions
+function showLoader() {
+    document
+        .getElementById("loadingOverlay")
+        .classList.add("active");
+}
+
+function hideLoader() {
+    document
+        .getElementById("loadingOverlay")
+        .classList.remove("active");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  // Calls loadProfile function
-  loadProfile();
+  
+    showLoader();
+    // Calls loadProfile function
+    Promise.all([
+        loadProfile(),
+        loadAddresses()
+    ]).finally(() => {
+        hideLoader();
+    });
 
   // Sidebar Tab Navigation
   const menuItems = document.querySelectorAll(".menu-item");
@@ -156,6 +176,8 @@ document.addEventListener("DOMContentLoaded", () => {
       
       //PUTS new items inside db (replacing old)
       try {
+          showLoader();
+
           const response = await fetch("/api/profile", {
               method: "PUT",
               headers: {
@@ -173,6 +195,8 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
       } catch (err) {
+          hideLoader();
+
           console.error("Save error:", err);
 
           confirmSaveBtn.disabled = false;
@@ -317,7 +341,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Elements now exist, so these are safe to call.
     updateAddressSaveButton();
-    loadAddresses();
 
 if (addressForm) {
     addressForm.addEventListener("submit", async (e) => {
@@ -375,11 +398,13 @@ if (addressForm) {
             await loadAddresses();
 
         } catch (error) {
+            hideLoader();
             console.error("Save address error:", error);
 
             alert(error.message || "Failed to save address.");
 
         } finally {
+            hideLoader();
             saveAddressBtn.textContent = "Save Address";
             updateAddressSaveButton();
         }
@@ -411,6 +436,7 @@ if (addressForm) {
             });
 
         } catch (error) {
+            hideLoader();
             console.error(
                 "Load addresses error:",
                 error
@@ -607,6 +633,7 @@ if (addressForm) {
                 // Reload addresses from the database.
                 await loadAddresses();
             } catch (error) {
+                hideLoader();
                 console.error(
                     "Update address error:",
                     error
@@ -616,6 +643,7 @@ if (addressForm) {
                     "Failed to update address."
                 );
             } finally {
+                hideLoader();
                 saveEditedAddressBtn.textContent = "Save";
 
                 if (editAddressModal.classList.contains("active")) {
@@ -703,6 +731,7 @@ if (addressForm) {
                 await loadAddresses();
 
             } catch (error) {
+                hideLoader();
                 console.error(
                     "Delete address error:",
                     error

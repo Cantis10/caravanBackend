@@ -1,8 +1,21 @@
 
 let isBundle = false;
 
-document.addEventListener("DOMContentLoaded", () => {
+// loeading screen mechanism
+function showLoader() {
+    document
+        .getElementById("loadingOverlay")
+        .classList.add("active");
+}
 
+function hideLoader() {
+    document
+        .getElementById("loadingOverlay")
+        .classList.remove("active");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    showLoader();
     updateNavbarLogin();
 
     const sizeSelect = document.getElementById("spiceSize");
@@ -20,301 +33,157 @@ document.addEventListener("DOMContentLoaded", () => {
         new URLSearchParams(window.location.search).get("bundleId")
     );
 
-    // Load all products for bundle items lookup
-    fetch("products_list.json")
-        .then((response) => response.json())
-        .then((products) => {
-            allProducts = products;
-        })
-        .catch((error) => console.error("Error loading products:", error));
-
     // LOAD PRODUCTS OR BUNDLES
 
     if (bundleId) {
         isBundle = true;
-        fetch("/bundles_list.json")
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(
-                        `Unable to load bundles: ${response.status}`
-                    );
-                }
-                return response.json();
-            })
-            .then((bundles) => {
-                // FIND CURRENT BUNDLE
-                const bundle = bundles.find(
-                    item => item.bundle_id === bundleId
+
+        Promise.all([
+            fetch("/bundles_list.json"),
+            fetch("/api/fetchProducts")
+        ])
+        .then(async ([bundlesResponse, productsResponse]) => {
+
+            if (!bundlesResponse.ok) {
+                throw new Error(
+                    `Unable to load bundles: ${bundlesResponse.status}`
                 );
+            }
 
-                if (!bundle) {
-                    throw new Error(
-                        `Bundle with ID ${bundleId} was not found`
-                    );
-                }
+            if (!productsResponse.ok) {
+                throw new Error(
+                    `Unable to load products: ${productsResponse.status}`
+                );
+            }
 
-                currentItem = bundle;
+            const bundles = await bundlesResponse.json();
+            const products = await productsResponse.json();
 
-                // DISPLAY CURRENT BUNDLE
+            allProducts = products;
 
-                basePrice = bundle.bundle_price;
+            const bundle = bundles.find(
+                item =>
+                    Number(item.bundle_id) === bundleId
+            );
 
-                document.getElementById("mainProductImg").src =
-                    bundle.bundle_image;
+            if (!bundle) {
+                throw new Error(
+                    `Bundle with ID ${bundleId} was not found`
+                );
+            }
 
-                document.getElementById("mainProductImg").alt =
-                    bundle.bundle_name;
+            currentItem = bundle;
+            basePrice = Number(bundle.bundle_price);
 
-                document.getElementById("productTitle").textContent =
-                    bundle.bundle_name;
+            document.getElementById("mainProductImg").src =
+                bundle.bundle_image;
 
-                document.getElementById("likeCount").textContent =
-                    bundle.bundle_likes;
+            document.getElementById("mainProductImg").alt =
+                bundle.bundle_name;
 
-                // Show bundle items instead of origin
-                const bundleItemsNames = bundle.bundle_items_id
+            document.getElementById("productTitle").textContent =
+                bundle.bundle_name;
+
+            document.getElementById("likeCount").textContent =
+                bundle.bundle_likes;
+
+            const bundleItemsNames =
+                bundle.bundle_items_id
                     .map(itemId => {
-                        const product = allProducts.find(p => p.product_id === itemId);
-                        return product ? product.product_name : `Product ${itemId}`;
+                        const product = allProducts.find(
+                            product =>
+                                Number(product.product_id) === Number(itemId)
+                        );
+
+                        return product
+                            ? product.product_name
+                            : `Product ${itemId}`;
                     })
                     .join(", ");
 
-                document.getElementById("productOrigin").textContent =
-                    `Bundle includes: ${bundleItemsNames}`;
+            document.getElementById("productOrigin").textContent =
+                `Bundle includes: ${bundleItemsNames}`;
 
-                document.getElementById("productDesc").textContent =
-                    `Description: ${bundle.bundle_description}`;
+            document.getElementById("productDesc").textContent =
+                `Description: ${bundle.bundle_description}`;
 
-                updatePrice();
-            })
-            .catch((error) => {
-                console.error("Error loading bundle:", error);
-                document.querySelector(".product-container").innerHTML =
-                    "<p>Unable to load this bundle.</p>";
-            });
+            updatePrice();
+            hideLoader();
+
+        })
+        .catch(error => {
+            console.error("Error loading bundle:", error);
+
+            document.querySelector(".product-container").innerHTML =
+                "<p>Unable to load this bundle.</p>";
+
+            hideLoader();
+        });
     } else {
-        // Load as product
-        fetch("/products_list.json")
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(
-                        `Unable to load products: ${response.status}`
-                    );
-                }
-                return response.json();
-            })
-            .then((products) => {
-                // FIND CURRENT PRODUCT
-                const product = products.find(
-                    item => item.product_id === productId
-                );
+        Promise.all([
+            fetch(
+                `/api/fetchProducts?productId=${encodeURIComponent(productId)}`
+            ),
+            fetch("/api/fetchProducts")
+        ])
+        .then(async ([productResponse, productsResponse]) => {
 
-                if (!product) {
+            if (!productResponse.ok) {
+                if (productResponse.status === 404) {
                     throw new Error(
                         `Product with ID ${productId} was not found`
                     );
                 }
 
-                currentItem = product;
-
-                // DISPLAY CURRENT PRODUCT
-                basePrice = product.product_price;
-
-                document.getElementById("mainProductImg").src =
-                    product.product_image;
-
-                document.getElementById("mainProductImg").alt =
-                    product.product_name;
-
-                document.getElementById("productTitle").textContent =
-                    product.product_name;
-
-                document.getElementById("likeCount").textContent =
-                    product.product_likes;
-
-                document.getElementById("productOrigin").textContent =
-                    `Origin: ${product.product_country}`;
-
-                document.getElementById("productDesc").textContent =
-                    `Description: ${product.product_desc}`;
-
-                updatePrice();
-
-                // SIMILAR SPICES
-
-                const recommendationsContainer =
-                document.querySelector(
-                    ".recommendations-similar .product-grid"
+                throw new Error(
+                    `Unable to load product: ${productResponse.status}`
                 );
+            }
 
-
-            const similarProducts = products.filter(
-                otherProduct => {
-
-                    // Don't recommend current product
-                    if (
-                        otherProduct.product_id ===
-                        product.product_id
-                    ) {
-                        return false;
-                    }
-
-
-                    // Same country
-                    const sameCountry =
-                        otherProduct.product_country ===
-                        product.product_country;
-
-
-                    // Share at least one category
-                    const sameCategory =
-                        otherProduct.product_category.some(
-                            otherCategory =>
-                                product.product_category.some(
-                                    currentCategory =>
-                                        currentCategory.category_id ===
-                                        otherCategory.category_id
-                                )
-                        );
-                    return sameCountry || sameCategory;
-                }
-            );
-
-            // Shuffle
-            const shuffledSimilarProducts =
-                [...similarProducts].sort(
-                    () => Math.random() - 0.5
+            if (!productsResponse.ok) {
+                throw new Error(
+                    `Unable to load recommendations: ${productsResponse.status}`
                 );
+            }
 
+            const product = await productResponse.json();
+            const products = await productsResponse.json();
 
-            // Maximum of 7
-            const recommendedProducts =
-                shuffledSimilarProducts.slice(0, 7);
+            allProducts = products;
+            currentItem = product;
+            basePrice = Number(product.product_price);
 
-            // Create cards
-            recommendedProducts.forEach(
-                recommendedProduct => {
+            document.getElementById("mainProductImg").src =
+                product.product_image;
 
-                    const recommendationCard =
-                        document.createElement("div");
+            document.getElementById("mainProductImg").alt =
+                product.product_name;
 
-                    recommendationCard.classList.add(
-                        "recommendation-card"
-                    );
-                    recommendationCard.dataset.productId =
-                        recommendedProduct.product_id;
+            document.getElementById("productTitle").textContent =
+                product.product_name;
 
+            document.getElementById("likeCount").textContent =
+                product.product_likes;
 
-                    recommendationCard.innerHTML = `
-                        <div class="cardImg">
-                            <img
-                                src="${recommendedProduct.product_image}"
-                                alt="${recommendedProduct.product_name}"
-                            />
-                        </div>
+            document.getElementById("productOrigin").textContent =
+                `Origin: ${product.product_country || "Unknown"}`;
 
-                        <div class="card-details">
-                            <h4 class="card-title">
-                                ${recommendedProduct.product_name}
-                            </h4>
+            document.getElementById("productDesc").textContent =
+                `Description: ${product.product_desc}`;
 
-                            <p class="art-price">
-                                ₱${recommendedProduct.product_price.toFixed(2)}
-                            </p>
-                        </div>
-                    `;
+            updatePrice();
+            hideLoader();
 
-                    // Click → product page
-                    recommendationCard.addEventListener(
-                        "click",
-                        () => {
-                            window.location.href =
-                                `product?productId=${recommendedProduct.product_id}`;
-                        }
-                    );
-
-                    recommendationsContainer.appendChild(
-                        recommendationCard
-                    );
-                }
-            );
-
-            // SPICES YOU MAY LIKE
-            const likedContainer =
-                document.querySelector(
-                    ".recommendations-like .product-grid"
-                );
-
-            // Get all products except current product
-            const otherProducts =
-                products.filter(
-                    otherProduct =>
-                        otherProduct.product_id !==
-                        product.product_id
-                );
-
-            // Shuffle
-            const shuffledRandomProducts =
-                [...otherProducts].sort(
-                    () => Math.random() - 0.5
-                );
-
-            // Maximum of 7
-            const randomProducts =
-                shuffledRandomProducts.slice(0, 7);
-
-            // Create cards
-            randomProducts.forEach(
-                randomProduct => {
-
-                    const recommendationCard =
-                        document.createElement("div");
-
-                    recommendationCard.classList.add(
-                        "recommendation-card"
-                    );
-
-                    recommendationCard.dataset.productId =
-                        randomProduct.product_id;
-
-                    recommendationCard.innerHTML = `
-                        <div class="cardImg">
-                            <img
-                                src="${randomProduct.product_image}"
-                                alt="${randomProduct.product_name}"
-                            />
-                        </div>
-
-                        <div class="card-details">
-                            <h4 class="card-title">
-                                ${randomProduct.product_name}
-                            </h4>
-
-                            <p class="art-price">
-                                ₱${randomProduct.product_price.toFixed(2)}
-                            </p>
-                        </div>
-                    `;
-
-                    // Click → product page
-                    recommendationCard.addEventListener(
-                        "click",
-                        () => {
-                            window.location.href =
-                                `product?productId=${randomProduct.product_id}`;
-                        }
-                    );
-
-                    likedContainer.appendChild(
-                        recommendationCard
-                    );
-                }
-            );
+            renderSimilarProducts(product, products);
+            renderRandomProducts(product, products);
         })
-        .catch((error) => {
+        .catch(error => {
             console.error("Error loading product:", error);
+
             document.querySelector(".product-container").innerHTML =
                 "<p>Unable to load this product.</p>";
+
+            hideLoader();
         });
     }
     // PRICE
@@ -338,14 +207,165 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
+    function renderSimilarProducts(product, products) {
+        const recommendationsContainer =
+            document.querySelector(
+                ".recommendations-similar .product-grid"
+            );
+
+        if (!recommendationsContainer) {
+            return;
+        }
+
+        recommendationsContainer.innerHTML = "";
+
+        const currentCategories =
+            Array.isArray(product.product_category)
+                ? product.product_category
+                : [];
+
+        const similarProducts = products.filter(
+            otherProduct => {
+                if (
+                    Number(otherProduct.product_id) ===
+                    Number(product.product_id)
+                ) {
+                    return false;
+                }
+
+                const sameCountry =
+                    otherProduct.product_country ===
+                    product.product_country;
+
+                const otherCategories =
+                    Array.isArray(otherProduct.product_category)
+                        ? otherProduct.product_category
+                        : [];
+
+                const sameCategory =
+                    otherCategories.some(otherCategory =>
+                        currentCategories.some(currentCategory =>
+                            Number(currentCategory.category_id) ===
+                            Number(otherCategory.category_id)
+                        )
+                    );
+
+                return sameCountry || sameCategory;
+            }
+        );
+
+        const recommendedProducts =
+            shuffleArray(similarProducts).slice(0, 7);
+
+        recommendedProducts.forEach(product => {
+            recommendationsContainer.appendChild(
+                createRecommendationCard(product)
+            );
+        });
+    }
+
+    // Randomize products
+    function renderRandomProducts(currentProduct, products) {
+        const likedContainer =
+            document.querySelector(
+                ".recommendations-like .product-grid"
+            );
+
+        if (!likedContainer) {
+            return;
+        }
+
+        likedContainer.innerHTML = "";
+
+        const otherProducts = products.filter(
+            product =>
+                Number(product.product_id) !==
+                Number(currentProduct.product_id)
+        );
+
+        const randomProducts =
+            shuffleArray(otherProducts).slice(0, 7);
+
+        randomProducts.forEach(product => {
+            likedContainer.appendChild(
+                createRecommendationCard(product)
+            );
+        });
+    }
+
+    // Random recommendations card
+    function createRecommendationCard(product) {
+        const recommendationCard =
+            document.createElement("div");
+
+        recommendationCard.classList.add(
+            "recommendation-card"
+        );
+
+        recommendationCard.dataset.productId =
+            product.product_id;
+
+        const productPrice =
+            Number(product.product_price) || 0;
+
+        recommendationCard.innerHTML = `
+            <div class="cardImg">
+                <img 
+                    src="${product.product_image}"
+                    alt="${product.product_name}"
+                ">
+            </div>
+
+            <div class="card-details">
+                <h4 class="card-title">
+                    ${product.product_name}
+                </h4>
+
+                <p class="art-price">
+                    ₱${productPrice.toFixed(2)}
+                </p>
+            </div>
+        `;
+
+        recommendationCard.addEventListener(
+            "click",
+            () => {
+                showLoader();
+
+                window.location.href =
+                    `/product?productId=${product.product_id}`;
+            }
+        );
+
+        return recommendationCard;
+    }
+
+    function shuffleArray(items) {
+        const shuffled = [...items];
+
+        for (
+            let index = shuffled.length - 1;
+            index > 0;
+            index--
+        ) {
+            const randomIndex =
+                Math.floor(Math.random() * (index + 1));
+
+            [
+                shuffled[index],
+                shuffled[randomIndex]
+            ] = [
+                shuffled[randomIndex],
+                shuffled[index]
+            ];
+        }
+
+        return shuffled;
+    }
+
     // LIKE BUTTON
-
-    const likeBtn =
-        document.getElementById("likeBtn");
-
-    const likeCount =
-        document.getElementById("likeCount");
-
+    const likeBtn = document.getElementById("likeBtn");
+    const likeCount = document.getElementById("likeCount");
 
     if (likeBtn && likeCount) {
 
