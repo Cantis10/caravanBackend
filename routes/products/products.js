@@ -22,6 +22,8 @@ app.get("/fetchProducts", async (req, res) => {
       sql: `
         SELECT
           p.product_id,
+          p.type_id,
+          t.type_name,
           p.Prod_name,
           p.Prod_likes,
           p.Prod_price,
@@ -46,6 +48,9 @@ app.get("/fetchProducts", async (req, res) => {
         LEFT JOIN Categories cat
           ON pc.category_id = cat.category_id
 
+        LEFT JOIN Type t
+            ON p.type_id = t.type_id
+
         ${whereClause}
 
         ORDER BY
@@ -62,6 +67,8 @@ app.get("/fetchProducts", async (req, res) => {
       if (!products[row.product_id]) {
         products[row.product_id] = {
           product_id: row.product_id,
+          type_id: row.type_id,
+          type_name: row.type_name,
           product_name: row.Prod_name,
           product_price: row.Prod_price,
           product_amount: row.Prod_amount,
@@ -91,6 +98,7 @@ app.get("/fetchProducts", async (req, res) => {
   }
 });
 
+// for adding products into database, ONLY ADMIN SIDE 
 app.post("/addProduct", requireAuth("admin"), async (req, res) => {
   try {
     const {

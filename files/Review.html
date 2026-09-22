@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Customer Reviews & Ratings</title>
+  <link rel="stylesheet" href="Review.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <i class="fa-solid fa-star"></i>
+    <span>Special Launch Offer! Get 10% off your first purchase.</span>
+    <i class="fa-solid fa-star"></i>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <img id="Caravan_Logo" src="./Images/logo.png" alt="Caravan Logo" width="40" />
+    <div class="nav-center">
+      <a href="#" class="nav-link">HOME</a>
+      <a href="#" class="nav-link">MARKET</a>
+      <a href="#" class="nav-link">FAQs</a>
+    </div>
+    <div class="nav-right">
+      <a href="#" class="nav-link">CART</a>
+      <span class="divider">|</span>
+      <a href="#" class="nav-link">LOGIN</a>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <h1>Customer Reviews & Ratings</h1>
+  </header>
+
+  <main class="reviews-container">
+
+    <!-- Hero Product Overview Card -->
+    <section class="product-overview-card">
+      <div class="product-image-container">
+        <img src="./Images/paprika.jpg" alt="Paprika Spice" class="product-image" />
+      </div>
+      <div class="product-details">
+        <h2>Product Overview</h2>
+        <p class="origin-text"><strong>Paprika</strong> - Origin: Central and South America</p>
+        <p class="description-text">
+          A vibrant spice known for its rich color and deep, smoky flavor. Perfect for enhancing soups, stews, and roasted dishes.
+        </p>
+        <div class="star-rating hero-stars">
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+        </div>
+        <div class="score-text">4.8 Out of 5 Stars</div>
+        <div class="review-count">based on 32 reviews</div>
+        <button class="leave-review-btn">Leave a Review</button>
+      </div>
+    </section>
+
+    <!-- Carousel Controls -->
+    <div class="carousel-controls">
+      <button class="control-btn" aria-label="Previous Page">&lt;</button>
+      <button class="control-btn" aria-label="Next Page">&gt;</button>
+    </div>
+
+    <!-- Empty Review Grid (Populated dynamically via JS or Backend) -->
+    <section class="reviews-grid" id="reviewsGrid">
+      <!-- Reviews will render here -->
+    </section>
+
+  </main>
+
+  <script src="Reviews.js"></script>
+</body>
+</html>

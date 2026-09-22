@@ -1,3 +1,32 @@
+//loading screen while products load
+function showContentLoader() {
+
+    const loader =
+        document.getElementById(
+            "contentLoader"
+        );
+
+    if (loader) {
+        loader.classList.add(
+            "active"
+        );
+    }
+}
+
+function hideContentLoader() {
+
+    const loader =
+        document.getElementById(
+            "contentLoader"
+        );
+
+    if (loader) {
+        loader.classList.remove(
+            "active"
+        );
+    }
+}
+
 //fade-in/out animation for product cards
 const observer = new IntersectionObserver(
     (entries) => {
@@ -19,25 +48,50 @@ let currentTab = "products";
 
 // Tab switching functionality
 function switchTab(tab) {
+    showContentLoader();
     currentTab = tab;
-    
-    // Update tab buttons
-    document.getElementById("productsTab").classList.toggle("active", tab === "products");
-    document.getElementById("bundlesTab").classList.toggle("active", tab === "bundles");
-    
-    // Update content visibility
-    document.getElementById("productsContent").classList.toggle("active", tab === "products");
-    document.getElementById("bundlesContent").classList.toggle("active", tab === "bundles");
-    
-    // Update navbar for bundles
-    updateNavbarForTab(tab);
-    
-    // Render appropriate content
+    document
+        .getElementById("productsTab")
+        .classList.toggle(
+            "active",
+            tab === "products"
+        );
+
+    document
+        .getElementById("bundlesTab")
+        .classList.toggle(
+            "active",
+            tab === "bundles"
+        );
+
+    document
+        .getElementById("productsContent")
+        .classList.toggle(
+            "active",
+            tab === "products"
+        );
+
+    document
+        .getElementById("bundlesContent")
+        .classList.toggle(
+            "active",
+            tab === "bundles"
+        );
+
+    document
+        .getElementById("product_country")
+        .disabled =
+        (tab === "bundles");
+
     if (tab === "products") {
         renderProducts();
-    } else {
-        renderBundles();
+        hideContentLoader();
     }
+    else {
+        renderBundles();
+        hideContentLoader();
+    }
+
 }
 
 // checks if user Logged in; if so, change login to profile
@@ -126,105 +180,214 @@ let products = [];
 let bundles = [];
 let selectedCategory = "";
 let selectedBundleCategory = "";
-
+``
+// render product cards
 function renderProducts() {
-    const productsection = document.getElementById("productsSection");
-    const noItemContainer = productsection.querySelector(".noitem-container");
-    const searchTerm = document.getElementById("searchInput").value.trim().toLowerCase();
-    const selectedCountry = document.getElementById("product_country").value;
 
-    productsection.querySelectorAll(".product-card").forEach(card => card.remove());
+    const productsection =
+        document.getElementById("productsSection");
 
-    const filteredProducts = products
-        .filter(product => {
-            const matchesCategory = !selectedCategory || product.product_category.some(category =>
-                category.category_name === selectedCategory
-            );
-            const matchesCountry = !selectedCountry || product.product_country === selectedCountry;
-            const matchesSearch = product.product_name.toLowerCase().includes(searchTerm);
-
-            return matchesCategory && matchesCountry && matchesSearch;
-        })
-        .sort((firstProduct, secondProduct) =>
-            firstProduct.product_name.localeCompare(secondProduct.product_name)
+    const noItemContainer =
+        productsection.querySelector(
+            ".noitem-container"
         );
+
+    const searchTerm =
+        document.getElementById("searchInput")
+            .value
+            .trim()
+            .toLowerCase();
+
+    const selectedCountry =
+        document.getElementById(
+            "product_country"
+        ).value;
+
+    productsection
+        .querySelectorAll(".product-card")
+        .forEach(card => card.remove());
+
+    const filteredProducts =
+        products
+            .filter(product => {
+
+                const matchesCategory =
+                    !selectedCategory ||
+                    product.product_category.some(
+                        category =>
+                            category.category_name ===
+                            selectedCategory
+                    );
+
+                const matchesCountry =
+                    !selectedCountry ||
+                    product.product_country ===
+                    selectedCountry;
+
+                const matchesSearch =
+                    product.product_name
+                        .toLowerCase()
+                        .includes(searchTerm);
+
+                return (
+                    matchesCategory &&
+                    matchesCountry &&
+                    matchesSearch
+                );
+
+            })
+            .sort((a, b) =>
+                a.product_name.localeCompare(
+                    b.product_name
+                )
+            );
 
     filteredProducts.forEach(product => {
-        const productCard = document.createElement("div");
-        productCard.classList.add("product-card");
-        productCard.dataset.productId = product.product_id;
 
-        productCard.innerHTML = `
-            <img
-                src="${product.product_image}"
-                alt="${product.product_name}"
-                class="product-image"
-            >
+        const productCard =
+            document.createElement("div");
 
-            <div class="product-info">
-                <h3 class="product-name">${product.product_name}</h3>
-                <p class="product-price">₱${product.product_price.toFixed(2)}/oz.</p>
-            </div>
-        `;
-
-        productCard.addEventListener("click", () => {
-            window.location.href = `product?productId=${product.product_id}`;
-        });
-
-        productsection.appendChild(productCard);
-
-        observer.observe(productCard);
-    });
-
-    noItemContainer.style.display = filteredProducts.length ? "none" : "block";
-}
-
-function renderBundles() {
-    const bundleSection = document.getElementById("bundlesSection");
-    const noItemContainer = bundleSection.querySelector(".noitem-container");
-    const searchTerm = document.getElementById("searchInput").value.trim().toLowerCase();
-
-    bundleSection.querySelectorAll(".product-card").forEach(card => card.remove());
-
-    const filteredBundles = bundles
-        .filter(bundle => {
-            const matchesCategory = !selectedBundleCategory || selectedBundleCategory === "All Bundles" || bundle.bundle_category === selectedBundleCategory;
-            const matchesSearch = bundle.bundle_name.toLowerCase().includes(searchTerm);
-
-            return matchesCategory && matchesSearch;
-        })
-        .sort((firstBundle, secondBundle) =>
-            firstBundle.bundle_name.localeCompare(secondBundle.bundle_name)
+        productCard.classList.add(
+            "product-card"
         );
 
-    filteredBundles.forEach(bundle => {
-        const bundleCard = document.createElement("div");
-        bundleCard.classList.add("product-card");
-        bundleCard.dataset.bundleId = bundle.bundle_id;
+        productCard.dataset.productId =
+            product.product_id;
 
-        bundleCard.innerHTML = `
-            <img
-                src="${bundle.bundle_image}"
-                alt="${bundle.bundle_name}"
+        productCard.innerHTML = `
+            <img  
+                src=${product.product_image}  
+                alt=${product.product_name}
                 class="product-image"
-            >
+            />
 
             <div class="product-info">
-                <h3 class="product-name">${bundle.bundle_name}</h3>
-                <p class="product-price">₱${bundle.bundle_price.toFixed(2)}</p>
+                <h3 class="product-name">
+                    ${product.product_name}
+                </h3>
+
+                <p class="product-price">
+                    ₱${Number(product.product_price).toFixed(2)}/oz.
+                </p>
             </div>
         `;
 
-        bundleCard.addEventListener("click", () => {
-            window.location.href = `product?bundleId=${bundle.bundle_id}`;
-        });
+        productCard.addEventListener(
+            "click",
+            () => {
 
-        bundleSection.appendChild(bundleCard);
+                window.location.href =
+                    `product?productId=${product.product_id}`;
 
-        observer.observe(bundleCard);
+            }
+        );
+
+        productsection.appendChild(
+            productCard
+        );
+
+        observer.observe(productCard);
+
     });
 
-    noItemContainer.style.display = filteredBundles.length ? "none" : "block";
+    noItemContainer.style.display =
+        filteredProducts.length
+            ? "none"
+            : "block";
+}
+
+// render bundle cards
+function renderBundles() {
+
+    const bundleSection =
+        document.getElementById(
+            "bundlesSection"
+        );
+
+    const noItemContainer =
+        bundleSection.querySelector(
+            ".noitem-container"
+        );
+
+    const searchTerm =
+        document.getElementById(
+            "searchInput"
+        )
+            .value
+            .trim()
+            .toLowerCase();
+
+    bundleSection
+        .querySelectorAll(".product-card")
+        .forEach(card => card.remove());
+
+    const filteredBundles =
+        bundles
+            .filter(bundle => {
+
+                return bundle.product_name
+                    .toLowerCase()
+                    .includes(searchTerm);
+
+            })
+            .sort((a, b) =>
+                a.product_name.localeCompare(
+                    b.product_name
+                )
+            );
+
+    filteredBundles.forEach(bundle => {
+
+        const bundleCard =
+            document.createElement("div");
+
+        bundleCard.classList.add(
+            "product-card"
+        );
+
+        bundleCard.dataset.bundleId =
+            bundle.product_id;
+
+        bundleCard.innerHTML = `
+            <img 
+                src=${bundle.product_image}
+                alt=${bundle.product_name}
+                class="product-image"
+            />
+
+            <div class="product-info">
+                <h3 class="product-name">
+                    ${bundle.product_name}
+                </h3>
+
+                <p class="product-price">
+                    ₱${Number(bundle.product_price).toFixed(2)}/oz.
+                </p>
+            </div>
+        `;
+
+        bundleCard.addEventListener(
+            "click",
+            () => {
+
+                window.location.href =
+                    `product?bundleId=${bundle.product_id}`;
+
+            }
+        );
+
+        bundleSection.appendChild(
+            bundleCard
+        );
+
+        observer.observe(bundleCard);
+
+    });
+
+    noItemContainer.style.display =
+        filteredBundles.length
+            ? "none"
+            : "block";
 }
 
 function filterBundlesByCategory(element) {
@@ -244,35 +407,91 @@ function filterBundlesByCategory(element) {
     renderBundles();
 }
 
-// fetches all the products inside products_list.json
-fetch("products_list.json") 
-    .then(response => response.json())
-    .then(loadedProducts => {
-        products = loadedProducts;
-        const countrySelect = document.getElementById("product_country");
-        const countries = [...new Set(products.map(product => product.product_country))].sort();
+showContentLoader();
+// fetches all the products inside products and bundles inside db
+fetch("/api/fetchProducts")
+    .then(response => {
+
+        if (!response.ok) {
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+        }
+
+        return response.json();
+
+    })
+    .then(data => {
+
+        products = data.filter(
+            item =>
+                Number(item.type_id) === 1
+        );
+
+        bundles = data.filter(
+            item =>
+                Number(item.type_id) === 2
+        );
+
+        const countrySelect =
+            document.getElementById(
+                "product_country"
+            );
+
+        countrySelect.innerHTML =
+            `<option value="">ALL COUNTRIES</option>`;
+
+        const countries = [
+            ...new Set(
+                products
+                    .filter(
+                        p =>
+                            p.product_country
+                    )
+                    .map(
+                        p =>
+                            p.product_country
+                    )
+            )
+        ].sort();
 
         countries.forEach(country => {
-            const option = document.createElement("option");
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
             option.value = country;
             option.textContent = country;
-            countrySelect.appendChild(option);
+
+            countrySelect.appendChild(
+                option
+            );
+
         });
 
         renderProducts();
-    })
-    .catch(error => {
-        console.error("Error loading products:", error);
-    });
+        renderBundles();
+        hideContentLoader();
 
-// fetches all the bundles inside bundles_list.json
-fetch("bundles_list.json") 
-    .then(response => response.json())
-    .then(loadedBundles => {
-        bundles = loadedBundles;
+        console.log(
+            `Products: ${products.length}`
+        );
+
+        console.log(
+            `Bundles: ${bundles.length}`
+        );
+
     })
     .catch(error => {
-        console.error("Error loading bundles:", error);
+
+        hideContentLoader();
+        console.error(
+            "Error loading items:",
+            error
+        );
+
     });
 
 const form = document.getElementById("Searchbar");
@@ -325,6 +544,7 @@ if (allProducts) {
 selectedCategory = "";
 
 function SearchProducts() {
+
     if (currentTab === "products") {
         renderProducts();
     } else {
