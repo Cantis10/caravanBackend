@@ -462,9 +462,11 @@ async function updateNavbarLogin(){
 
 }
 
+//modal constant: selects modals
 const addtocart_modal = document.querySelector(".addtocart-modal");
 const success_modal = document.querySelector(".success-modal");
 const login_required_modal = document.querySelector(".login-required-modal");
+const wishlist_modal = document.querySelector(".wishlist-modal");
 
 async function addtoCart(button) {
 
@@ -512,6 +514,70 @@ function closeLoginRequiredModal() {
 
 function goToLogin() {
     window.location.href = "/login";
+}
+
+function addToWishlist() {
+
+    let wishlist =
+        JSON.parse(
+            localStorage.getItem("wishlist")
+        ) || [];
+
+    const params = new URLSearchParams(window.location.search);
+    const productId = Number(params.get("productId"));
+    const bundleId = Number(params.get("bundleId"));
+
+    const itemId = isBundle
+            ? bundleId
+            : productId;
+
+    const alreadyExists =
+        wishlist.some(item =>
+            item.id === itemId &&
+            item.isBundle === isBundle
+        );
+
+    const modalTitle =
+        wishlist_modal.querySelector(
+            ".warning-title"
+        );
+
+    const modalDesc =
+        wishlist_modal.querySelector(
+            ".warning-desc"
+        );
+
+    if (alreadyExists) {
+
+        modalTitle.textContent = "ALREADY IN WISHLIST";
+
+        modalDesc.textContent = "This item is already in your wishlist.";
+
+    } else {
+
+        wishlist.push({
+            id: itemId,
+            isBundle: isBundle
+        });
+
+        localStorage.setItem(
+            "wishlist",
+            JSON.stringify(wishlist)
+        );
+
+        modalTitle.textContent = "WISHLIST";
+
+        modalDesc.textContent = "Item added to wishlist.";
+    }
+
+    wishlist_modal.style.visibility = "visible";
+
+    wishlist_modal.style.opacity = "1";
+}
+
+function closeWishlistModal() {
+    wishlist_modal.style.visibility = "hidden";
+    wishlist_modal.style.opacity = "0";
 }
 
 function addtocart_confirm() {

@@ -100,6 +100,32 @@
       </div>
     </div>
 
+    <div class="wishlist-modal">
+      <div class="cart-warning">
+          <h2 class="warning-title">
+              WISHLIST
+          </h2>
+
+          <hr>
+
+          <p class="warning-desc">
+              Item added to wishlist.
+          </p>
+
+          <br>
+
+          <div class="warning-actions">
+              <button
+                  type="button"
+                  class="btn btn-outline-primary"
+                  onclick="closeWishlistModal()"
+              >
+                  Okay
+              </button>
+          </div>
+      </div>
+    </div>
+
     <!-- Login Required Modal -->
     <div class="login-required-modal">
       <div class="cart-warning">
@@ -158,6 +184,12 @@
         </div>
 
         <div class="product-price" id="productPrice">Price: $999</div>
+
+        <div class="wishlist-container">
+          <button class="wishlist-btn" id="wishlistBtn" onclick="addToWishlist()">
+              ✦ Add to Wishlist
+          </button>
+      </div>
 
         <div class="product-actions">
           <button class="btn-like" id="likeBtn">

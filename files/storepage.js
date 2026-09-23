@@ -48,8 +48,10 @@ let currentTab = "products";
 
 // Tab switching functionality
 function switchTab(tab) {
+
     showContentLoader();
     currentTab = tab;
+
     document
         .getElementById("productsTab")
         .classList.toggle(
@@ -80,18 +82,16 @@ function switchTab(tab) {
 
     document
         .getElementById("product_country")
-        .disabled =
-        (tab === "bundles");
+        .disabled = (tab === "bundles");
+
+    updateNavbarForTab(tab);
 
     if (tab === "products") {
         renderProducts();
-        hideContentLoader();
-    }
-    else {
+    } else {
         renderBundles();
-        hideContentLoader();
     }
-
+    hideContentLoader();
 }
 
 // checks if user Logged in; if so, change login to profile
@@ -115,45 +115,49 @@ updateNavbarLogin();
 
 // Update navbar based on tab
 function updateNavbarForTab(tab) {
-    const verticalNavbar = document.querySelector(".vertical-navbar");
-    
+
+    const categories = document.querySelectorAll(".category");
+
     if (tab === "bundles") {
-        // Show only bundles category
-        const categories = verticalNavbar.querySelectorAll(".category");
         categories.forEach(category => {
-            const categoryTitle = category.querySelector(".category-title span:first-child").textContent.trim();
-            if (categoryTitle === "Bundles") {
+
+            const title = category.querySelector(
+                    ".category-title span:first-child"
+                )
+                ?.textContent
+                ?.trim()
+                ?.toUpperCase();
+
+            if (title && title.toUpperCase() === "DEFAULT") {
+
                 category.style.display = "block";
+                const subcategories = category.querySelectorAll(".subcategory");
+
+                subcategories.forEach(sub => {
+
+                    if (
+                        sub.textContent.trim().toUpperCase() === "All Products"
+                    ) {
+                        sub.style.display = "block";
+                    } else {
+                        sub.style.display = "none";
+                    }
+                });
             } else {
                 category.style.display = "none";
             }
         });
-        
-        // If Bundles category doesn't exist, create it
-        if (!verticalNavbar.querySelector(".category")) {
-            verticalNavbar.innerHTML = `
-                <div class="category-header">
-                    <span style="font-size: 20px"><b>Categories</b></span>
-                </div>
-                <div class="category">
-                    <div class="category-title" onclick="toggleSubcategories(this)">
-                        <span>Bundles</span>
-                        <span class="toggle-icon">&#9660;</span>
-                    </div>
-                    <div class="subcategories">
-                        <div class="subcategory" onclick="filterBundlesByCategory(this)">All Bundles</div>
-                        <div class="subcategory" onclick="filterBundlesByCategory(this)">Cooking</div>
-                        <div class="subcategory" onclick="filterBundlesByCategory(this)">Baking</div>
-                        <div class="subcategory" onclick="filterBundlesByCategory(this)">Garnishing</div>
-                    </div>
-                </div>
-            `;
-        }
     } else {
-        // Show all product categories
-        const categories = verticalNavbar.querySelectorAll(".category");
         categories.forEach(category => {
             category.style.display = "block";
+            category
+                .querySelectorAll(
+                    ".subcategory"
+                )
+                .forEach(sub => {
+                    sub.style.display =
+                        "block";
+                });
         });
     }
 }

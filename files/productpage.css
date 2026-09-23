@@ -399,6 +399,54 @@ body {
   transition: transform 0.3s ease;
 }
 
+.wishlist-modal {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(0, 0, 0, 0.5);
+
+  z-index: 2000;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transition: opacity 0.2s ease,
+              visibility 0.2s ease;
+}
+
+.wishlist-container {
+  margin-bottom: 12px;
+}
+
+.wishlist-btn {
+  width: 100%;
+
+  background: transparent;
+
+  border: 1px solid white;
+
+  color: white;
+
+  border-radius: 6px;
+
+  padding: 8px 12px;
+
+  font-size: 12px;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.wishlist-btn:hover {
+  background: white;
+  color: var(--color-green-card);
+}
+
 .loading-overlay {
     position: fixed;
     inset: 0;
