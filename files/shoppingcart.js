@@ -210,26 +210,41 @@ function checkout_Yes() {
 
 // Load cart items from localStorage and products_list.json
 function loadCartItems() {
-    // Load cart from localStorage
-    cartData = JSON.parse(localStorage.getItem("cart")) || [];
+    cartData =
+        JSON.parse(localStorage.getItem("cart")) || [];
 
-    // Updates Checkoutbtn depending on cart content
     updateCheckoutButton();
-    // Fetch both products and bundles
-    Promise.all([
-        fetch("/products_list.json").then(r => r.json()),
-        fetch("/bundles_list.json").then(r => r.json())
-    ])
-    .then(([products, bundles]) => {
-        productsData = products;
-        bundlesData = bundles;
-        displayCartItems();
-    })
-    .catch((error) => {
-        console.error("Error loading cart:", error);
-        document.querySelector(".cart-items").innerHTML =
-            "<p>Unable to load cart items.</p>";
-    });
+
+    fetch("/api/fetchProducts")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(
+                    `Unable to load products: ${response.status}`
+                );
+            }
+
+            return response.json();
+        })
+        .then(items => {
+            const allItems = Array.isArray(items) ? items : [];
+
+            productsData = allItems.filter(
+                item => Number(item.type_id) === 1
+            );
+
+            bundlesData = allItems.filter(
+                item => Number(item.type_id) === 2
+            );
+
+            displayCartItems();
+        })
+        .catch(error => {
+            console.error("Error loading cart items:", error);
+
+            document.querySelector(
+                ".cart-items"
+            ).innerHTML = "<p>Unable to load cart items.</p>";
+        });
 }
 
 // Loads User's Stored addresses from db
@@ -303,7 +318,7 @@ function displayCartItems() {
         if (cartItem.isBundle) {
             // Find bundle
             item = bundlesData.find(
-                b => b.bundle_id === Number(cartItem.cartbundle_id)
+                bundle => Number(bundle.product_id) === Number(cartItem.cartbundle_id)
             );
             if (item) {
                 itemCard = createBundleCard(item, cartItem, index);
@@ -375,52 +390,92 @@ function createItemCard(product, cartItem, index) {
 
 // Create a bundle card element for cart
 function createBundleCard(bundle, cartItem, index) {
-    const itemCard = document.createElement("div");
+    const itemCard =
+        document.createElement("div");
+
     itemCard.classList.add("item-card");
-    itemCard.dataset.bundleId = bundle.bundle_id;
-    itemCard.dataset.cartIndex = index;
-    itemCard.dataset.index = index;
 
-    const size = cartItem.cartprod_size || "8oz";
-    const sizeMultiplier = size === "16oz" ? 16 : 8;
-    const quantity = cartItem.quantity || 1;
-    const itemPrice = bundle.bundle_price * sizeMultiplier;
+    itemCard.dataset.bundleId =
+        bundle.product_id;
 
-    // Get bundle items names
-    const bundleItemsNames = bundle.bundle_items_id
-        .map(itemId => {
-            const product = productsData.find(p => p.product_id === itemId);
-            return product ? product.product_name : `Product ${itemId}`;
-        })
-        .join(", ");
+    itemCard.dataset.cartIndex =
+        index;
+
+    itemCard.dataset.index =
+        index;
+
+    const size =
+        cartItem.cartprod_size || "8oz";
+
+    const sizeMultiplier =
+        size === "16oz" ? 16 : 8;
+
+    const quantity =
+        Number(cartItem.quantity) || 1;
+
+    const basePrice =
+        Number(bundle.product_price) || 0;
+
+    const itemPrice =
+        basePrice * sizeMultiplier;
 
     itemCard.innerHTML = `
         <div class="product-image">
-            <img src="${bundle.bundle_image}" alt="${bundle.bundle_name}">
+            <img src="${bundle.product_image}" alt="${bundle.product_name}">
         </div>
 
         <div class="item-info">
-            <h4 class="product_name">${bundle.bundle_name}</h4>
-            <p class="product_size">Size: ${size.replace("oz", " oz")}</p>
-            <p class="product_category">Bundle items: ${bundleItemsNames}</p>
+            <h4 class="product_name">
+                ${bundle.product_name || "Unnamed Bundle"}
+            </h4>
+
+            <p class="product_size">
+                Size: ${size.replace("oz", " oz")}
+            </p>
+
+            <p class="product_category">
+                Bundle
+            </p>
 
             <div class="quantity-control">
                 <span>Quantity:</span>
-                <button class="quantity-btn" onclick="decreaseQuantity(${index})">−</button>
-                <span class="product_quantity" data-index="${index}">${quantity}</span>
-                <button class="quantity-btn" onclick="increaseQuantity(${index})">+</button>
 
-                <button class="delete-btn" onclick="deleteWarn(this)">🗑 Delete</button>
+                <button
+                    class="quantity-btn"
+                    onclick="decreaseQuantity(${index})">
+                    −
+                </button>
+
+                <span
+                    class="product_quantity"
+                    data-index="${index}">
+                    ${quantity}
+                </span>
+
+                <button
+                    class="quantity-btn"
+                    onclick="increaseQuantity(${index})">
+                    +
+                </button>
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteWarn(this)">
+                    🗑 Delete
+                </button>
             </div>
         </div>
 
         <div class="item-price">
-            <p class="product_price">Price: ₱${(itemPrice*quantity).toFixed(2)}</p>
+            <p class="product_price">
+                Price: ₱${(itemPrice * quantity).toFixed(2)}
+            </p>
         </div>
     `;
 
     return itemCard;
 }
+``
 
 function updateCheckoutButton() {
     const checkoutButton = document.querySelector(".checkout-btn");
@@ -462,7 +517,7 @@ function increaseQuantity(index) {
 
         const bundleId = Number(itemCard.dataset.bundleId);
         const bundle = bundlesData.find(
-            b => b.bundle_id === bundleId
+            item => Number(item.product_id) === bundleId
         );
 
         if (bundle) {
@@ -470,7 +525,7 @@ function increaseQuantity(index) {
                 cartItem.cartprod_size === "16oz" ? 16 : 8;
 
             const itemPrice =
-                bundle.bundle_price *
+                bundle.product_price *
                 sizeMultiplier *
                 quantity;
 
@@ -534,7 +589,7 @@ function decreaseQuantity(index) {
                     cartItem.cartprod_size === "16oz" ? 16 : 8;
 
                 const itemPrice =
-                    bundle.bundle_price *
+                    bundle.product_price *
                     sizeMultiplier *
                     quantity;
 
@@ -658,14 +713,21 @@ function updatePriceSummary() {
         const quantity = quantityElement ? parseInt(quantityElement.textContent) : 1;
         const sizeMultiplier = cartItem && cartItem.cartprod_size === "16oz" ? 16 : 8;
 
-        if (cartItem.isBundle) {
-            // Handle bundle
-            const bundleId = parseInt(itemCard.dataset.bundleId, 10);
-            const bundle = bundlesData.find(b => b.bundle_id === bundleId);
-            if (bundle) {
-                totalProductCost += bundle.bundle_price * sizeMultiplier * quantity;
-            }
-        } else {
+            if (cartItem.isBundle) {
+                //handle bundle
+                const bundleId = Number(itemCard.dataset.bundleId);
+
+                const bundle = bundlesData.find(
+                    item => Number(item.product_id) === bundleId
+                );
+
+                if (bundle) {
+                    totalProductCost +=
+                        Number(bundle.product_price) *
+                        sizeMultiplier *
+                        quantity;
+                }
+            } else {
             // Handle product
             const productId = parseInt(itemCard.dataset.productId, 10);
             const product = productsData.find(p => p.product_id === productId);

@@ -39,14 +39,15 @@ document.addEventListener("DOMContentLoaded", () => {
         isBundle = true;
 
         Promise.all([
-            fetch("/bundles_list.json"),
+            fetch(
+                `/api/fetchProducts?productId=${encodeURIComponent(bundleId)}`
+            ),
             fetch("/api/fetchProducts")
         ])
-        .then(async ([bundlesResponse, productsResponse]) => {
-
-            if (!bundlesResponse.ok) {
+        .then(async ([bundleResponse, productsResponse]) => {
+            if (!bundleResponse.ok) {
                 throw new Error(
-                    `Unable to load bundles: ${bundlesResponse.status}`
+                    `Unable to load bundle: ${bundleResponse.status}`
                 );
             }
 
@@ -56,15 +57,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
             }
 
-            const bundles = await bundlesResponse.json();
-            const products = await productsResponse.json();
+            const bundleData = await bundleResponse.json();
+            const productsData = await productsResponse.json();
 
-            allProducts = products;
+            // Your single-item endpoint currently returns an array.
+            const bundle = Array.isArray(bundleData)
+                ? bundleData[0]
+                : bundleData;
 
-            const bundle = bundles.find(
-                item =>
-                    Number(item.bundle_id) === bundleId
-            );
+            const products = Array.isArray(productsData)
+                ? productsData
+                : [];
 
             if (!bundle) {
                 throw new Error(
@@ -72,53 +75,63 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
             }
 
+            if (Number(bundle.type_id) !== 2) {
+                throw new Error(
+                    `Product ID ${bundleId} is not a bundle`
+                );
+            }
+
+            console.log("BUNDLE RESPONSE:", bundle);
+
+            allProducts = products;
             currentItem = bundle;
-            basePrice = Number(bundle.bundle_price);
+
+            // Use product_price, not bundle_price.
+            basePrice = Number(bundle.product_price) || 0;
 
             document.getElementById("mainProductImg").src =
-                bundle.bundle_image;
+                bundle.product_image || "";
 
             document.getElementById("mainProductImg").alt =
-                bundle.bundle_name;
+                bundle.product_name || "Bundle";
 
             document.getElementById("productTitle").textContent =
-                bundle.bundle_name;
+                bundle.product_name || "Unnamed Bundle";
 
             document.getElementById("likeCount").textContent =
-                bundle.bundle_likes;
+                Number(bundle.product_likes) || 0;
 
-            const bundleItemsNames =
-                bundle.bundle_items_id
-                    .map(itemId => {
-                        const product = allProducts.find(
-                            product =>
-                                Number(product.product_id) === Number(itemId)
-                        );
-
-                        return product
-                            ? product.product_name
-                            : `Product ${itemId}`;
-                    })
-                    .join(", ");
-
+            /*
+            * The current API response does not contain bundle_items_id,
+            * so bundle contents cannot be displayed yet.
+            */
             document.getElementById("productOrigin").textContent =
-                `Bundle includes: ${bundleItemsNames}`;
+                `Origin: ${bundle.product_country || "Unknown"}`;
 
             document.getElementById("productDesc").textContent =
-                `Description: ${bundle.bundle_description}`;
+                `Description: ${bundle.product_desc || "No description available."}`;
 
             updatePrice();
-            hideLoader();
 
+            renderSimilarProducts(bundle, products);
+            renderRandomProducts(bundle, products);
+
+            hideLoader();
         })
         .catch(error => {
             console.error("Error loading bundle:", error);
 
-            document.querySelector(".product-container").innerHTML =
-                "<p>Unable to load this bundle.</p>";
+            const productContainer =
+                document.querySelector(".product-container");
+
+            if (productContainer) {
+                productContainer.innerHTML =
+                    "<p>Unable to load this bundle.</p>";
+            }
 
             hideLoader();
         });
+
     } else {
         Promise.all([
             fetch(
@@ -146,8 +159,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
             }
 
-            const product = await productResponse.json();
+            const productData = await productResponse.json();
+
+            const product = Array.isArray(productData)
+                ? productData[0]
+                : productData;
+                
             const products = await productsResponse.json();
+            console.log("PRODUCT RESPONSE:", product);
 
             allProducts = products;
             currentItem = product;
@@ -313,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <img 
                     src="${product.product_image}"
                     alt="${product.product_name}"
-                ">
+                />
             </div>
 
             <div class="card-details">
@@ -331,9 +350,12 @@ document.addEventListener("DOMContentLoaded", () => {
             "click",
             () => {
                 showLoader();
+                
+                const queryParameter = Number(product.type_id) === 2
+                    ? "bundleId"
+                    : "productId";
 
-                window.location.href =
-                    `/product?productId=${product.product_id}`;
+                window.location.href = `/product?${queryParameter}=${product.product_id}`;
             }
         );
 
@@ -493,68 +515,78 @@ function goToLogin() {
 }
 
 function addtocart_confirm() {
-
     addtocart_modal.style.visibility = "hidden";
     addtocart_modal.style.opacity = "0";
 
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cart =
+        JSON.parse(localStorage.getItem("cart")) || [];
 
-    const size = document.getElementById("spiceSize").value;
+    const size =
+        document.getElementById("spiceSize").value;
 
-    const params = new URLSearchParams(window.location.search);
+    const params =
+        new URLSearchParams(window.location.search);
 
-    const productId = Number(params.get("productId"));
-    const bundleId = Number(params.get("bundleId"));
+    const productId =
+        Number(params.get("productId"));
 
-    let existingItem;
+    const bundleId =
+        Number(params.get("bundleId"));
 
-    if (isBundle) {
+    const itemId =
+        isBundle ? bundleId : productId;
 
-        // Check if the same bundle AND same size is already in cart
-        existingItem = cart.find(item =>
-            item.isBundle === true &&
-            Number(item.cartbundle_id) === bundleId &&
+    if (!itemId) {
+        console.error("No valid product or bundle ID found.");
+
+        alert("Unable to add this item to the cart.");
+        return;
+    }
+
+    const existingItem = cart.find(item => {
+        if (isBundle) {
+            return (
+                item.isBundle === true &&
+                Number(item.cartbundle_id) === itemId &&
+                item.cartprod_size === size
+            );
+        }
+
+        return (
+            item.isBundle === false &&
+            Number(item.cartprod_id) === itemId &&
             item.cartprod_size === size
         );
+    });
 
-        if (existingItem) {
-            // Already in cart
-            showAlreadyInCartModal();
-            return;
-        }
-        // Add new bundle
+    if (existingItem) {
+        showAlreadyInCartModal();
+        return;
+    }
+
+    if (isBundle) {
         cart.push({
-            cartbundle_id: bundleId,
+            cartbundle_id: itemId,
             cartprod_size: size,
             quantity: 1,
             isBundle: true
         });
     } else {
-        // Check if the same product AND same size is already in cart
-        existingItem = cart.find(item =>
-            item.isBundle === false &&
-            Number(item.cartprod_id) === productId &&
-            item.cartprod_size === size
-        );
-
-        if (existingItem) {
-            // Already in cart
-            showAlreadyInCartModal();
-            return;
-        }
-
-        // Add new product
         cart.push({
-            cartprod_id: productId,
+            cartprod_id: itemId,
             cartprod_size: size,
             quantity: 1,
             isBundle: false
         });
     }
-    localStorage.setItem("cart", JSON.stringify(cart));
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
     console.log("Cart saved:", cart);
 
-    // Show normal success modal
     showSuccessModal();
 }
 
@@ -566,8 +598,20 @@ function addtocart_close() {
 
 function showSuccessModal() {
     const successModal = document.querySelector(".success-modal");
-    successModal.querySelector(".warning-title").textContent = "SUCCESS";
-    successModal.querySelector(".warning-desc").textContent = "Your Product has been added to your cart";
+
+    if (!successModal) {
+        return;
+    }
+
+    const itemType =
+        isBundle ? "bundle" : "product";
+
+    successModal.querySelector(".warning-title")
+        .textContent = "SUCCESS";
+
+    successModal.querySelector(".warning-desc")
+        .textContent =
+            `Your ${itemType} has been added to your cart.`;
 
     successModal.style.visibility = "visible";
     successModal.style.opacity = "1";
@@ -575,8 +619,20 @@ function showSuccessModal() {
 
 function showAlreadyInCartModal() {
     const successModal = document.querySelector(".success-modal");
-    successModal.querySelector(".warning-title").textContent = "ALREADY IN CART";
-    successModal.querySelector(".warning-desc").textContent = "This product is already inside your cart";
+
+    if (!successModal) {
+        return;
+    }
+
+    const itemType =
+        isBundle ? "bundle" : "product";
+
+    successModal.querySelector(".warning-title")
+        .textContent = "ALREADY IN CART";
+
+    successModal.querySelector(".warning-desc")
+        .textContent =
+            `This ${itemType} with the selected size is already in your cart.`;
 
     successModal.style.visibility = "visible";
     successModal.style.opacity = "1";
