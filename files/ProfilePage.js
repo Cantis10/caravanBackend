@@ -140,9 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const saveModal = document.getElementById("saveProfileModal");
-
   const confirmSaveBtn = document.getElementById("confirmSaveBtn");
-
   const cancelSaveBtn = document.getElementById("cancelSaveBtn");
 
   saveBtn.addEventListener("click", () => {
@@ -190,6 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const result = await response.json();
 
           console.log(result);
+          hideLoader();
 
           if (!response.ok) {
               throw new Error(result.message || "Save failed");
