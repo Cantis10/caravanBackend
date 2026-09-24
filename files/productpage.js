@@ -101,10 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("likeCount").textContent =
                 Number(bundle.product_likes) || 0;
 
-            /*
-            * The current API response does not contain bundle_items_id,
-            * so bundle contents cannot be displayed yet.
-            */
             document.getElementById("productOrigin").textContent =
                 `Origin: ${bundle.product_country || "Unknown"}`;
 
@@ -121,8 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(error => {
             console.error("Error loading bundle:", error);
 
-            const productContainer =
-                document.querySelector(".product-container");
+            const productContainer = document.querySelector(".product-container");
 
             if (productContainer) {
                 productContainer.innerHTML =
@@ -516,63 +511,193 @@ function goToLogin() {
     window.location.href = "/login";
 }
 
-function addToWishlist() {
-
-    let wishlist =
-        JSON.parse(
-            localStorage.getItem("wishlist")
-        ) || [];
-
-    const params = new URLSearchParams(window.location.search);
-    const productId = Number(params.get("productId"));
-    const bundleId = Number(params.get("bundleId"));
-
-    const itemId = isBundle
-            ? bundleId
-            : productId;
-
-    const alreadyExists =
-        wishlist.some(item =>
-            item.id === itemId &&
-            item.isBundle === isBundle
+async function addToWishlist() {
+    const params =
+        new URLSearchParams(
+            window.location.search
         );
+
+    const productId =
+        Number(params.get("productId"));
+
+    const bundleId =
+        Number(params.get("bundleId"));
+
+    /*
+     * Bundles and regular products both use product_id
+     * in the database.
+     */
+    const itemId =
+        isBundle ? bundleId : productId;
+
+    const wishlistButton =
+        document.getElementById("wishlistBtn");
+
+    if (!itemId) {
+        showWishlistModal(
+            "WISHLIST ERROR",
+            "Unable to identify this item."
+        );
+
+        return;
+    }
+
+    try {
+        if (wishlistButton) {
+            wishlistButton.disabled = true;
+            wishlistButton.textContent =
+                "Adding...";
+        }
+
+        const response = await fetch(
+            "/api/addWishlist",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    productId: itemId
+                })
+            }
+        );
+
+        /*
+         * Check this before response.json().
+         * This avoids Unexpected token '<' if authentication
+         * redirects to an HTML login page.
+         */
+        const contentType =
+            response.headers.get(
+                "content-type"
+           ) || "";
+
+        if (
+           !contentType.includes(
+               "application/json"
+           )
+        ) {
+            const responseText =
+                await response.text();
+
+            console.error(
+                "Non-JSON wishlist response:",
+                responseText
+            );
+
+            if (
+                response.status === 401 ||
+                response.redirected
+            ) {
+                showLoginRequiredModal();
+                return;
+            }
+
+            throw new Error(
+                "The server returned an invalid response"
+            );
+        }
+
+        const result =
+            await response.json();
+
+        if (response.status === 401) {
+            showLoginRequiredModal();
+            return;
+        }
+
+        if (
+           response.status === 409 ||
+            result.alreadyExists
+        ) {
+            showWishlistModal(
+                "ALREADY IN WISHLIST",
+                "This item is already in your wishlist."
+            );
+
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                result.error ||
+                "Unable to add item to wishlist."
+            );
+        }
+
+        showWishlistModal(
+            "WISHLIST",
+            "Item added to wishlist."
+        );
+
+    } catch (error) {
+        console.error(
+            "Wishlist error:",
+            error
+        );
+
+        showWishlistModal(
+            "WISHLIST ERROR",
+            error.message ||
+            "Unable to add item to wishlist."
+        );
+
+    } finally {
+        if (wishlistButton) {
+            wishlistButton.disabled = false;
+            wishlistButton.textContent =
+                "✦ Add to Wishlist";
+        }
+    }
+}
+
+function showWishlistModal(
+    title,
+    description
+) {
+    if (!wishlist_modal) {
+        return;
+    }
 
     const modalTitle =
         wishlist_modal.querySelector(
             ".warning-title"
         );
 
-    const modalDesc =
+    const modalDescription =
         wishlist_modal.querySelector(
             ".warning-desc"
         );
 
-    if (alreadyExists) {
-
-        modalTitle.textContent = "ALREADY IN WISHLIST";
-
-        modalDesc.textContent = "This item is already in your wishlist.";
-
-    } else {
-
-        wishlist.push({
-            id: itemId,
-            isBundle: isBundle
-        });
-
-        localStorage.setItem(
-            "wishlist",
-            JSON.stringify(wishlist)
-        );
-
-        modalTitle.textContent = "WISHLIST";
-
-        modalDesc.textContent = "Item added to wishlist.";
+    if (modalTitle) {
+        modalTitle.textContent = title;
     }
 
-    wishlist_modal.style.visibility = "visible";
+    if (modalDescription) {
+        modalDescription.textContent =
+            description;
+    }
 
-    wishlist_modal.style.opacity = "1";
+    wishlist_modal.style.visibility =
+        "visible";
+
+    wishlist_modal.style.opacity =
+        "1";
+}
+
+function showLoginRequiredModal() {
+    if (!login_required_modal) {
+        return;
+    }
+
+    login_required_modal.style.visibility =
+        "visible";
+
+    login_required_modal.style.opacity =
+        "1";
 }
 
 function closeWishlistModal() {

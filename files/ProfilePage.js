@@ -17,7 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Calls loadProfile function
     Promise.all([
         loadProfile(),
-        loadAddresses()
+        loadAddresses(),
+        loadWishlist()
     ]).finally(() => {
         hideLoader();
     });
@@ -410,7 +411,7 @@ if (addressForm) {
         }
     });
 }
-
+    //show addresses of logged in user
     async function loadAddresses() {
         try {
             const response =
@@ -442,6 +443,140 @@ if (addressForm) {
                 error
             );
         }
+    }
+    
+    //loads wishlist of logged in user
+    async function loadWishlist() {
+
+        try {
+
+            const response =
+                await fetch("/api/fetchWishlist");
+
+            const wishlist =
+                await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    wishlist.error ||
+                    "Unable to load wishlist"
+                );
+            }
+
+            const container =
+                document.getElementById(
+                    "wishlistContainer"
+                );
+
+            container.innerHTML = "";
+
+            if (!wishlist.length) {
+
+                container.innerHTML = `
+                    <div class="radius-10-box large-box">
+                        <p class="empty-text">
+                            No wishlist items found.
+                        </p>
+                    </div>
+                `;
+
+                return;
+            }
+
+            wishlist.forEach(item => {
+
+                const card =
+                    document.createElement("div");
+
+                card.className =
+                    "wishlist-item";
+
+                card.innerHTML = `
+                    <div class="wishlist-left">
+                        <img
+                            class="wishlist-image"
+                            src="${item.product_image}"
+                            alt="${item.product_name}"
+                        />
+                        <div class="wishlist-info">
+                            <h4>${item.product_name}</h4>
+                            <p>₱${Number(item.product_price).toFixed(2)}</p>
+                        </div>
+                    </div>
+
+                    <div class="wishlist-actions">
+                        <button
+                            type="button"
+                            class="wishlist-view-btn"
+                            data-product-id="${item.product_id}"
+                        >
+                            Go To
+                        </button>
+
+                        <button
+                            type="button"
+                            class="wishlist-delete-btn"
+                            data-product-id="${item.product_id}"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                `;
+
+                card.querySelector(".wishlist-view-btn")
+                    .addEventListener("click", () => {
+                        goToWishlistProduct(item.product_id);
+                    });
+
+                card.querySelector(".wishlist-delete-btn")
+                    .addEventListener("click", () => {
+                        removeWishlistItem(item.product_id);
+                    });
+
+                container.appendChild(card);
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Wishlist load error:",
+                error
+            );
+
+        }
+
+    }
+
+    async function removeWishlistItem(productId) {
+        try {
+
+            const response = await fetch(
+                    `/api/removeWishlist/${productId}`,
+                    { method: "DELETE" }
+                );
+
+            if (!response.ok) { 
+                throw new Error(
+                    "Delete failed"
+                );
+            }
+            loadWishlist();
+
+        } catch (error) {
+
+            console.error(
+                "Wishlist delete error:",
+                error
+            );
+
+        }
+
+    }
+
+    function goToWishlistProduct(productId) {
+        window.location.href = `/product?productId=${productId}`;
+
     }
 
     function hasEditedAddressChanges() {
