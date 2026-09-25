@@ -171,19 +171,21 @@
             <span></span>
         </button>
         <form class="search-container" id="Searchbar">
-          <input
-            type="text"
-            class="searchbar"
-            placeholder="Search for products..."
-            id="searchInput"
-          />
-          <button
-            class="searchbtn"
-            style="font-size: 2rem; width: 50px; height: 50px; margin-top: 10px"
-            onclick="SearchProducts()"
-          >
-            ⌕
-          </button>
+          <div style="margin-bottom: 10px; align-items: center;">
+            <input
+              type="text"
+              class="searchbar"
+              placeholder="Search for products..."
+              id="searchInput"
+            />
+            <button
+              class="searchbtn"
+              style="font-size: 2rem; width: 50px; height: 50px; margin-top: 10px"
+              onclick="SearchProducts()"
+            >
+              ⌕
+            </button>
+          </div>
           <div class="country-filter">
             <label for="product_country">Filter by Country:</label>
             <select class="country-dropdown" id="product_country" name="product_country">

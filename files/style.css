@@ -656,11 +656,12 @@ body {
   }
 
   .cardContainer {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 12px;
   }
 
   .cardImg {
+    height: 110px;
     margin: 10px 10px 0;
   }
   
@@ -709,4 +710,29 @@ body {
     .footerText {
         font-size: 12px;
     }
+}
+
+@media (max-width: 768px) {
+
+  .Selection {
+    display: flex;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    align-items: center;
+  }
+
+  .Categories {
+    padding: 10px;
+  }
+
+  .catImage {
+    width: 90px;
+    height: 90px;
+  }
+
+  .catType {
+    font-size: 14px;
+    margin-top: 8px;
+  }
+  
 }
