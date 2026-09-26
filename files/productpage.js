@@ -511,6 +511,26 @@ function goToLogin() {
     window.location.href = "/login";
 }
 
+function goToReviews() {
+    const params = new URLSearchParams(
+        window.location.search
+    );
+
+    const productId = params.get("productId");
+    const bundleId = params.get("bundleId");
+
+    if (productId) {
+        window.location.href =
+            `/user/reviews?productId=${productId}`;
+    } else if (bundleId) {
+        window.location.href =
+            `/user/reviews?bundleId=${bundleId}`;
+    } else {
+        window.location.href =
+            "/user/reviews";
+    }
+}
+
 async function addToWishlist() {
     const params =
         new URLSearchParams(
