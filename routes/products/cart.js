@@ -314,9 +314,8 @@ app.get(
                 });
             }
 
-            /*
-             * Find the customer's active cart.
-             */
+            
+            //Find the customer's active cart.
             const cartResult =
                 await db.execute({
                     sql: `
@@ -351,9 +350,8 @@ app.get(
             const cartId =
                 Number(cart.Cart_id);
 
-            /*
-             * Fetch all items belonging to the active cart.
-             */
+            
+            //Fetch all items belonging to the active cart.
             const itemsResult =
                 await db.execute({
                     sql: `
@@ -410,5 +408,219 @@ app.get(
     }
 );
 
+app.put(
+    "/items/:productId",
+    requireAuth("user"),
+    async (req, res) => {
+        try {
+            const customerId = Number(req.user.userId);
+            const productId = Number(req.params.productId);
+            const productSize = Number(req.body.productSize);
+            const quantity = Number(req.body.quantity);
+
+            if (
+                !customerId ||
+                !productId ||
+                !productSize ||
+                !Number.isInteger(quantity) ||
+                quantity < 1
+            ) {
+                return res.status(400).json({
+                    error:
+                        "Valid productId, productSize and quantity are required"
+                });
+            }
+
+            const cartResult =
+                await db.execute({
+                    sql: `
+                        SELECT Cart_id
+                        FROM Cart
+                        WHERE Customer_id = ?
+                        AND status = 'active'
+                        ORDER BY Cart_id DESC
+                        LIMIT 1
+                    `,
+                    args: [customerId]
+                });
+
+            if (cartResult.rows.length === 0) {
+                return res.status(404).json({
+                    error:
+                        "Active cart not found"
+                });
+            }
+
+            const cartId =
+                Number(
+                    cartResult.rows[0].Cart_id
+                );
+
+            const existingResult =
+                await db.execute({
+                    sql: `
+                        SELECT product_id
+                        FROM Cart_items
+                        WHERE Cart_id = ?
+                        AND product_id = ?
+                        AND Product_Size = ?
+                    `,
+                    args: [
+                        cartId,
+                        productId,
+                        productSize
+                    ]
+                });
+
+            if (existingResult.rows.length === 0) {
+                return res.status(404).json({
+                    error:
+                        "Cart item not found"
+                });
+            }
+
+            await db.execute({
+                sql: `
+                    UPDATE Cart_items
+                    SET Quantity = ?
+                    WHERE Cart_id = ?
+                    AND product_id = ?
+                    AND Product_Size = ?
+                `,
+                args: [
+                    quantity,
+                    cartId,
+                    productId,
+                    productSize
+                ]
+            });
+
+            return res.status(200).json({
+                message:
+                    "Cart quantity updated",
+
+                cartId,
+                productId,
+                productSize,
+                quantity
+            });
+
+        } catch (error) {
+            console.error(
+                "Failed to update cart quantity:",
+                error
+            );
+
+            return res.status(500).json({
+                error:
+                    "Failed to update cart quantity"
+            });
+        }
+    }
+);
+
+app.delete(
+    "/items/:productId",
+    requireAuth("user"),
+    async (req, res) => {
+        try {
+            const customerId = Number(req.user.userId);
+            const productId = Number(req.params.productId);
+            const productSize = Number(req.query.productSize);
+
+            if (
+                !customerId ||
+                !productId ||
+                !productSize
+            ) {
+                return res.status(400).json({
+                    error:
+                        "Valid productId and productSize are required"
+                });
+            }
+
+            const cartResult =
+                await db.execute({
+                    sql: `
+                        SELECT Cart_id
+                        FROM Cart
+                        WHERE Customer_id = ?
+                        AND status = 'active'
+                        ORDER BY Cart_id DESC
+                        LIMIT 1
+                    `,
+                    args: [customerId]
+                });
+
+            if (cartResult.rows.length === 0) {
+                return res.status(404).json({
+                    error:
+                        "Active cart not found"
+                });
+            }
+
+            const cartId = Number(
+                cartResult.rows[0].Cart_id
+            );
+
+            const existingResult =
+                await db.execute({
+                    sql: `
+                        SELECT product_id
+                        FROM Cart_items
+                        WHERE Cart_id = ?
+                        AND product_id = ?
+                        AND Product_Size = ?
+                    `,
+                    args: [
+                        cartId,
+                        productId,
+                        productSize
+                    ]
+                });
+
+            if (existingResult.rows.length === 0) {
+                return res.status(404).json({
+                    error:
+                        "Cart item not found"
+                });
+            }
+
+            await db.execute({
+                sql: `
+                    DELETE FROM Cart_items
+                    WHERE Cart_id = ?
+                    AND product_id = ?
+                    AND Product_Size = ?
+                `,
+                args: [
+                    cartId,
+                    productId,
+                    productSize
+                ]
+            });
+
+            return res.status(200).json({
+                message:
+                    "Cart item removed",
+
+                cartId,
+                productId,
+                productSize
+            });
+
+        } catch (error) {
+            console.error(
+                "Failed to remove cart item:",
+                error
+            );
+
+            return res.status(500).json({
+                error:
+                    "Failed to remove cart item"
+            });
+        }
+    }
+);
 
 module.exports = app;

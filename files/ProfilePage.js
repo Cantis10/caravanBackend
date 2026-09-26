@@ -487,8 +487,7 @@ if (addressForm) {
                 const card =
                     document.createElement("div");
 
-                card.className =
-                    "wishlist-item";
+                card.className = "wishlist-item";
 
                 card.innerHTML = `
                     <div class="wishlist-left">

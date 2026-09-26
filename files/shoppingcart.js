@@ -28,6 +28,19 @@ let vouchers = [
 ];
 let selectedVoucher = null;
 
+// loading function
+function showLoader() {
+    document
+        .getElementById("loadingOverlay")
+        .classList.add("active");
+}
+
+function hideLoader() {
+    document
+        .getElementById("loadingOverlay")
+        .classList.remove("active");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     loadCartItems();
     updateNavbarLogin();
@@ -148,33 +161,111 @@ function warning_No() {
     selectedItem = null;
 }
 
-function warning_Yes() {
-    if (selectedItem) {
-        // Use the cart entry index so identical products with different sizes are distinct.
-        const cartIndex = parseInt(selectedItem.dataset.cartIndex, 10);
-
-        // Remove from DOM
-        selectedItem.remove();
-
-        // Remove from localStorage cart
-        if (!Number.isNaN(cartIndex)) {
-            let cart = JSON.parse(localStorage.getItem("cart")) || [];
-            if (cartIndex > -1 && cartIndex < cart.length) {
-                cart.splice(cartIndex, 1);
-                localStorage.setItem("cart", JSON.stringify(cart));
-
-                cartData = cart;
-                // Updates Checkoutbtn depending on cart content
-                updateCheckoutButton();
-                displayCartItems();
-            }
-        }
-
-        // Update price summary
-        updatePriceSummary();
+async function warning_Yes() {
+    if (!selectedItem) {
+        warning_No();
+        return;
     }
 
-    warning_No();
+    const cartIndex =
+        Number(selectedItem.dataset.cartIndex);
+
+    const cartItem =
+        cartData[cartIndex];
+
+    if (!cartItem) {
+        console.error(
+            "Unable to find the selected cart item."
+        );
+
+        warning_No();
+        return;
+    }
+
+    const deleteButton =
+        delete_modal.querySelector(
+            ".btn-outline-danger"
+        );
+
+    try {
+        if (deleteButton) {
+            deleteButton.disabled = true;
+            deleteButton.textContent =
+                "Deleting...";
+        }
+
+        const response = await fetch(
+            `/api/cart/items/${cartItem.product_id}` +
+            `?productSize=${encodeURIComponent(
+                Number(
+                    String(cartItem.cartprod_size)
+                        .replace("oz", "")
+                )
+            )}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        const contentType =
+            response.headers.get(
+                "content-type"
+            ) || "";
+
+        if (!contentType.includes("application/json")) {
+            const responseText =
+                await response.text();
+
+            console.error(
+                "Invalid delete response:",
+                responseText
+            );
+
+            throw new Error(
+                "The server returned an invalid response."
+            );
+        }
+
+        const result =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.error ||
+                "Unable to remove cart item."
+            );
+        }
+
+        console.log(
+            "Cart item deleted:",
+            result
+        );
+
+        /*
+         * Reload the authoritative cart from the database.
+         */
+        await loadCartItems();
+
+        warning_No();
+
+    } catch (error) {
+        console.error(
+            "Delete cart item error:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Unable to delete this item."
+        );
+
+    } finally {
+        if (deleteButton) {
+            deleteButton.disabled = false;
+            deleteButton.textContent =
+                "Delete";
+        }
+    }
 }
 
 /*warning for checkout*/
@@ -199,7 +290,7 @@ function checkoutWarn() {
 
 function checkout_No() {
     warning_modal.style.visibility = "hidden";
-    warning_modal.style.visibility = "0";
+    warning_modal.style.opacity = "0";
 }
 
 function checkout_Yes() {
@@ -208,43 +299,176 @@ function checkout_Yes() {
     // PLACE CHECKOUT SCRIPT FOR BACKEND
 }
 
-// Load cart items from localStorage and products_list.json
-function loadCartItems() {
-    cartData =
-        JSON.parse(localStorage.getItem("cart")) || [];
+// Load the logged-in customer's active cart from the database
+async function loadCartItems() {
+    showLoader();
 
-    updateCheckoutButton();
+    try {
+        const response = await fetch("/api/cart");
 
-    fetch("/api/fetchProducts")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(
-                    `Unable to load products: ${response.status}`
-                );
-            }
+        const contentType =
+            response.headers.get("content-type") || "";
 
-            return response.json();
-        })
-        .then(items => {
-            const allItems = Array.isArray(items) ? items : [];
+        if (!contentType.includes("application/json")) {
+            const responseText = await response.text();
 
-            productsData = allItems.filter(
-                item => Number(item.type_id) === 1
+            console.error(
+                "Invalid cart response:",
+                responseText
             );
 
-            bundlesData = allItems.filter(
-                item => Number(item.type_id) === 2
+            throw new Error(
+                "The server returned an invalid cart response."
             );
+        }
 
-            displayCartItems();
-        })
-        .catch(error => {
-            console.error("Error loading cart items:", error);
+        const result = await response.json();
 
-            document.querySelector(
-                ".cart-items"
-            ).innerHTML = "<p>Unable to load cart items.</p>";
+        if (!response.ok) {
+            throw new Error(
+                result.error ||
+                "Unable to load cart."
+            );
+        }
+
+        /*
+         * Convert database rows into the same structure
+         * your existing cart functions already use.
+         */
+        cartData = (result.items || []).map(item => {
+            const isBundle =
+                Number(item.type_id) === 2;
+
+            const productSize =
+                `${Number(item.product_size) || 8}oz`;
+
+            return {
+                cart_id:
+                    Number(item.cart_id),
+
+                product_id:
+                    Number(item.product_id),
+
+                cartprod_id:
+                    isBundle
+                        ? null
+                        : Number(item.product_id),
+
+                cartbundle_id:
+                    isBundle
+                        ? Number(item.product_id)
+                        : null,
+
+                cartprod_size:
+                    productSize,
+
+                quantity:
+                    Number(item.quantity) || 1,
+
+                isBundle:
+                    isBundle,
+
+                product_name:
+                    item.product_name,
+
+                product_price:
+                    Number(item.product_price) || 0,
+
+                product_image:
+                    item.product_image,
+
+                type_id:
+                    Number(item.type_id)
+            };
         });
+
+        /*
+         * Your /api/cart endpoint already provides product
+         * information, so create product arrays directly from it.
+         */
+        productsData = cartData
+            .filter(item => !item.isBundle)
+            .map(item => ({
+                product_id:
+                    item.product_id,
+
+                product_name:
+                    item.product_name,
+
+                product_price:
+                    item.product_price,
+
+                product_image:
+                    item.product_image,
+
+                type_id:
+                    item.type_id,
+
+                /*
+                 * Prevent existing createItemCard()
+                 * from failing when reading categories.
+                 */
+                product_category: []
+            }));
+
+        bundlesData = cartData
+            .filter(item => item.isBundle)
+            .map(item => ({
+                product_id:
+                    item.product_id,
+
+                product_name:
+                    item.product_name,
+
+                product_price:
+                    item.product_price,
+
+                product_image:
+                    item.product_image,
+
+                type_id:
+                    item.type_id,
+
+                product_category: []
+            }));
+
+        console.log(
+            "Active cart:",
+            result.cart
+        );
+
+        console.log(
+            "Cart items from database:",
+            cartData
+        );
+
+        updateCheckoutButton();
+        displayCartItems();
+
+    } catch (error) {
+        console.error(
+            "Error loading cart items:",
+            error
+        );
+
+        cartData = [];
+        productsData = [];
+        bundlesData = [];
+
+        updateCheckoutButton();
+
+        const cartContainer =
+            document.querySelector(".cart-items");
+
+        if (cartContainer) {
+            cartContainer.innerHTML =
+                "<p>Unable to load cart items.</p>";
+        }
+
+        updatePriceSummary();
+    } finally {
+        hideLoader();
+    }
 }
 
 // Loads User's Stored addresses from db
@@ -326,7 +550,7 @@ function displayCartItems() {
         } else {
             // Find product
             item = productsData.find(
-                p => p.product_id === Number(cartItem.cartprod_id)
+                product => Number(product.product_id) === Number(cartItem.cartprod_id)
             );
             if (item) {
                 itemCard = createItemCard(item, cartItem, index);
@@ -356,9 +580,13 @@ function createItemCard(product, cartItem, index) {
     const itemPrice = product.product_price * sizeMultiplier;
 
     // Get first category
-    const category = product.product_category.length > 0
-        ? product.product_category[0].category_name
-        : "Uncategorized";
+    const categories = Array.isArray(product.product_category)
+        ? product.product_category
+        : [];
+
+    const category = categories.length > 0
+        ? categories[0].category_name
+        : "Uncategorised";
 
     itemCard.innerHTML = `
         <div class="product-image">
@@ -372,11 +600,43 @@ function createItemCard(product, cartItem, index) {
 
             <div class="quantity-control">
                 <span>Quantity:</span>
-                <button class="quantity-btn" onclick="decreaseQuantity(${index})">−</button>
-                <span class="product_quantity" data-index="${index}">${quantity}</span>
-                <button class="quantity-btn" onclick="increaseQuantity(${index})">+</button>
 
-                <button class="delete-btn" onclick="deleteWarn(this)">🗑 Delete</button>
+                <button
+                    type="button"
+                    class="quantity-btn"
+                    onclick="decreaseQuantity(${index})"
+                    ${quantity <= 1 ? "disabled" : ""}
+                >
+                    −
+                </button>
+
+                <input
+                    type="number"
+                    class="product_quantity quantity-input"
+                    data-index="${index}"
+                    value="${quantity}"
+                    min="1"
+                    step="1"
+                    inputmode="numeric"
+                    onchange="quantityChanged(${index}, this)"
+                    onkeydown="handleQuantityKeydown(event)"
+                >
+
+                <button
+                    type="button"
+                    class="quantity-btn"
+                    onclick="increaseQuantity(${index})"
+                >
+                    +
+                </button>
+
+                <button
+                    type="button"
+                    class="delete-btn"
+                    onclick="deleteWarn(this)"
+                >
+                    🗑 Delete
+                </button>
             </div>
         </div>
 
@@ -390,34 +650,20 @@ function createItemCard(product, cartItem, index) {
 
 // Create a bundle card element for cart
 function createBundleCard(bundle, cartItem, index) {
-    const itemCard =
-        document.createElement("div");
+    const itemCard = document.createElement("div");
 
     itemCard.classList.add("item-card");
-
-    itemCard.dataset.bundleId =
-        bundle.product_id;
-
-    itemCard.dataset.cartIndex =
-        index;
-
-    itemCard.dataset.index =
-        index;
-
-    const size =
-        cartItem.cartprod_size || "8oz";
-
+    itemCard.dataset.bundleId = bundle.product_id;
+    itemCard.dataset.cartIndex = index;
+    itemCard.dataset.index = index;
+    
+    const size = cartItem.cartprod_size || "8oz";
     const sizeMultiplier =
         size === "16oz" ? 16 : 8;
 
-    const quantity =
-        Number(cartItem.quantity) || 1;
-
-    const basePrice =
-        Number(bundle.product_price) || 0;
-
-    const itemPrice =
-        basePrice * sizeMultiplier;
+    const quantity = Number(cartItem.quantity) || 1;
+    const basePrice = Number(bundle.product_price) || 0;
+    const itemPrice = basePrice * sizeMultiplier;
 
     itemCard.innerHTML = `
         <div class="product-image">
@@ -441,26 +687,39 @@ function createBundleCard(bundle, cartItem, index) {
                 <span>Quantity:</span>
 
                 <button
+                    type="button"
                     class="quantity-btn"
-                    onclick="decreaseQuantity(${index})">
+                    onclick="decreaseQuantity(${index})"
+                    ${quantity <= 1 ? "disabled" : ""}
+                >
                     −
                 </button>
 
-                <span
-                    class="product_quantity"
-                    data-index="${index}">
-                    ${quantity}
-                </span>
+                <input
+                    type="number"
+                    class="product_quantity quantity-input"
+                    data-index="${index}"
+                    value="${quantity}"
+                    min="1"
+                    step="1"
+                    inputmode="numeric"
+                    onchange="quantityChanged(${index}, this)"
+                    onkeydown="handleQuantityKeydown(event)"
+                >
 
                 <button
+                    type="button"
                     class="quantity-btn"
-                    onclick="increaseQuantity(${index})">
+                    onclick="increaseQuantity(${index})"
+                >
                     +
                 </button>
 
                 <button
+                    type="button"
                     class="delete-btn"
-                    onclick="deleteWarn(this)">
+                    onclick="deleteWarn(this)"
+                >
                     🗑 Delete
                 </button>
             </div>
@@ -489,133 +748,266 @@ function updateCheckoutButton() {
     }
 }
 
+async function updateCartItemQuantity(
+    index,
+    newQuantity
+) {
+    const cartItem =
+        cartData[index];
+
+    if (!cartItem) {
+        return;
+    }
+
+    const itemCard =
+        document.querySelector(
+            `.item-card[data-cart-index="${index}"]`
+        );
+
+    const quantityButtons = 
+        itemCard
+            ? itemCard.querySelectorAll(
+                ".quantity-btn"
+            )
+            : [];
+
+    const decreaseButton = quantityButtons.length > 0
+        ? quantityButtons[0]
+        : null;
+
+    if (decreaseButton) {
+        decreaseButton.disabled = newQuantity <= 1;
+    }
+
+    try {
+        quantityButtons.forEach(button => {
+            button.disabled = true;
+        });
+
+        const productSize =
+            Number(
+                String(cartItem.cartprod_size)
+                    .replace("oz", "")
+            );
+
+        const response = await fetch(
+            `/api/cart/items/${cartItem.product_id}`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    productSize:
+                        productSize,
+
+                    quantity:
+                        newQuantity
+                })
+            }
+        );
+
+        const contentType =
+            response.headers.get(
+                "content-type"
+            ) || "";
+
+        if (!contentType.includes("application/json")) {
+            const responseText =
+                await response.text();
+
+            console.error(
+                "Invalid quantity response:",
+                responseText
+            );
+
+            throw new Error(
+                "The server returned an invalid response."
+            );
+        }
+
+        const result =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.error ||
+                "Unable to update quantity."
+            );
+        }
+
+        console.log(
+            "Quantity updated:",
+            result
+        );
+
+        //Keep the local runtime array synchronised. This is not localStorage.
+        cartData[index].quantity =
+            newQuantity;
+
+        if (itemCard) {
+            const quantityElement =
+                itemCard.querySelector(
+                    ".product_quantity"
+                );
+
+            const priceElement =
+                itemCard.querySelector(
+                    ".product_price"
+                );
+
+            if (quantityElement) {
+                quantityElement.value = newQuantity;
+            }
+
+            const sizeMultiplier =
+                cartItem.cartprod_size ===
+                "16oz"
+                    ? 16
+                    : 8;
+
+            const itemTotal =
+                Number(cartItem.product_price) *
+                sizeMultiplier *
+                newQuantity;
+
+            if (priceElement) {
+                priceElement.textContent =
+                    `Price: ₱${itemTotal.toFixed(2)}`;
+            }
+        }
+
+        updatePriceSummary();
+
+    } catch (error) {
+        console.error(
+            "Quantity update error:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Unable to update quantity."
+        );
+
+        //Re-fetch to restore the real database value.
+        await loadCartItems();
+
+    } finally {
+        quantityButtons.forEach(
+            (button, buttonIndex) => {
+                if (buttonIndex === 0) {
+                    button.disabled = Number(cartData[index]?.quantity) <= 1;
+                } else {
+                    button.disabled = false;
+                }
+            }
+        );
+    }
+}
+
 // Increase quantity for a cart item
-function increaseQuantity(index) {
-    const itemCard = document.querySelector(
-        `.item-card[data-cart-index="${index}"]`
-    );
-
-    if (!itemCard) return;
-
-    const quantityElement = itemCard.querySelector(".product_quantity");
-    const priceElement = itemCard.querySelector(".product_price");
-
-    let quantity = parseInt(quantityElement.textContent, 10);
-    quantity++;
-
-    // Update cart data
-    cartData[index].quantity = quantity;
-
-    // Save cart
-    localStorage.setItem("cart", JSON.stringify(cartData));
-
-    // Update displayed quantity
-    quantityElement.textContent = quantity;
+async function increaseQuantity(index) {
     const cartItem = cartData[index];
 
-    if (cartItem.isBundle) {
-
-        const bundleId = Number(itemCard.dataset.bundleId);
-        const bundle = bundlesData.find(
-            item => Number(item.product_id) === bundleId
-        );
-
-        if (bundle) {
-            const sizeMultiplier =
-                cartItem.cartprod_size === "16oz" ? 16 : 8;
-
-            const itemPrice =
-                bundle.product_price *
-                sizeMultiplier *
-                quantity;
-
-            priceElement.textContent =
-                `Price: ₱${itemPrice.toFixed(2)}`;
-        }
-    } else {
-        const productId = Number(itemCard.dataset.productId);
-        const product = productsData.find(
-            p => p.product_id === productId
-        );
-        if (product) {
-            const sizeMultiplier =
-                cartItem.cartprod_size === "16oz" ? 16 : 8;
-
-            const itemPrice =
-                product.product_price *
-                sizeMultiplier *
-                quantity;
-
-            priceElement.textContent =
-                `Price: ₱${itemPrice.toFixed(2)}`;
-        }
+    if (!cartItem) {
+        return;
     }
-    updatePriceSummary();
+
+    const newQuantity =
+        (Number(cartItem.quantity) || 1) + 1;
+
+    await updateCartItemQuantity(
+        index,
+        newQuantity
+    );
 }
 
 // Decrease quantity for a cart item
-function decreaseQuantity(index) {
-    const itemCard = document.querySelector(
-        `.item-card[data-cart-index="${index}"]`
+async function decreaseQuantity(index) {
+    const cartItem = cartData[index];
+
+    if (!cartItem) {
+        return;
+    }
+
+    const currentQuantity =
+        Number(cartItem.quantity) || 1;
+
+    if (currentQuantity <= 1) {
+        return;
+    }
+
+    await updateCartItemQuantity(
+        index,
+        currentQuantity - 1
     );
+}
 
-    if (!itemCard) return;
-    const quantityElement = itemCard.querySelector(".product_quantity");
-    const priceElement = itemCard.querySelector(".product_price");
+async function quantityChanged(index, inputElement) {
+    const cartItem = cartData[index];
 
-    let quantity = parseInt(quantityElement.textContent, 10);
+    if (!cartItem) {
+        return;
+    }
 
-    if (quantity > 1) {
-        quantity--;
+    const previousQuantity =
+        Number(cartItem.quantity) || 1;
 
-        // Update cart data
-        cartData[index].quantity = quantity;
+    let newQuantity =
+        Number.parseInt(
+            inputElement.value,
+            10
+        );
 
-        // Save cart
-        localStorage.setItem("cart", JSON.stringify(cartData));
+    if (
+        Number.isNaN(newQuantity) ||
+        newQuantity < 1
+    ) {
+        newQuantity = 1;
+    }
 
-        // Update displayed quantity
-        quantityElement.textContent = quantity;
-        const cartItem = cartData[index];
+    
+    // Keep the displayed value valid.
+    inputElement.value = newQuantity;
 
-        if (cartItem.isBundle) {
-            const bundleId = Number(itemCard.dataset.bundleId);
-            const bundle = bundlesData.find(
-                b => b.bundle_id === bundleId
-            );
+    
+    // Avoid an unnecessary API request when the value has not changed.
+    if (newQuantity === previousQuantity) {
+        return;
+    }
 
-            if (bundle) {
-                const sizeMultiplier =
-                    cartItem.cartprod_size === "16oz" ? 16 : 8;
+    inputElement.disabled = true;
 
-                const itemPrice =
-                    bundle.product_price *
-                    sizeMultiplier *
-                    quantity;
+    try {
+        await updateCartItemQuantity(
+            index,
+            newQuantity
+        );
+    } finally {
+        inputElement.disabled = false;
+    }
+}
 
-                priceElement.textContent =
-                    `Price: ₱${itemPrice.toFixed(2)}`;
-            }
-        } else {
-            const productId = Number(itemCard.dataset.productId);
-            const product = productsData.find(
-                p => p.product_id === productId
-            );
+function handleQuantityKeydown(event) {
+    
+    // Prevent decimal, negative and scientific notation characters in the number input. 
+    if (
+        event.key === "-" ||
+        event.key === "+" ||
+        event.key === "." ||
+        event.key.toLowerCase() === "e"
+    ) {
+        event.preventDefault();
+    }
 
-            if (product) {
-                const sizeMultiplier =
-                    cartItem.cartprod_size === "16oz" ? 16 : 8;
-
-                const itemPrice =
-                    product.product_price *
-                    sizeMultiplier *
-                    quantity;
-
-                priceElement.textContent =
-                    `Price: ₱${itemPrice.toFixed(2)}`;
-            }
-        }
-        updatePriceSummary();
+    //Immediately save when Enter is pressed.
+    if (event.key === "Enter") {
+        event.preventDefault();
+        event.target.blur();
     }
 }
 
@@ -710,7 +1102,7 @@ function updatePriceSummary() {
             return;
         }
         const quantityElement = itemCard.querySelector(".product_quantity");
-        const quantity = quantityElement ? parseInt(quantityElement.textContent) : 1;
+        const quantity = quantityElement ? Number.parseInt(quantityElement.value, 10) || 1 : 1;
         const sizeMultiplier = cartItem && cartItem.cartprod_size === "16oz" ? 16 : 8;
 
             if (cartItem.isBundle) {
