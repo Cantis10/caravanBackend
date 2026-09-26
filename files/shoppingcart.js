@@ -28,11 +28,29 @@ let vouchers = [
 ];
 let selectedVoucher = null;
 
+function showLoader() {
+    document
+        .getElementById("loadingOverlay")
+        .classList.add("active");
+}
+
+function hideLoader() {
+    document
+        .getElementById("loadingOverlay")
+        .classList.remove("active");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-    loadCartItems();
+    showLoader();
+    Promise.all([
+        loadCartItems(),
+        loadAddresses()
+    ]) .finally (() => {
+        hideLoader();
+    });
+    
     updateNavbarLogin();
     renderVoucherDropdown();
-    loadAddresses();
 
     // Voucher dropdown
     document.addEventListener("change", function(event) {
@@ -209,42 +227,54 @@ function checkout_Yes() {
 }
 
 // Load cart items from localStorage and products_list.json
-function loadCartItems() {
-    cartData =
-        JSON.parse(localStorage.getItem("cart")) || [];
+async function loadCartItems() {
 
-    updateCheckoutButton();
+    showLoader();
 
-    fetch("/api/fetchProducts")
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(
-                    `Unable to load products: ${response.status}`
-                );
-            }
+    try {
 
-            return response.json();
-        })
-        .then(items => {
-            const allItems = Array.isArray(items) ? items : [];
+        cartData =
+            JSON.parse(
+                localStorage.getItem("cart")
+            ) || [];
 
-            productsData = allItems.filter(
-                item => Number(item.type_id) === 1
+        updateCheckoutButton();
+
+        const response =
+            await fetch("/api/fetchProducts");
+
+        if (!response.ok) {
+            throw new Error(
+                `Unable to load products: ${response.status}`
+            );
+        }
+
+        const items = await response.json();
+        const allItems =
+            Array.isArray(items)
+                ? items
+                : [];
+
+        productsData =
+            allItems.filter(
+                item =>
+                    Number(item.type_id) === 1
             );
 
-            bundlesData = allItems.filter(
-                item => Number(item.type_id) === 2
+        bundlesData =
+            allItems.filter(
+                item =>
+                    Number(item.type_id) === 2
             );
 
-            displayCartItems();
-        })
-        .catch(error => {
-            console.error("Error loading cart items:", error);
+        displayCartItems();
 
-            document.querySelector(
-                ".cart-items"
-            ).innerHTML = "<p>Unable to load cart items.</p>";
-        });
+    } catch (error) {
+        console.error("Error loading cart items:", error);
+        document.querySelector(".cart-items").innerHTML = "<p>Unable to load cart items.</p>";
+    } finally {
+        hideLoader();
+    }
 }
 
 // Loads User's Stored addresses from db

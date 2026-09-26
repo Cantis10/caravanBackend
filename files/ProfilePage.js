@@ -241,6 +241,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
+      localStorage.removeItem("cart");   
       window.location.href = "/login";
     });
   }
