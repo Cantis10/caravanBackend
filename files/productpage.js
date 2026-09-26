@@ -463,7 +463,7 @@ const success_modal = document.querySelector(".success-modal");
 const login_required_modal = document.querySelector(".login-required-modal");
 const wishlist_modal = document.querySelector(".wishlist-modal");
 
-async function addtoCart(button) {
+async function addtoCart() {
 
     try {
         const response = await fetch("/api/isLoggedIn");
@@ -716,41 +716,33 @@ function closeWishlistModal() {
     wishlist_modal.style.opacity = "0";
 }
 
-async function addtocart_confirm() {
-    const confirmButton =
-        document.querySelector(
-            ".addtocart-modal .btn-outline-danger"
+function addtocart_confirm() {
+    const sizeSelect = document.getElementById("spiceSize");
+    const params = new URLSearchParams(
+            window.location.search
         );
 
-    const sizeSelect = document.getElementById("spiceSize");
-    const params = new URLSearchParams(window.location.search);
     const productId = Number(params.get("productId"));
     const bundleId = Number(params.get("bundleId"));
 
-    /*
-     * Products and bundles are both stored in Product,
-     * so both use product_id in Cart_items.
-     */
     const itemId =
-        isBundle ? bundleId : productId;
+        isBundle
+            ? bundleId
+            : productId;
 
-    /*
-     * Product_Size column is INT.
-     * Convert "8oz" into 8 and "16oz" into 16.
-     */
-    const productSize =
-        Number(
-            String(sizeSelect?.value || "")
-                .replace("oz", "")
-        );
+    const size =
+        sizeSelect
+            ? sizeSelect.value
+            : "8oz";
+
+    addtocart_modal.style.visibility = "hidden";
+
+    addtocart_modal.style.opacity = "0";
 
     if (!itemId) {
         console.error(
             "No valid product or bundle ID found."
         );
-
-        addtocart_modal.style.visibility = "hidden";
-        addtocart_modal.style.opacity = "0";
 
         showCartErrorModal(
             "Unable to identify this item."
@@ -759,135 +751,80 @@ async function addtocart_confirm() {
         return;
     }
 
-    if (!productSize) {
-        console.error(
-            "No valid product size selected."
-        );
+    /*
+     * Load the existing cart from localStorage.
+     */
+    const cart =
+        JSON.parse(
+            localStorage.getItem("cart")
+        ) || [];
 
-        addtocart_modal.style.visibility = "hidden";
-        addtocart_modal.style.opacity = "0";
+    /*
+     * Check whether the same product/bundle AND size
+     * are already in the cart.
+     */
+    const existingItem =
+        cart.find(item => {
+            if (isBundle) {
+                return (
+                    item.isBundle === true &&
+                    Number(item.cartbundle_id) ===
+                        itemId &&
+                    item.cartprod_size === size
+                );
+            }
 
-        showCartErrorModal(
-            "Please select a valid product size."
-        );
+            return (
+                item.isBundle === false &&
+                Number(item.cartprod_id) ===
+                    itemId &&
+                item.cartprod_size === size
+            );
+        });
 
+    if (existingItem) {
+        showAlreadyInCartModal();
         return;
     }
 
-    try {
-        if (confirmButton) {
-            confirmButton.disabled = true;
-            confirmButton.textContent = "Adding...";
-        }
-
-        const response = await fetch(
-            "/api/cart/items",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body: JSON.stringify({
-                    productId: itemId,
-                    productSize: productSize,
-                    quantity: 1
-                })
-            }
-        );
-
-        const contentType =
-            response.headers.get(
-                "content-type"
-            ) || "";
-
+    /*
+     * Add bundle to localStorage cart.
+     */
+    if (isBundle) {
+        cart.push({
+            cartbundle_id: itemId,
+            cartprod_id: null,
+            cartprod_size: size,
+            quantity: 1,
+            isBundle: true
+        });
+    } else {
         /*
-         * Authentication middleware may return an HTML
-         * login page instead of JSON.
+         * Add regular product to localStorage cart.
          */
-        if (
-            !contentType.includes(
-                "application/json"
-            )
-        ) {
-            const responseText = await response.text();
-
-            console.error("Non-JSON cart response: ",responseText);
-
-            addtocart_modal.style.visibility = "hidden";
-            addtocart_modal.style.opacity = "0";
-            if (
-                response.status === 401 ||
-                response.redirected
-            ) {
-                showLoginRequiredModal();
-                return;
-            }
-
-            throw new Error(
-                "The server returned an invalid response."
-            );
-        }
-
-        const result =
-            await response.json();
-
-        if (response.status === 401) {
-            addtocart_modal.style.visibility = "hidden";
-            addtocart_modal.style.opacity = "0";
-
-            showLoginRequiredModal();
-            return;
-        }
-
-        /*
-         * Your cart API returns 409 if the product and
-         * selected size already exist in the active cart.
-         */
-        if (
-            response.status === 409 ||
-            result.alreadyExists === true
-        ) {
-            addtocart_modal.style.visibility = "hidden";
-
-            addtocart_modal.style.opacity = "0";
-
-            showAlreadyInCartModal();
-            return;
-        }
-
-        if (!response.ok) {
-            throw new Error(
-                result.error ||
-                "Unable to add item to cart."
-            );
-        }
-
-        addtocart_modal.style.visibility = "hidden";
-        addtocart_modal.style.opacity = "0";
-
-        console.log(
-            "Cart item saved to database:",
-            result
-        );
-
-        showSuccessModal();
-
-    } catch (error) {
-        console.error("Add to cart error:", error);
-        addtocart_modal.style.visibility = "hidden";
-        addtocart_modal.style.opacity = "0";
-
-        showCartErrorModal(error.message || "Unable to add this item to your cart.");
-
-    } finally {
-        if (confirmButton) {
-            confirmButton.disabled = false;
-            confirmButton.textContent = "Yes";
-        }
+        cart.push({
+            cartprod_id: itemId,
+            cartbundle_id: null,
+            cartprod_size: size,
+            quantity: 1,
+            isBundle: false
+        });
     }
+
+    /*
+     * Save updated cart.
+     */
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+    console.log(
+        "Cart saved to localStorage:",
+        cart
+    );
+
+    showSuccessModal();
 }
 
 function addtocart_close() {
