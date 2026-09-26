@@ -466,30 +466,21 @@ const wishlist_modal = document.querySelector(".wishlist-modal");
 async function addtoCart(button) {
 
     try {
-
         const response = await fetch("/api/isLoggedIn");
 
         if (!response.ok) {
-
-            login_required_modal.style.visibility = "visible";
-            login_required_modal.style.opacity = "1";
-
+            showLoginRequiredModal();
             return;
         }
 
         const data = await response.json();
 
         if (!data.loggedIn) {
-
-            login_required_modal.style.visibility = "visible";
-            login_required_modal.style.opacity = "1";
-
+            showLoginRequiredModal();
             return;
         }
 
         // User is logged in
-        selectedItem = button.closest(".item-card");
-
         addtocart_modal.style.visibility = "visible";
         addtocart_modal.style.opacity = "1";
 
@@ -725,86 +716,209 @@ function closeWishlistModal() {
     wishlist_modal.style.opacity = "0";
 }
 
-function addtocart_confirm() {
-    addtocart_modal.style.visibility = "hidden";
-    addtocart_modal.style.opacity = "0";
+async function addtocart_confirm() {
+    const confirmButton =
+        document.querySelector(
+            ".addtocart-modal .btn-outline-danger"
+        );
 
-    const cart =
-        JSON.parse(localStorage.getItem("cart")) || [];
+    const sizeSelect = document.getElementById("spiceSize");
+    const params = new URLSearchParams(window.location.search);
+    const productId = Number(params.get("productId"));
+    const bundleId = Number(params.get("bundleId"));
 
-    const size =
-        document.getElementById("spiceSize").value;
-
-    const params =
-        new URLSearchParams(window.location.search);
-
-    const productId =
-        Number(params.get("productId"));
-
-    const bundleId =
-        Number(params.get("bundleId"));
-
+    /*
+     * Products and bundles are both stored in Product,
+     * so both use product_id in Cart_items.
+     */
     const itemId =
         isBundle ? bundleId : productId;
 
-    if (!itemId) {
-        console.error("No valid product or bundle ID found.");
+    /*
+     * Product_Size column is INT.
+     * Convert "8oz" into 8 and "16oz" into 16.
+     */
+    const productSize =
+        Number(
+            String(sizeSelect?.value || "")
+                .replace("oz", "")
+        );
 
-        alert("Unable to add this item to the cart.");
+    if (!itemId) {
+        console.error(
+            "No valid product or bundle ID found."
+        );
+
+        addtocart_modal.style.visibility = "hidden";
+        addtocart_modal.style.opacity = "0";
+
+        showCartErrorModal(
+            "Unable to identify this item."
+        );
+
         return;
     }
 
-    const existingItem = cart.find(item => {
-        if (isBundle) {
-            return (
-                item.isBundle === true &&
-                Number(item.cartbundle_id) === itemId &&
-                item.cartprod_size === size
+    if (!productSize) {
+        console.error(
+            "No valid product size selected."
+        );
+
+        addtocart_modal.style.visibility = "hidden";
+        addtocart_modal.style.opacity = "0";
+
+        showCartErrorModal(
+            "Please select a valid product size."
+        );
+
+        return;
+    }
+
+    try {
+        if (confirmButton) {
+            confirmButton.disabled = true;
+            confirmButton.textContent = "Adding...";
+        }
+
+        const response = await fetch(
+            "/api/cart/items",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    productId: itemId,
+                    productSize: productSize,
+                    quantity: 1
+                })
+            }
+        );
+
+        const contentType =
+            response.headers.get(
+                "content-type"
+            ) || "";
+
+        /*
+         * Authentication middleware may return an HTML
+         * login page instead of JSON.
+         */
+        if (
+            !contentType.includes(
+                "application/json"
+            )
+        ) {
+            const responseText = await response.text();
+
+            console.error("Non-JSON cart response: ",responseText);
+
+            addtocart_modal.style.visibility = "hidden";
+            addtocart_modal.style.opacity = "0";
+            if (
+                response.status === 401 ||
+                response.redirected
+            ) {
+                showLoginRequiredModal();
+                return;
+            }
+
+            throw new Error(
+                "The server returned an invalid response."
             );
         }
 
-        return (
-            item.isBundle === false &&
-            Number(item.cartprod_id) === itemId &&
-            item.cartprod_size === size
+        const result =
+            await response.json();
+
+        if (response.status === 401) {
+            addtocart_modal.style.visibility = "hidden";
+            addtocart_modal.style.opacity = "0";
+
+            showLoginRequiredModal();
+            return;
+        }
+
+        /*
+         * Your cart API returns 409 if the product and
+         * selected size already exist in the active cart.
+         */
+        if (
+            response.status === 409 ||
+            result.alreadyExists === true
+        ) {
+            addtocart_modal.style.visibility = "hidden";
+
+            addtocart_modal.style.opacity = "0";
+
+            showAlreadyInCartModal();
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(
+                result.error ||
+                "Unable to add item to cart."
+            );
+        }
+
+        addtocart_modal.style.visibility = "hidden";
+        addtocart_modal.style.opacity = "0";
+
+        console.log(
+            "Cart item saved to database:",
+            result
         );
-    });
 
-    if (existingItem) {
-        showAlreadyInCartModal();
-        return;
+        showSuccessModal();
+
+    } catch (error) {
+        console.error("Add to cart error:", error);
+        addtocart_modal.style.visibility = "hidden";
+        addtocart_modal.style.opacity = "0";
+
+        showCartErrorModal(error.message || "Unable to add this item to your cart.");
+
+    } finally {
+        if (confirmButton) {
+            confirmButton.disabled = false;
+            confirmButton.textContent = "Yes";
+        }
     }
-
-    if (isBundle) {
-        cart.push({
-            cartbundle_id: itemId,
-            cartprod_size: size,
-            quantity: 1,
-            isBundle: true
-        });
-    } else {
-        cart.push({
-            cartprod_id: itemId,
-            cartprod_size: size,
-            quantity: 1,
-            isBundle: false
-        });
-    }
-
-    localStorage.setItem(
-        "cart",
-        JSON.stringify(cart)
-    );
-
-    console.log("Cart saved:", cart);
-
-    showSuccessModal();
 }
 
 function addtocart_close() {
         
     addtocart_modal.style.visibility = "hidden";
     addtocart_modal.style.opacity = "0";
+}
+
+function showCartErrorModal(message) {
+    if (!success_modal) {
+        return;
+    }
+
+    const title = success_modal.querySelector(
+        ".warning-title"
+    );
+
+    const description = success_modal.querySelector(
+        ".warning-desc"
+    );
+
+    if (title) {
+        title.textContent = "CART ERROR";
+    }
+
+    if (description) {
+        description.textContent = message;
+    }
+
+    success_modal.style.visibility = "visible";
+    success_modal.style.opacity = "1";
 }
 
 function showSuccessModal() {
