@@ -4,7 +4,7 @@ const path = require("path");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cookieParser());
@@ -36,22 +36,14 @@ function loadRoutes(directory) {
   });
 }
 
-
-
-
-
 loadRoutes(routersPath);
-
-
 
 const filesPath = path.join(__dirname, "/files");
 
 app.use(express.static(filesPath));
 
 app.use((req, res) => {
-
   res.sendFile(path.join(filesPath, "404.html"));
-  
 });
 module.exports = app;
 

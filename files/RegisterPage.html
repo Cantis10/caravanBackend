@@ -21,11 +21,10 @@
       crossorigin="anonymous"
     />
 
-    <title> Register </title>
+    <title>Register</title>
   </head>
 
   <body>
-
     <!-- Navbar -->
     <nav class="navbar navbar-expand-md fixed-top">
       <div class="container-fluid">
@@ -75,299 +74,284 @@
     </nav>
 
     <div class="formContainer">
-    <div class="form-card">
+      <div class="form-card">
+        <h1 class="form-title">CREATE YOUR ACCOUNT</h1>
+        <p class="form-subtitle">Please confirm your details</p>
 
-  <h1 class="form-title">CREATE YOUR ACCOUNT</h1>
-  <p class="form-subtitle">Please confirm your details</p>
+        <!-- Error Message -->
+        <div
+          id="error-message"
+          class="error-message"
+          style="display: none"
+        ></div>
 
+        <!-- Success Message -->
+        <div
+          id="success-message"
+          class="success-message"
+          style="display: none"
+        ></div>
 
-  <!-- Error Message -->
-  <div
-    id="error-message"
-    class="error-message"
-    style="display: none;"
-  ></div>
+        <!-- Registration Form -->
+        <form class="register-form" id="registerForm">
+          <!-- First Name -->
+          <div class="form-group">
+            <input
+              type="text"
+              id="firstName"
+              placeholder="First Name"
+              class="form-input"
+              required
+            />
+          </div>
 
+          <!-- Last Name -->
+          <div class="form-group">
+            <input
+              type="text"
+              id="lastName"
+              placeholder="Last Name"
+              class="form-input"
+              required
+            />
+          </div>
 
-  <!-- Success Message -->
-  <div
-    id="success-message"
-    class="success-message"
-    style="display: none;"
-  ></div>
+          <!-- Email -->
+          <div class="form-group">
+            <input
+              type="text"
+              id="email"
+              placeholder="Email Address"
+              class="form-input"
+              autocomplete="email"
+              required
+            />
+          </div>
 
+          <!-- Password -->
+          <div class="form-group">
+            <div class="password-container">
+              <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                class="form-input"
+                required
+              />
 
-  <!-- Registration Form -->
-  <form class="register-form" id="registerForm">
+              <button
+                type="button"
+                class="password-toggle"
+                id="togglePassword"
+                aria-label="Show password"
+              >
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
 
-    <!-- First Name -->
-    <div class="form-group">
-      <input
-        type="text"
-        id="firstName"
-        placeholder="First Name"
-        class="form-input"
-        required
-      >
-    </div>
+          <!-- Confirm Password -->
+          <div class="form-group">
+            <div class="password-container">
+              <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Confirm Password"
+                class="form-input"
+                required
+              />
 
+              <button
+                type="button"
+                class="password-toggle"
+                id="toggleConfirmPassword"
+                aria-label="Show confirm password"
+              >
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+          </div>
 
-    <!-- Last Name -->
-    <div class="form-group">
-      <input
-        type="text"
-        id="lastName"
-        placeholder="Last Name"
-        class="form-input"
-        required
-      >
-    </div>
+          <!-- Privacy Consent -->
+          <div class="privacy-consent-section">
+            <div class="checkbox-wrapper">
+              <input
+                type="checkbox"
+                id="privacyConsent"
+                class="privacy-checkbox"
+              />
 
+              <label for="privacyConsent" class="privacy-label">
+                I agree to the
 
-    <!-- Email -->
-    <div class="form-group">
-      <input
-        type="text"
-        id="email"
-        placeholder="Email Address"
-        class="form-input"
-        autocomplete="email"
-        required
-      >
-    </div>
+                <a href="#" id="privacyLink" class="privacy-link">
+                  Data Privacy Policy
+                </a>
+              </label>
+            </div>
+          </div>
 
-
-    <!-- Password -->
-    <div class="form-group">
-      <div class="password-container">
-
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          class="form-input"
-          required
-        >
-
-        <button
-          type="button"
-          class="password-toggle"
-          id="togglePassword"
-          aria-label="Show password"
-        >
-          <i class="bi bi-eye"></i>
-        </button>
-
-      </div>
-    </div>
-
-    <!-- Confirm Password -->
-    <div class="form-group">
-      <div class="password-container">
-
-        <input
-          type="password"
-          id="confirmPassword"
-          placeholder="Confirm Password"
-          class="form-input"
-          required
-        >
-
-        <button
-          type="button"
-          class="password-toggle"
-          id="toggleConfirmPassword"
-          aria-label="Show confirm password"
-        >
-          <i class="bi bi-eye"></i>
-        </button>
-
-      </div>
-    </div>
-
-
-    <!-- Privacy Consent -->
-    <div class="privacy-consent-section">
-
-      <div class="checkbox-wrapper">
-
-        <input
-          type="checkbox"
-          id="privacyConsent"
-          class="privacy-checkbox"
-        >
-
-        <label for="privacyConsent" class="privacy-label">
-          I agree to the
-
-          <a
-            href="#"
-            id="privacyLink"
-            class="privacy-link"
+          <!-- Register Button -->
+          <button
+            type="submit"
+            class="register-btn register-btn-disabled"
+            id="registerButton"
+            disabled
           >
-            Data Privacy Policy
-          </a>
+            Register
+          </button>
+        </form>
 
-        </label>
+        <!-- Login Link -->
+        <div class="login-link">
+          Already have an account?
+          <a href="/login"> Login here </a>
+        </div>
 
+        <!-- NEW: Google Sign-In Button Container -->
+        <a
+          href="/api/auth/google"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            color: #333;
+            font-size: 15px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+          "
+        >
+          <img
+            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+            alt="Google"
+            style="width: 20px; height: 20px"
+          />
+
+          Continue with Google
+        </a>
+
+        <div
+          class="g_id_signin"
+          data-type="standard"
+          data-shape="rectangular"
+          data-theme="outline"
+          data-text="sign_in_with"
+          data-size="large"
+          data-logo_alignment="left"
+        ></div>
       </div>
 
-    </div>
+      <!-- =============================== -->
+      <!-- DATA PRIVACY POLICY MODAL -->
+      <!-- =============================== -->
 
-
-    <!-- Register Button -->
-    <button
-      type="submit"
-      class="register-btn register-btn-disabled"
-      id="registerButton"
-      disabled
-    >
-      Register
-    </button>
-
-  </form>
-
-
-  <!-- Login Link -->
-  <div class="login-link">
-    Already have an account?
-    <a href="/login">
-      Login here
-    </a>
-  </div>
-
-</div>
-
-
-<!-- =============================== -->
-<!-- DATA PRIVACY POLICY MODAL -->
-<!-- =============================== -->
-
-<div
-  class="privacy-modal-overlay"
-  id="privacyModal"
-  style="display: none;"
->
-
-  <div class="privacy-modal">
-
-    <!-- Modal Header -->
-    <div class="privacy-modal-header">
-
-      <h2>Data Privacy Policy</h2>
-
-      <button
-        class="close-modal-btn"
-        id="closeModal"
-        type="button"
+      <div
+        class="privacy-modal-overlay"
+        id="privacyModal"
+        style="display: none"
       >
-        ×
-      </button>
+        <div class="privacy-modal">
+          <!-- Modal Header -->
+          <div class="privacy-modal-header">
+            <h2>Data Privacy Policy</h2>
 
+            <button class="close-modal-btn" id="closeModal" type="button">
+              ×
+            </button>
+          </div>
+
+          <!-- Modal Content -->
+          <div class="privacy-modal-content">
+            <h3>Caravan Data Privacy Notice</h3>
+
+            <p>Last updated: April 2026</p>
+
+            <h4>1. Information We Collect</h4>
+
+            <p>
+              We collect personal information that you provide to us when
+              registering for an account, including:
+            </p>
+
+            <ul>
+              <li>Full name (first, middle, and last name)</li>
+              <li>Email address</li>
+              <li>Account credentials (encrypted password)</li>
+            </ul>
+
+            <h4>2. How We Use Your Information</h4>
+
+            <p>Your information is used to:</p>
+
+            <ul>
+              <li>Create and manage your Artify account</li>
+              <li>Provide customer support</li>
+              <li>Send important account notifications</li>
+              <li>Improve our services and user experience</li>
+            </ul>
+
+            <h4>3. Data Protection</h4>
+
+            <p>
+              We implement appropriate security measures to protect your
+              personal information against unauthorized access, alteration,
+              disclosure, or destruction. Your password is encrypted and we
+              never share your personal information with third parties without
+              your consent.
+            </p>
+
+            <h4>4. Your Rights</h4>
+
+            <p>You have the right to:</p>
+
+            <ul>
+              <li>Access your personal data</li>
+              <li>Request correction of inaccurate data</li>
+              <li>Request deletion of your account and associated data</li>
+              <li>Withdraw consent at any time</li>
+            </ul>
+
+            <h4>5. Contact Us</h4>
+
+            <p>
+              If you have questions about this privacy policy, please contact us
+              at: privacy@artify.com
+            </p>
+
+            <p class="privacy-footer-note">
+              By checking the box and registering, you acknowledge that you have
+              read and understood this Data Privacy Policy and consent to the
+              collection and use of your information as described.
+            </p>
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="privacy-modal-footer">
+            <button class="accept-privacy-btn" id="acceptPrivacy" type="button">
+              I Accept
+            </button>
+
+            <button
+              class="decline-privacy-btn"
+              id="declinePrivacy"
+              type="button"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
-
-    <!-- Modal Content -->
-    <div class="privacy-modal-content">
-
-      <h3>Caravan Data Privacy Notice</h3>
-
-      <p>Last updated: April 2026</p>
-
-
-      <h4>1. Information We Collect</h4>
-
-      <p>
-        We collect personal information that you provide to us when
-        registering for an account, including:
-      </p>
-
-      <ul>
-        <li>Full name (first, middle, and last name)</li>
-        <li>Email address</li>
-        <li>Account credentials (encrypted password)</li>
-      </ul>
-
-
-      <h4>2. How We Use Your Information</h4>
-
-      <p>Your information is used to:</p>
-
-      <ul>
-        <li>Create and manage your Artify account</li>
-        <li>Provide customer support</li>
-        <li>Send important account notifications</li>
-        <li>Improve our services and user experience</li>
-      </ul>
-
-
-      <h4>3. Data Protection</h4>
-
-      <p>
-        We implement appropriate security measures to protect your
-        personal information against unauthorized access, alteration,
-        disclosure, or destruction. Your password is encrypted and we
-        never share your personal information with third parties without
-        your consent.
-      </p>
-
-
-      <h4>4. Your Rights</h4>
-
-      <p>You have the right to:</p>
-
-      <ul>
-        <li>Access your personal data</li>
-        <li>Request correction of inaccurate data</li>
-        <li>Request deletion of your account and associated data</li>
-        <li>Withdraw consent at any time</li>
-      </ul>
-
-
-      <h4>5. Contact Us</h4>
-
-      <p>
-        If you have questions about this privacy policy, please contact
-        us at: privacy@artify.com
-      </p>
-
-
-      <p class="privacy-footer-note">
-        By checking the box and registering, you acknowledge that you
-        have read and understood this Data Privacy Policy and consent to
-        the collection and use of your information as described.
-      </p>
-
-    </div>
-
-
-    <!-- Modal Footer -->
-    <div class="privacy-modal-footer">
-
-      <button
-        class="accept-privacy-btn"
-        id="acceptPrivacy"
-        type="button"
-      >
-        I Accept
-      </button>
-
-
-      <button
-        class="decline-privacy-btn"
-        id="declinePrivacy"
-        type="button"
-      >
-        Close
-      </button>
-
-    </div>
-
-  </div>
-</div>
-</div>
-    
-  <div class="overlay"></div>
+    <div class="overlay"></div>
 
     <!-- Bootstrap JavaScript-->
     <script

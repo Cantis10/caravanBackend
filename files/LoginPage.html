@@ -21,131 +21,149 @@
       crossorigin="anonymous"
     />
 
-    <title> Login </title>
+    <title>Login</title>
   </head>
   <body>
-    
-      <!-- Navbar -->
-      <nav class="navbar navbar-expand-md fixed-top">
-        <div class="container-fluid">
-          <!-- Logo -->
-          <div class="nav-left">
-            <a class="navbar-brand" href="/">
-              <img
-                src="./Images/CaravanLogo_Transparent.png"
-                alt="Caravan"
-                height="60"
-                id="Caravan_Logo"
-              />
-            </a>
-          </div>
-
-          <!-- Mobile Toggle Button -->
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-
-          <!-- Navbar Content -->
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <!-- Center Navigation -->
-            <ul class="navbar-nav nav-center">
-              <li class="nav-item1">
-                <a class="nav-link" href="/">Home</a>
-              </li>
-
-              <li class="nav-item1">
-                <a class="nav-link" href="/store">Market</a>
-              </li>
-
-              <li class="nav-item1">
-                <a class="nav-link" href="/faqs">FAQs</a>
-              </li>
-            </ul>
-          </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-md fixed-top">
+      <div class="container-fluid">
+        <!-- Logo -->
+        <div class="nav-left">
+          <a class="navbar-brand" href="/">
+            <img
+              src="./Images/CaravanLogo_Transparent.png"
+              alt="Caravan"
+              height="60"
+              id="Caravan_Logo"
+            />
+          </a>
         </div>
-      </nav>
 
+        <!-- Mobile Toggle Button -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Center Navigation -->
+          <ul class="navbar-nav nav-center">
+            <li class="nav-item1">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+
+            <li class="nav-item1">
+              <a class="nav-link" href="/store">Market</a>
+            </li>
+
+            <li class="nav-item1">
+              <a class="nav-link" href="/faqs">FAQs</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
     <!-- Login Form -->
-<div class="formContainer container-fluid">
-  <div class="form-card">
+    <div class="formContainer container-fluid">
+      <div class="form-card">
+        <h1 class="form-title">SIGN IN</h1>
+        <p class="form-subtitle">Please confirm your details</p>
 
-    <h1 class="form-title">SIGN IN</h1>
-    <p class="form-subtitle">Please confirm your details</p>
+        <!-- Error Message -->
+        <div
+          id="error-message"
+          class="error-message"
+          style="display: none"
+        ></div>
 
-    <!-- Error Message -->
-    <div 
-      id="error-message" 
-      class="error-message" 
-      style="display: none;"
-    ></div>
+        <!-- Success Message -->
+        <div
+          id="success-message"
+          class="success-message"
+          style="display: none"
+        ></div>
 
-    <!-- Success Message -->
-    <div 
-      id="success-message" 
-      class="success-message" 
-      style="display: none;"
-    ></div>
+        <form class="register-form" id="loginForm">
+          <input
+            type="text"
+            id="email"
+            placeholder="Email Address"
+            class="form-input"
+            name="email"
+            autocomplete="email"
+          />
 
-    <form class="register-form" id="loginForm">
+          <div class="password-container">
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              class="form-input"
+              name="password"
+              autocomplete="current-password"
+              required
+            />
 
-      <input
-        type="text"
-        id="email"
-        placeholder="Email Address"
-         class="form-input"
-        name="email"
-        autocomplete="email"
-       />
-       
-      <div class="password-container">
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          class="form-input"
-          name="password"
-          autocomplete="current-password"
-          required
-        />
+            <button
+              type="button"
+              id="togglePassword"
+              class="password-toggle"
+              aria-label="Show password"
+            >
+              <i class="bi bi-eye"></i>
+            </button>
+          </div>
 
-        <button
-          type="button"
-          id="togglePassword"
-          class="password-toggle"
-          aria-label="Show password"
+          <button type="submit" class="register-btn" id="loginButton">
+            Sign In
+          </button>
+        </form>
+
+        <div class="login-link">
+          Don't have an account?
+          <a href="/register">Register here</a>
+        </div>
+        <a
+          href="/api/auth/google"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            color: #333;
+            font-size: 15px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+          "
         >
-          <i class="bi bi-eye"></i>
-        </button>
+          <img
+            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+            alt="Google"
+            style="width: 20px; height: 20px"
+          />
+
+          Continue with Google
+        </a>
       </div>
-
-      <button
-        type="submit"
-        class="register-btn"
-        id="loginButton"
-      >
-        Sign In
-      </button>
-
-    </form>
-
-    <div class="login-link">
-      Don't have an account?
-      <a href="/register">Register here</a>
     </div>
 
-  </div>
-</div>
-
-<div class="overlay"></div>
+    <div class="overlay"></div>
 
     <!-- Bootstrap JavaScript-->
     <script
