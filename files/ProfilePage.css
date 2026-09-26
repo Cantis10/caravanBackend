@@ -758,11 +758,6 @@ body {
     font-family: InstrumentSans, sans-serif;
   }
 
-  .wishlist-item {
-    display: flex;
-    flex-direction: column;
-  }
-
   .custom-input-box,
   .radius-10-input {
     width: 100%;
