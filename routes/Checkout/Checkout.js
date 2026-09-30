@@ -251,61 +251,6 @@ router.post("/", checkAuth("user"), async (req, res) => {
             });
         }
 
-        console.log("==== FK CHECK ====");
-
-        console.log("customerId:", customerId);
-        console.log("addressId:", addressId);
-        console.log("methodId:", methodId);
-        console.log("voucherId:", validatedVoucherId);
-
-        console.log(
-            "Customer:",
-            await transaction.execute({
-                sql: `
-                    SELECT *
-                    FROM Customer
-                    WHERE Customer_id = ?
-                `,
-                args: [customerId]
-            })
-        );
-
-        console.log(
-            "Address:",
-            await transaction.execute({
-                sql: `
-                    SELECT *
-                    FROM Address
-                    WHERE Address_id = ?
-                `,
-                args: [addressId]
-            })
-        );
-
-        console.log(
-            "Payment:",
-            await transaction.execute({
-                sql: `
-                    SELECT *
-                    FROM Payment_method
-                    WHERE Method_id = ?
-                `,
-                args: [methodId]
-            })
-        );
-
-        console.log(
-            "Voucher:",
-            await transaction.execute({
-                sql: `
-                    SELECT *
-                    FROM Vouchers
-                    WHERE Voucher_id = ?
-                `,
-                args: [validatedVoucherId]
-            })
-        );
-
         // Create order with Confirmed status.
         const orderResult =
             await transaction.execute({
