@@ -232,15 +232,24 @@
 
         <div class="payment-section">
 
-          <button class="payment-option">
-            <span>₱</span>
-            <span>Card Payment (Debit / Credit)</span>
+          <button
+              type="button"
+              class="payment-option"
+              data-method-id="1"
+              data-payment-type="Card"
+          >
+              <span>₱</span>
+              <span>Card Payment (Debit / Credit)</span>
           </button>
 
-
-          <button class="payment-option">
-            <span>🚚</span>
-            <span>Cash on Delivery</span>
+          <button
+              type="button"
+              class="payment-option"
+              data-method-id="2"
+              data-payment-type="Cash"
+          >
+              <span>🚚</span>
+              <span>Cash on Delivery</span>
           </button>
 
           <button class="checkout-btn" onclick="checkoutWarn()">

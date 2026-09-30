@@ -73,12 +73,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     event.target.value
                 );
 
-            selectedAddress =
-                addresses.find(
-                    a =>
-                    a.Address_id ===
-                    addressId
-                ) || null;
+            selectedAddress = addresses.find(address =>
+                Number(address.Address_id) === addressId
+            ) || null;
+
 
             console.log(
                 "Selected address:",
@@ -88,23 +86,30 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     // Payment selector
-    const paymentOptions =
-        document.querySelectorAll(".payment-option");
+    const paymentOptions = document.querySelectorAll(".payment-option");
 
     paymentOptions.forEach(option => {
-
         option.addEventListener("click", () => {
+            const paymentType =
+                option.dataset.paymentType;
 
-            paymentOptions.forEach(btn => {
-                btn.classList.remove("selected");
+            if (paymentType === "card") {
+                alert("Card payment is not available yet.");
+                return;
+            }
+
+            paymentOptions.forEach(button => {
+                button.classList.remove("selected");
             });
 
             option.classList.add("selected");
 
-            selectedPaymentMethod =
-                option.textContent.trim();
+            selectedPaymentMethod = {
+                methodId: Number(option.dataset.methodId),
+                paymentType: paymentType,
+                paymentName: option.textContent.trim()
+            };
         });
-
     });
 });
 ``
@@ -196,12 +201,16 @@ function checkoutWarn() {
 
 function checkout_No() {
     warning_modal.style.visibility = "hidden";
-    warning_modal.style.visibility = "0";
+    warning_modal.style.opacity = "0";
 }
 
-async function checkout_Yes() {
+let checkoutInProgress = false;
 
-    // simply hides the confirmation modal
+async function checkout_Yes() {
+    if (checkoutInProgress) {
+        return;
+    }
+
     checkout_No();
 
     const modal = document.querySelector(".checkout-result-modal");
@@ -209,34 +218,151 @@ async function checkout_Yes() {
     const successState = document.getElementById("checkoutSuccessState");
 
     modal.style.display = "flex";
-
     processingState.style.display = "block";
-
     successState.style.display = "none";
 
+    checkoutInProgress = true;
+
     try {
+        if (cartData.length === 0) {
+            throw new Error(
+                "Your cart is empty"
+            );
+        }
+
+        if (!selectedAddress) {
+            throw new Error(
+                "Please select a delivery address"
+            );
+        }
+
+        if (!selectedPaymentMethod) {
+            throw new Error(
+                "Please select a payment method"
+            );
+        }
+
+        if (
+            selectedPaymentMethod.paymentType === "card"
+        ) {
+            throw new Error(
+                "Card payment is not available yet"
+            );
+        }
+
+        const items = cartData.map(cartItem => {
+            const productId = cartItem.isBundle
+                ? Number(cartItem.cartbundle_id)
+                : Number(cartItem.cartprod_id);
+
+            return {
+                productId,
+                quantity: Number(cartItem.quantity) || 1,
+                productSize: cartItem.cartprod_size || "8oz"
+            };
+        });
+
+        const payload = {
+            items,
+
+            addressId: Number(selectedAddress.Address_id),
+            methodId: selectedPaymentMethod.methodId,
+            voucherId: selectedVoucher
+                    ? Number(
+                        selectedVoucher.Voucher_id
+                    )
+                    : null
+        };
+
+        const response = await fetch("/checkout", {
+            method: "POST",
+
+            headers: {
+                "Content-Type":
+                    "application/json"
+            },
+
+            body:
+                JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+
+        //Console log of the TEST_MODE
+        console.log("Checkout Response:", result);
+
+        if (!response.ok) {
+            throw new Error(
+                result.error ||
+                "Unable to place order"
+            );
+        }
+
+        if (result.testMode) {
+            console.log(
+                "TEST MODE CHECKOUT PREVIEW:",
+                JSON.stringify(result.preview, null, 4)
+            );
+
+            processingState.style.display = "none";
+            successState.style.display = "block";
+
+            return;
+        }
+
+        console.log("Order placed:", result);
 
         /*
-            PLACE CHECKOUT API HERE
-        */
+         * Only clear the cart after the API
+         * confirms that checkout succeeded.
+         */
+        localStorage.removeItem("cart");
 
-        await new Promise(resolve =>
-            setTimeout(resolve, 2000)
-        );
+        cartData = [];
+        selectedVoucher = null;
+        selectedAddress = null;
+        selectedPaymentMethod = null;
+
+        displayCartItems();
+        updateCheckoutButton();
+        updatePriceSummary();
+
+        document
+            .querySelectorAll(".payment-option")
+            .forEach(option => {
+                option.classList.remove("selected");
+            });
+
+        const voucherSelect = document.getElementById("voucherSelect");
+        const addressSelect = document.getElementById("addressSelect");
+        const voucherDescription = document.getElementById("voucherDescription");
+
+        if (voucherSelect) {
+            voucherSelect.value = "";
+        }
+
+        if (addressSelect) {
+            addressSelect.value = "";
+        }
+
+        if (voucherDescription) {
+            voucherDescription.textContent = "";
+        }
 
         processingState.style.display = "none";
         successState.style.display = "block";
-    }
 
-    catch(error) {
-
-        console.error(error);
+    } catch (error) {
+        console.error(
+            "Checkout failed:",
+            error
+        );
 
         modal.style.display = "none";
 
-        alert(
-            "Failed to process order."
-        );
+        alert(error.message || "Failed to process order.");
+    } finally {
+        checkoutInProgress = false;
     }
 }
 
@@ -452,34 +578,20 @@ function createItemCard(product, cartItem, index) {
 
 // Create a bundle card element for cart
 function createBundleCard(bundle, cartItem, index) {
-    const itemCard =
-        document.createElement("div");
+    const itemCard = document.createElement("div");
 
     itemCard.classList.add("item-card");
 
-    itemCard.dataset.bundleId =
-        bundle.product_id;
-
-    itemCard.dataset.cartIndex =
-        index;
-
-    itemCard.dataset.index =
-        index;
-
-    const size =
-        cartItem.cartprod_size || "8oz";
-
+    itemCard.dataset.bundleId = bundle.product_id;
+    itemCard.dataset.cartIndex = index;
+    itemCard.dataset.index = index;
+    const size = cartItem.cartprod_size || "8oz";
     const sizeMultiplier =
         size === "16oz" ? 16 : 8;
 
-    const quantity =
-        Number(cartItem.quantity) || 1;
-
-    const basePrice =
-        Number(bundle.product_price) || 0;
-
-    const itemPrice =
-        basePrice * sizeMultiplier;
+    const quantity = Number(cartItem.quantity) || 1;
+    const basePrice = Number(bundle.product_price) || 0;
+    const itemPrice = basePrice * sizeMultiplier;
 
     itemCard.innerHTML = `
         <div class="product-image">
@@ -799,20 +911,13 @@ function updatePriceSummary() {
 
     // Update price breakdown
     const shippingFee = 100.00;
-
     let discount = 0;
 
     if (selectedVoucher) {
-
-        discount =
-            totalProductCost *
-            (selectedVoucher.discount / 100);
+        discount = totalProductCost * (selectedVoucher.discount / 100);
     }
 
-    const totalCost =
-        totalProductCost +
-        shippingFee -
-        discount;
+    const totalCost = totalProductCost + shippingFee - discount;
 
     // Update the price breakdown display
     const priceBreakdown = document.querySelector(".price-breakdown");
