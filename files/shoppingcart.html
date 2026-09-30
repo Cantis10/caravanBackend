@@ -83,7 +83,7 @@
       </div>
     </div>
 
-    <!-- Delete notice Modal -->
+    <!-- Checkout notice Modal -->
     <div class="checkout-warning-modal">
       <div class="checkout-warning">
         <h2 class="checkout-warning-title">PROCEED TO CHECKOUT</h2>
@@ -96,7 +96,40 @@
       </div>
     </div>
 
-    <div class="shoppingcart-container">
+    <!-- Checkout Success Modal -->
+  <div class="checkout-result-modal">
+      <div class="checkout-result-box">
+
+          <!-- Processing State -->
+          <div id="checkoutProcessingState">
+              <h2 class="checkout-result-title">
+                  Processing Order...
+              </h2>
+              <div class="spinner"></div>
+              <p>Please wait while we place your order.</p>
+          </div>
+
+          <!-- Success State -->
+          <div id="checkoutSuccessState" style="display:none;">
+              <h2 class="checkout-result-title">
+                  Order Placed Successfully!
+              </h2>
+
+              <p>Thank you for your purchase.</p>
+
+              <div class="checkout-result-buttons">
+                  <button id="continueShoppingBtn" class="btn btn-outline-success">
+                      Continue Shopping
+                  </button>
+                  <button id="viewOrdersBtn" class="btn btn-success">
+                      View Orders
+                  </button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="shoppingcart-container">
 
     <h2 class="page-title">Shopping Cart</h2>
 

@@ -199,10 +199,45 @@ function checkout_No() {
     warning_modal.style.visibility = "0";
 }
 
-function checkout_Yes() {
-    console.log("processing Checkout");
+async function checkout_Yes() {
 
-    // PLACE CHECKOUT SCRIPT FOR BACKEND
+    // simply hides the confirmation modal
+    checkout_No();
+
+    const modal = document.querySelector(".checkout-result-modal");
+    const processingState = document.getElementById("checkoutProcessingState");
+    const successState = document.getElementById("checkoutSuccessState");
+
+    modal.style.display = "flex";
+
+    processingState.style.display = "block";
+
+    successState.style.display = "none";
+
+    try {
+
+        /*
+            PLACE CHECKOUT API HERE
+        */
+
+        await new Promise(resolve =>
+            setTimeout(resolve, 2000)
+        );
+
+        processingState.style.display = "none";
+        successState.style.display = "block";
+    }
+
+    catch(error) {
+
+        console.error(error);
+
+        modal.style.display = "none";
+
+        alert(
+            "Failed to process order."
+        );
+    }
 }
 
 // Load cart items from localStorage and products_list.json
@@ -795,4 +830,16 @@ function updatePriceSummary() {
         }
     }
 }
+
+document.addEventListener("click", function(event) {
+    
+        if (event.target.id === "continueShoppingBtn") {
+            window.location.href = "/store";
+        }
+        if (event.target.id === "viewOrdersBtn") {
+            window.location.href = "/user/orders";
+        }
+    }
+);
+
 
