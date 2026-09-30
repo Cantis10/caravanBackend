@@ -6,26 +6,7 @@ let selectedPaymentMethod = null;
 let addresses = [];
 let selectedAddress = null;
 
-let vouchers = [
-    {
-        voucher_id: 1,
-        voucher_name: "WELCOME10",
-        discount: 10,
-        voucher_desc: "Get 10% off your order."
-    },
-    {
-        voucher_id: 2,
-        voucher_name: "CARAVAN15",
-        discount: 15,
-        voucher_desc: "Get 15% off your order."
-    },
-    {
-        voucher_id: 3,
-        voucher_name: "SPICE20",
-        discount: 20,
-        voucher_desc: "Get 20% off your order."
-    } /* NOTE: TEMPORARY VOUCHERS JUST FOR SIMULATION, REAL VOUCHERS WILL BE ADDED IN DB LATER */
-];
+let vouchers = [];
 let selectedVoucher = null;
 
 function showLoader() {
@@ -44,13 +25,13 @@ document.addEventListener("DOMContentLoaded", () => {
     showLoader();
     Promise.all([
         loadCartItems(),
-        loadAddresses()
+        loadAddresses(),
+        loadVouchers()
     ]) .finally (() => {
         hideLoader();
     });
     
     updateNavbarLogin();
-    renderVoucherDropdown();
 
     // Voucher dropdown
     document.addEventListener("change", function(event) {
@@ -60,18 +41,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const voucherId = parseInt(event.target.value);
+        const desc = document.getElementById("voucherDescription");
 
         selectedVoucher =
-            vouchers.find(v =>
-                v.voucher_id === voucherId
+            vouchers.find(
+                v => Number(v.Voucher_id) === voucherId
             ) || null;
-
-        const desc =
-            document.getElementById("voucherDescription");
 
         desc.textContent =
             selectedVoucher
-                ? selectedVoucher.voucher_desc
+                ? selectedVoucher.Voucher_desc
                 : "";
 
         updatePriceSummary();
@@ -274,6 +253,24 @@ async function loadCartItems() {
         document.querySelector(".cart-items").innerHTML = "<p>Unable to load cart items.</p>";
     } finally {
         hideLoader();
+    }
+}
+
+// Loads User's available vouchers
+async function loadVouchers() {
+    try {
+        console.log("Loading vouchers...");
+        const response = await fetch("/vouchers/me");
+        console.log("status:", response.status);
+        const data = await response.json();
+        console.log("Data:", data);
+        vouchers = data;
+        renderVoucherDropdown();
+    } catch (error) {
+        console.error(
+            "Voucher load error:",
+            error
+        );
     }
 }
 
@@ -671,10 +668,8 @@ function renderVoucherDropdown() {
     vouchers.forEach(voucher => {
         const option = document.createElement("option");
 
-        option.value = voucher.voucher_id;
-        option.textContent =
-            voucher.voucher_name +
-            " (" + voucher.discount + "% OFF)";
+        option.value = voucher.Voucher_id;
+        option.textContent = `${voucher.Voucher_name} (${voucher.discount}% OFF)`;
         select.appendChild(option);
     });
 }

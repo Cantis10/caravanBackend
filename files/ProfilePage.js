@@ -18,7 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
     Promise.all([
         loadProfile(),
         loadAddresses(),
-        loadWishlist()
+        loadWishlist(), 
+        loadVouchers()
     ]).finally(() => {
         hideLoader();
     });
@@ -89,25 +90,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
           console.log("Profile information:", data);
 
-          document.getElementById("userEmail").value =
-              data.email || "";
-
-          document.getElementById("userFirstName").value =
-              data.firstName || "";
-
-          document.getElementById("userLastName").value =
-              data.lastName || "";
-
-          document.getElementById("userBirthdate").value =
-              data.birthdate || "";
-
-          document.querySelector(".user-name").textContent =
-              `${data.firstName || ""} ${data.lastName || ""}`.trim();
-
+          document.getElementById("userEmail").value = data.email || "";
+          document.getElementById("userFirstName").value = data.firstName || "";
+          document.getElementById("userLastName").value = data.lastName || "";
+          document.getElementById("userBirthdate").value = data.birthdate || "";
+          document.querySelector(".user-name").textContent = `${data.firstName || ""} ${data.lastName || ""}`.trim();
       } catch (error) {
-
           console.error("Error loading profile:", error);
-
       }
   }
 
@@ -443,6 +432,68 @@ if (addressForm) {
                 error
             );
         }
+    }
+
+    // loads User's Vouchers
+    async function loadVouchers() {
+        try {
+            const response = await fetch("/vouchers/me");
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    result.error ||
+                    "Unable to load vouchers"
+                );
+            }
+            renderVouchers(result);
+        } catch (error) {
+            console.error("Voucher load error:", error);
+        }
+    }
+
+    function renderVouchers(vouchers) {
+        const container =
+            document.getElementById(
+                "vouchersListContainer"
+            );
+
+        if (!container) {
+            return;
+        }
+
+        container.innerHTML = "";
+
+        if (!vouchers.length) {
+            container.innerHTML = `
+                <div class="voucher-card">
+                    <p>No vouchers available.</p>
+                </div>
+            `;
+            return;
+        }
+
+        vouchers.forEach(voucher => {
+            const card = document.createElement("div");
+            card.className = "voucher-card";
+            card.innerHTML = `
+                <div class="voucher-header">
+                    <strong>
+                        ${voucher.Voucher_name}
+                    </strong>
+
+                    <span class="voucher-status">
+                        Unused
+                    </span>
+                </div>
+
+                <div class="voucher-body">
+                    ${voucher.Voucher_desc}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
     }
     
     //loads wishlist of logged in user
