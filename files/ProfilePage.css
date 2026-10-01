@@ -408,6 +408,16 @@ body {
     background-color: #d5d5d5;
 }
 
+.orders-btn {
+    background-color: #6F4E37;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-family: InstrumentSans_Semi, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+}
+
 .submit-btn {
   width: 100%;
   background: var(--color-primary);
@@ -459,7 +469,7 @@ body {
     cursor: not-allowed;
 }
 
-.large-boux {
+.large-box {
     display: flex;
     flex-direction: column; /* Stack the text and button vertically */
     align-items: center;    /* Center them horizontally */
@@ -468,7 +478,7 @@ body {
     padding: 20px;          /* Optional: Adds space inside the box */
 }
 
-.large-boux .empty-text {
+.large-box .empty-text {
     margin-bottom: 15px; 
 }
 

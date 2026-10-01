@@ -681,20 +681,9 @@ if (addressForm) {
         editAddressModal.classList.add("active");
     }
 
-    editStreetAddressInput.addEventListener(
-        "input",
-        updateEditedAddressSaveButton
-    );
-
-    editCityInput.addEventListener(
-        "input",
-        updateEditedAddressSaveButton
-    );
-
-    editZipCodeInput.addEventListener(
-        "input",
-        updateEditedAddressSaveButton
-    );
+    editStreetAddressInput.addEventListener("input",updateEditedAddressSaveButton);
+    editCityInput.addEventListener("input",updateEditedAddressSaveButton);
+    editZipCodeInput.addEventListener("input",updateEditedAddressSaveButton);
 
     function closeEditAddressModal() {
         editAddressModal.classList.remove("active");
@@ -710,15 +699,8 @@ if (addressForm) {
         saveEditedAddressBtn.textContent = "Save";
     }
 
-    closeEditAddressModalBtn.addEventListener(
-        "click",
-        closeEditAddressModal
-    );
-
-    cancelEditAddressBtn.addEventListener(
-        "click",
-        closeEditAddressModal
-    );
+    closeEditAddressModalBtn.addEventListener("click",closeEditAddressModal);
+    cancelEditAddressBtn.addEventListener("click",closeEditAddressModal);
 
     function createAddressCard(address) {
         const card = document.createElement("div");
@@ -861,15 +843,8 @@ if (addressForm) {
         confirmDeleteAddressBtn.textContent = "Delete";
     }
 
-    closeDeleteAddressModalBtn.addEventListener(
-        "click",
-        closeDeleteAddressModal
-    );
-
-    cancelDeleteAddressBtn.addEventListener(
-        "click",
-        closeDeleteAddressModal
-    );
+    closeDeleteAddressModalBtn.addEventListener("click",closeDeleteAddressModal);
+    cancelDeleteAddressBtn.addEventListener("click",closeDeleteAddressModal);
 
     confirmDeleteAddressBtn.addEventListener(
         "click",
@@ -934,6 +909,12 @@ if (addressForm) {
             }
         }
     );
+
+    document.addEventListener("click", function(event) {
+        if (event.target.id === "viewOrdersBtn") {
+            window.location.href = "/user/order";
+        }
+    });
 
     // Dynamic Card Form Submission
     const cardForm = document.getElementById("cardForm");

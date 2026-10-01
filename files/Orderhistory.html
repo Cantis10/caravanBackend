@@ -74,10 +74,9 @@
 
       <h1 class="orderhistory-title">Your Order History</h1>
 
-      <div class="orderhistory-list">
-
-        <!-- ORDER 1 -->
-        <div class="orderhistory-card">
+      <div class="orderhistory-list" id="orderHistoryContainer">
+        <!-- ORDER 1 Card -->
+        <!-- <div class="orderhistory-card">
 
           <div class="order-card-header">
             <strong>Order #54321</strong>
@@ -111,7 +110,7 @@
 
             <div class="order-actions">
 
-              <button class="track-order-btn">
+              <button class="track-order-btn" data-order-id="${order.Order_id}">
                 Track Order
               </button>
 
@@ -123,7 +122,6 @@
 
           </div>
 
-          <!-- Progress -->
           <div class="order-progress">
 
             <div class="progress-line">
@@ -149,167 +147,8 @@
               <div class="progress-dot"></div>
               <span>Delivered</span>
             </div>
-
           </div>
-
-        </div>
-
-
-        <!-- ORDER 2 -->
-        <div class="orderhistory-card">
-
-          <div class="order-card-header">
-            <strong>Order #54320</strong>
-            <span>Placed Oct 15, 2023</span>
-          </div>
-
-          <div class="order-card-body">
-
-            <div class="order-product">
-              <img
-                src="Images/pAPRIKA.jpg"
-                alt="Paprika"
-                class="order-product-image"
-              >
-
-              <div class="order-product-info">
-                <h3>Placeholder <span>(Size: 8 oz.)</span></h3>
-                <p>Quantity: 1</p>
-                <p>Unit Price: ₱999</p>
-              </div>
-            </div>
-
-            <div class="order-status">
-              <p>
-                Status:
-                <strong>[Delivered]</strong>
-              </p>
-
-              <p>Order Total: ₱999</p>
-            </div>
-
-            <div class="order-actions">
-
-              <button class="track-order-btn">
-                Track Order
-              </button>
-
-              <a href="#" class="order-details-link">
-                View Order Details
-              </a>
-
-            </div>
-
-          </div>
-
-          <!-- Progress -->
-          <div class="order-progress">
-
-            <div class="progress-line">
-              <div class="progress-filled delivered"></div>
-            </div>
-
-            <div class="progress-step active">
-              <div class="progress-dot"></div>
-              <span>Confirmed</span>
-            </div>
-
-            <div class="progress-step active">
-              <div class="progress-dot"></div>
-              <span>Shipped</span>
-            </div>
-
-            <div class="progress-step active">
-              <div class="progress-dot"></div>
-              <span>In Transit</span>
-            </div>
-
-            <div class="progress-step active">
-              <div class="progress-dot"></div>
-              <span>Delivered</span>
-            </div>
-
-          </div>
-
-        </div>
-
-        <!-- ORDER 3 -->
-        <div class="orderhistory-card">
-
-          <div class="order-card-header">
-            <strong>Order #54323</strong>
-            <span>Placed Oct 15, 2023</span>
-          </div>
-
-          <div class="order-card-body">
-
-            <div class="order-product">
-              <img
-                src="Images/pAPRIKA.jpg"
-                alt="Paprika"
-                class="order-product-image"
-              >
-
-              <div class="order-product-info">
-                <h3>Placeholder <span>(Size: 8 oz.)</span></h3>
-                <p>Quantity: 1</p>
-                <p>Unit Price: ₱999</p>
-              </div>
-            </div>
-
-            <div class="order-status">
-              <p>
-                Status:
-                <strong>[Delivered]</strong>
-              </p>
-
-              <p>Order Total: ₱999</p>
-            </div>
-
-            <div class="order-actions">
-
-              <button class="track-order-btn">
-                Track Order
-              </button>
-
-              <a href="#" class="order-details-link">
-                View Order Details
-              </a>
-
-            </div>
-
-          </div>
-
-          <!-- Progress -->
-          <div class="order-progress">
-
-            <div class="progress-line">
-              <div class="progress-filled delivered"></div>
-            </div>
-
-            <div class="progress-step active">
-              <div class="progress-dot"></div>
-              <span>Confirmed</span>
-            </div>
-
-            <div class="progress-step active">
-              <div class="progress-dot"></div>
-              <span>Shipped</span>
-            </div>
-
-            <div class="progress-step active">
-              <div class="progress-dot"></div>
-              <span>In Transit</span>
-            </div>
-
-            <div class="progress-step active">
-              <div class="progress-dot"></div>
-              <span>Delivered</span>
-            </div>
-
-          </div>
-
-        </div>
+        </div> -->
 
       </div>
 
@@ -320,6 +159,84 @@
       </p>
 
     </main>
+
+    <!-- Receipt Modal -->
+    <div class="modal-overlay" id="receiptModal">
+      <div class="modal-box radius-10-box">
+          <div class="modal-header">
+              <h3>Order Receipt</h3>
+              <button
+                  type="button"
+                  class="close-modal"
+                  id="closeReceiptModal">
+                  &times;
+              </button>
+          </div>
+          <div id="receiptContent"></div>
+          <div class="modal-actions">
+              <button
+                  type="button"
+                  class="refund-btn radius-10-box"
+                  id="openRefundModalBtn">
+                  Request Refund
+              </button>
+          </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="refundModal">
+      <div class="modal-box radius-10-box">
+          <div class="modal-header">
+              <h3>Refund</h3>
+              <button
+                  type="button"
+                  class="close-modal"
+                  id="closeRefundModal">
+                  &times;
+              </button>
+          </div>
+
+          <form id="refundForm">
+              <div class="form-field-group">
+                  <input
+                      type="text"
+                      id="refundSubject"
+                      class="radius-10-input"
+                      placeholder="Subject"
+                  >
+              </div>
+              <div class="form-field-group">
+                  <textarea
+                      id="refundReason"
+                      class="radius-10-input"
+                      rows="6"
+                      placeholder="Reason"
+                  ></textarea>
+              </div>
+              <div class="modal-actions">
+                  <button
+                      type="button"
+                      id="cancelRefundBtn"
+                      class="cancel-modal-btn radius-10-box">
+                      Cancel
+                  </button>
+                  <button
+                      type="submit"
+                      class="submit-btn radius-10-box">
+                      Submit
+                  </button>
+              </div>
+          </form>
+      </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" class="loading-overlay">
+      <div class="loading-content">
+          <div class="loading-spinner"></div>
+          <p>Loading...</p>
+      </div>
+  </div>
 
     <!-- Footer -->
     <footer class="footer">
