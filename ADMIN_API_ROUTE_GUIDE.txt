@@ -1,0 +1,59 @@
+Caravan Admin API route guide
+============================
+
+All endpoints below are mounted at /api/admin and require an authenticated admin cookie. The HTML and JavaScript under files/ were not changed. Apply the suggested fetch calls in the indicated frontend locations when wiring the existing UI.
+
+Authentication note
+-------------------
+routes/admin/admin.js uses req.user.adminId for content ownership and stock adjustment records. routes/login-register/login.js now puts Admin.Admin_id and Admin.Admin_email into admin tokens. Customer token claims remain unchanged.
+
+Dashboard (files/ADDashboard.js)
+-------------------------------
+GET /api/admin/dashboard -> { recentOrders: [...] }, sourced from Orders, Order_items, Order_status.
+Suggested integration: after DOMContentLoaded (line 1), fetch this endpoint and render #ordersBody; replace the static table contents in AdminDashboard.html. The .see-more click at line 31 can navigate to the relevant inventory/order page; this API currently returns recent orders only.
+
+Accounts (files/AM JS.js)
+-------------------------
+GET /api/admin/accounts -> { customers: [...], admins: [...] }.
+PUT /api/admin/accounts/customer/:accountId/status with JSON { "status": "Suspended" }.
+PUT /api/admin/accounts/admin/:accountId/status with JSON { "status": "Active" }.
+Suggested integration: fetch and render customerBody/adminBody after DOMContentLoaded (line 1); replace hard-coded row data. Replace suspend/activate DOM-only handlers at lines 83-123 with PUT requests and update the row only after success. Account status values accepted case-insensitively: active, suspended, pending.
+
+Content management (files/CMJS.js)
+----------------------------------
+GET /api/admin/content -> content rows joined with Content_type.
+POST /api/admin/content with JSON { "title": "...", "contentTypeId": 1, "status": "Draft" }.
+PUT /api/admin/content/:contentId with JSON { "title": "...", "contentTypeId": 1, "status": "Published" }.
+DELETE /api/admin/content/:contentId.
+Suggested integration: fetch/render #contentBody after DOMContentLoaded (line 1); connect publish/unpublish and row-action handler at lines 20-42 to PUT/DELETE, and connect Add content at lines 45-47 to POST. Content ids are assigned based on the maximum current id + 1 because the exported schema does not declare these IDs auto-incrementing.
+
+Audit (files/AuditJS.js)
+-----------------------
+GET /api/admin/audit?limit=100 -> audit rows ordered newest first (maximum 200).
+Suggested integration: fetch/render #logList after DOMContentLoaded (line 1); replace the static rows selected at line 3. Existing filter/search code can continue to filter rendered rows. No endpoint is provided to write audit rows automatically yet.
+
+Orders (files/ORJS.js)
+----------------------
+GET /api/admin/orders?limit=100 -> order, customer, status, item, and quantity data (maximum 500 rows).
+Suggested integration: fetch/render #reportsBody after DOMContentLoaded (line 1), replacing static rows selected at line 3. Existing search handler at lines 5-16 can continue filtering the result.
+There are no return/refund mutation endpoints: the schema has a Returns table but no payment/refund processing contract, and the existing UI does not supply return details. There is no order status update endpoint in this set.
+
+Stock inventory (files/SIJS.js)
+-------------------------------
+GET /api/admin/products -> product inventory and category data; optional ?search=term.
+PUT /api/admin/products/:productId/stock with JSON { "quantity": 25 } to set stock directly.
+POST /api/admin/products/:productId/stock-adjustments with JSON { "quantityChange": 5 } to apply and record a signed stock change.
+Suggested integration: fetch/render #stockBody after DOMContentLoaded (line 1), replacing static rows selected at line 3. Replace adjust/order stock placeholder at lines 35-47 with the appropriate PUT or POST request. Stock adjustment rows are written to Stock_adjustments and linked to the authenticated admin.
+
+Sales report (files/SRJR.js)
+---------------------------
+GET /api/admin/sales -> per-product units sold and sales total, aggregated from Orders and Order_items.
+Suggested integration: fetch/render #salesBody after DOMContentLoaded (line 1); replace static table rows selected at line 4. Existing search/category filtering at lines 15-29 applies after rendering. The current SalesReport UI's "add report" action at lines 54-56 has no matching database entity or endpoint.
+
+Settings (files/SettingsConfigJS.js)
+-----------------------------------
+No settings endpoint was added. The supplied Drizzle export has no settings table or settings data model; add one before connecting the save handler at lines 21-23. Notification toggles/add-option clicks at lines 4-18 currently have no persistent database representation.
+
+Route implementation
+--------------------
+routes/admin/admin.js contains the endpoints above. The project recursively loads route files and mounts this router at /api/admin.

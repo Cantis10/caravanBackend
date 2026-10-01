@@ -60,8 +60,9 @@ app.post("/login", async (req, res) => {
 
     const token = jwt.sign(
       {
-        userId: user.Customer_id,
-        email: user.Cus_email,
+        ...(isAdmin
+          ? { adminId: user.Admin_id, email: user.Admin_email }
+          : { userId: user.Customer_id, email: user.Cus_email }),
         role: isAdmin ? "admin" : "user",
       },
       JWT_SECRET,
