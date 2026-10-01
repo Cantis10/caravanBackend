@@ -408,6 +408,16 @@ body {
     background-color: #d5d5d5;
 }
 
+.orders-btn {
+    background-color: #6F4E37;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-family: InstrumentSans_Semi, sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+}
+
 .submit-btn {
   width: 100%;
   background: var(--color-primary);
@@ -459,7 +469,7 @@ body {
     cursor: not-allowed;
 }
 
-.large-boux {
+.large-box {
     display: flex;
     flex-direction: column; /* Stack the text and button vertically */
     align-items: center;    /* Center them horizontally */
@@ -468,7 +478,7 @@ body {
     padding: 20px;          /* Optional: Adds space inside the box */
 }
 
-.large-boux .empty-text {
+.large-box .empty-text {
     margin-bottom: 15px; 
 }
 
@@ -590,6 +600,34 @@ body {
     color: #333;
 
     overflow-wrap: anywhere;
+}
+
+.voucher-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 12px;
+}
+
+.voucher-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.voucher-header strong {
+    font-size: 16px;
+}
+
+.voucher-body {
+    color: #555;
+}
+
+.voucher-status {
+    font-weight: bold;
+    color: green;
 }
 
 .wishlist-item {
@@ -804,6 +842,10 @@ body {
   .address-edit-btn,
   .address-delete-btn {
     padding: 5px 10px;
+  }
+
+  .submit-btn {
+    background-color: var(--color-primary);
   }
 
 }

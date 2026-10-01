@@ -651,6 +651,33 @@ body.modal-open {
   border-top: 1px solid #ccc;
 }
 
+.api-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+    color: white;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 15px 0;
+}
+
+.line {
+    flex: 1;
+    height: 1px;
+    background-color: rgba(243, 243, 243, 0.911);
+}
+
+.divider h6 {
+    margin: 0 12px;
+    color: white;
+    white-space: nowrap;
+}
+
 @media (max-width: 768px) {
     .form-card {
         padding: 1.25rem 1.25rem;

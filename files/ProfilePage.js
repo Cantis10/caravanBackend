@@ -18,7 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
     Promise.all([
         loadProfile(),
         loadAddresses(),
-        loadWishlist()
+        loadWishlist(), 
+        loadVouchers()
     ]).finally(() => {
         hideLoader();
     });
@@ -89,25 +90,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
           console.log("Profile information:", data);
 
-          document.getElementById("userEmail").value =
-              data.email || "";
-
-          document.getElementById("userFirstName").value =
-              data.firstName || "";
-
-          document.getElementById("userLastName").value =
-              data.lastName || "";
-
-          document.getElementById("userBirthdate").value =
-              data.birthdate || "";
-
-          document.querySelector(".user-name").textContent =
-              `${data.firstName || ""} ${data.lastName || ""}`.trim();
-
+          document.getElementById("userEmail").value = data.email || "";
+          document.getElementById("userFirstName").value = data.firstName || "";
+          document.getElementById("userLastName").value = data.lastName || "";
+          document.getElementById("userBirthdate").value = data.birthdate || "";
+          document.querySelector(".user-name").textContent = `${data.firstName || ""} ${data.lastName || ""}`.trim();
       } catch (error) {
-
           console.error("Error loading profile:", error);
-
       }
   }
 
@@ -444,6 +433,68 @@ if (addressForm) {
             );
         }
     }
+
+    // loads User's Vouchers
+    async function loadVouchers() {
+        try {
+            const response = await fetch("/vouchers/me");
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    result.error ||
+                    "Unable to load vouchers"
+                );
+            }
+            renderVouchers(result);
+        } catch (error) {
+            console.error("Voucher load error:", error);
+        }
+    }
+
+    function renderVouchers(vouchers) {
+        const container =
+            document.getElementById(
+                "vouchersListContainer"
+            );
+
+        if (!container) {
+            return;
+        }
+
+        container.innerHTML = "";
+
+        if (!vouchers.length) {
+            container.innerHTML = `
+                <div class="voucher-card">
+                    <p>No vouchers available.</p>
+                </div>
+            `;
+            return;
+        }
+
+        vouchers.forEach(voucher => {
+            const card = document.createElement("div");
+            card.className = "voucher-card";
+            card.innerHTML = `
+                <div class="voucher-header">
+                    <strong>
+                        ${voucher.Voucher_name}
+                    </strong>
+
+                    <span class="voucher-status">
+                        Unused
+                    </span>
+                </div>
+
+                <div class="voucher-body">
+                    ${voucher.Voucher_desc}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+    }
     
     //loads wishlist of logged in user
     async function loadWishlist() {
@@ -630,20 +681,9 @@ if (addressForm) {
         editAddressModal.classList.add("active");
     }
 
-    editStreetAddressInput.addEventListener(
-        "input",
-        updateEditedAddressSaveButton
-    );
-
-    editCityInput.addEventListener(
-        "input",
-        updateEditedAddressSaveButton
-    );
-
-    editZipCodeInput.addEventListener(
-        "input",
-        updateEditedAddressSaveButton
-    );
+    editStreetAddressInput.addEventListener("input",updateEditedAddressSaveButton);
+    editCityInput.addEventListener("input",updateEditedAddressSaveButton);
+    editZipCodeInput.addEventListener("input",updateEditedAddressSaveButton);
 
     function closeEditAddressModal() {
         editAddressModal.classList.remove("active");
@@ -659,15 +699,8 @@ if (addressForm) {
         saveEditedAddressBtn.textContent = "Save";
     }
 
-    closeEditAddressModalBtn.addEventListener(
-        "click",
-        closeEditAddressModal
-    );
-
-    cancelEditAddressBtn.addEventListener(
-        "click",
-        closeEditAddressModal
-    );
+    closeEditAddressModalBtn.addEventListener("click",closeEditAddressModal);
+    cancelEditAddressBtn.addEventListener("click",closeEditAddressModal);
 
     function createAddressCard(address) {
         const card = document.createElement("div");
@@ -810,15 +843,8 @@ if (addressForm) {
         confirmDeleteAddressBtn.textContent = "Delete";
     }
 
-    closeDeleteAddressModalBtn.addEventListener(
-        "click",
-        closeDeleteAddressModal
-    );
-
-    cancelDeleteAddressBtn.addEventListener(
-        "click",
-        closeDeleteAddressModal
-    );
+    closeDeleteAddressModalBtn.addEventListener("click",closeDeleteAddressModal);
+    cancelDeleteAddressBtn.addEventListener("click",closeDeleteAddressModal);
 
     confirmDeleteAddressBtn.addEventListener(
         "click",
@@ -883,6 +909,12 @@ if (addressForm) {
             }
         }
     );
+
+    document.addEventListener("click", function(event) {
+        if (event.target.id === "viewOrdersBtn") {
+            window.location.href = "/user/order";
+        }
+    });
 
     // Dynamic Card Form Submission
     const cardForm = document.getElementById("cardForm");

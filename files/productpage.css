@@ -208,7 +208,8 @@ body {
   border-radius: 15px;
   overflow: hidden;
   margin-bottom: 45px;
-  height: 320px;
+  min-height: 320px;
+  max-height: 340px;
 }
 
 .product-image-container {
